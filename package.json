@@ -1,0 +1,23 @@
+{
+  "name": "client-server-messaging-visualizer",
+  "version": "0.0.0",
+  "description": "Client-Server Messaging Visualizer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aleksi-lukkarinen/Client-Server-Messaging-Visualizer.git"
+  },
+  "keywords": [
+    "client",
+    "server",
+    "protocol",
+    "message",
+    "visualizer",
+    "visualization",
+    "browser"
+  ],
+  "author": "Aleksi Lukkarinen",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
+}
