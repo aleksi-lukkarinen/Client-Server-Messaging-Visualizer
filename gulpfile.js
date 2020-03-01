@@ -1,5 +1,16 @@
 const { src, dest, series, parallel } = require('gulp');
 const babel = require('gulp-babel');
+const rename = require('gulp-rename');
+
+const srcDir = "src/";
+const targetDir = "target/";
+const minifiedDir = targetDir + "minified/";
+
+const extJS = ".js"
+const extMinJS = ".min" + extJS;
+
+const globAllJS = "*" + extJS;
+const globAllMinJS = "*" + extMinJS;
 
 
 function clean(cb) {
@@ -14,8 +25,10 @@ function jsBundle(cb) {
   cb();
 }
 
-function jsMinify(cb) {
-  cb();
+function jsMinify() {
+  return src(srcDir + globAllJS)
+    .pipe(rename({ extname: extMinJS }))
+    .pipe(dest(minifiedDir));
 }
 
 function images(cb) {
