@@ -1,0 +1,36 @@
+#
+# File ignoration patterns for Git
+#
+# The idea here is to explicitly ignore everything,
+# except the exact files allowed to be checked in.
+#
+
+/*
+
+!/conf
+!/src
+!/.gitattributes
+!/.gitignore
+!/CHANGELOG
+!/CODE_OF_CONDUCT.md
+!/CONTRIBUTING.md
+!/gulpfile.js
+!/LICENSE
+!/package.json
+!/package-lock.json
+!/README.md
+
+**/.git/*
+**/.history/*
+**/__pycache__/*
+**/*___jb_tmp___
+**/.cache-main
+**/.DS_Store
+**/*.bak
+**/*.class
+**/*.log
+**/*.min.js
+**/*.pyc
+**/*.pyo
+**/*.tmp
+**/*~
