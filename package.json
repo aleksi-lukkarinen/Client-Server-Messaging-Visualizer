@@ -18,6 +18,8 @@
   "author": "Aleksi Lukkarinen",
   "dependencies": {},
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "@babel/core": "^7.8.6",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0-beta.2"
   }
 }
