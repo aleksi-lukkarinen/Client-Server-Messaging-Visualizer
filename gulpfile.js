@@ -1,5 +1,6 @@
 const { src, dest, series, parallel } = require('gulp');
 const babel = require('gulp-babel');
+const del = require('del');
 const rename = require('gulp-rename');
 
 const srcDir = "src/";
@@ -13,8 +14,8 @@ const globAllJS = "*" + extJS;
 const globAllMinJS = "*" + extMinJS;
 
 
-function clean(cb) {
-  cb();
+function clean() {
+  return del([targetDir]);
 }
 
 function cssMinify(cb) {
