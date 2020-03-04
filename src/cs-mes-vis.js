@@ -24,6 +24,13 @@ var Config = {
     VISUALIZATION_NAME:             "cmsv-name",
   },
 
+  htmlTags: {
+    TAG_START:                      "<",
+    SINGLE_TAG_END:                 "/>",
+    DIV:                            "div",
+    BUTTON:                         "button"
+  },
+
   setupDataKeys: {  
     VIS_NAME:                       "name",
     VIS_TITLE:                      "title",
@@ -256,15 +263,16 @@ const CSMesVisHelpers = function() {
 }
 
 CSMesVisHelpers.prototype.createHtmlDiv = function(cssClass) {
-  return this.createHtmlElement("div", cssClass);
+  return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
 }
 
 CSMesVisHelpers.prototype.createHtmlButton = function(cssClass) {
-  return this.createHtmlElement("button", cssClass);
+  return this.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
 }
 
-CSMesVisHelpers.prototype.createHtmlElement = function(elementName, cssClass) {
-  return $("<" + elementName + "/>", {"class": cssClass});
+CSMesVisHelpers.prototype.createHtmlTag = function(tagName, cssClass) {
+  const tag = Config.htmlTags.TAG_START + tagName + Config.htmlTags.SINGLE_TAG_END;
+  return $(tag, {"class": cssClass});
 }
 
 CSMesVisHelpers.prototype.incorrectSetupDataMessage = function(message) {
