@@ -132,10 +132,11 @@ CSMesVis.prototype.createOuterFrame = function() {
   if (this.setupData.hasOwnProperty(dataKeyVisTitle)) {
     const t = this.setupData[dataKeyVisTitle];
     if (this.helper.isNonEmptyString(t)) {
+      const title = $.trim(t);
       const titleDiv = this.helper.createHtmlDiv(classCsmvVisTitle);
-      titleDiv.text(t);
+      titleDiv.text(title);
       titleDiv.appendTo(frameDiv);
-      this.title = t;
+      this.title = title;
       this.titleDiv = titleDiv;
     }
     else {
@@ -148,10 +149,11 @@ CSMesVis.prototype.createOuterFrame = function() {
   if (this.setupData.hasOwnProperty(dataKeyVisDescription)) {
     const d = this.setupData[dataKeyVisDescription];
     if (this.helper.isNonEmptyString(d)) {
+      const desc = $.trim(d);
       const descDiv = this.helper.createHtmlDiv(classCsmvVisDescription);
-      descDiv.text(d);
+      descDiv.text(desc);
       descDiv.appendTo(frameDiv);
-      this.description = d;
+      this.description = desc;
       this.descriptionDiv = descDiv;
     }
     else {
