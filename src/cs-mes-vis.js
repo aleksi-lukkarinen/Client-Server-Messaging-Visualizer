@@ -38,6 +38,13 @@ var Config = {
     TO_NEXT_STEP_TITLE:             "toNextStepTitle",
     TO_LAST_STEP_TITLE:             "toLastStepTitle",
     VIS_ACTORS:                     "actors"
+  },
+  
+  uiTexts: {
+    TO_FIRST_STEP_TITLE:            "First Step",
+    TO_PREVIOUS_STEP_TITLE:         "Previous Step",
+    TO_NEXT_STEP_TITLE:             "Next Step",
+    TO_LAST_STEP_TITLE:             "Last Step",
   }
 };
 
@@ -66,10 +73,10 @@ CSMesVis.prototype.createControlFrame = function() {
   frame.appendTo(this.frames.outer);
   this.frames.control = frame;
 
-  var toFirstStepTitle = "First Step";
-  var toPreviousStepTitle = "Previous Step";
-  var toNextStepTitle = "Next Step";
-  var toLastStepTitle = "Last Step";
+  var toFirstStepTitle = Config.uiTexts.TO_FIRST_STEP_TITLE;
+  var toPreviousStepTitle = Config.uiTexts.TO_PREVIOUS_STEP_TITLE;
+  var toNextStepTitle = Config.uiTexts.TO_NEXT_STEP_TITLE;
+  var toLastStepTitle = Config.uiTexts.TO_LAST_STEP_TITLE;
   
   if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
     const e = this.setupData[Config.setupDataKeys.VIS_ENV];
