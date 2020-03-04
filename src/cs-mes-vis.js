@@ -1,32 +1,45 @@
-const appName = "Client-Server Messaging Visualizer";
 
-const classCsmvVisualization = "csmv-visualization";
-const classCsmvOuterFrame = "csmv-outer-frame";
-const classCsmvVisTitle = "csmv-visualization-title";
-const classCsmvVisDescription = "csmv-visualization-description";
-const classCsmvAnimationFrame = "csmv-animation-frame";
-const classCsmvControlFrame = "csmv-control-frame";
-const classCsmvButton = "csmv-button";
-const classCsmvButtonToFirstStep = "csmv-button-first-step";
-const classCsmvButtonToPreviousStep = "csmv-button-previous-step";
-const classCsmvButtonToNextStep = "csmv-button-next-step";
-const classCsmvButtonToLastStep = "csmv-button-last-step";
 
-const attrVisualizationName = "cmsv-name";
 
-const dataKeyVisName = "name";
-const dataKeyVisTitle = "title";
-const dataKeyVisDescription = "description";
-const dataKeyVisEnv = "environment";
-const dataKeyVisAnimationFrame = "animationFrame";
-const dataKeyWidth = "width";
-const dataKeyHeight = "height";
-const dataKeyButtons = "buttons";
-const dataKeyToFirstStepTitle = "toFirstStepTitle";
-const dataKeyToPreviousStepTitle = "toPreviousStepTitle";
-const dataKeyToNextStepTitle = "toNextStepTitle";
-const dataKeyToLastStepTitle = "toLastStepTitle";
-const dataKeyVisActors = "actors";
+var Config = {
+  application: {
+    NAME:                           "Client-Server Messaging Visualizer",
+  },
+
+  cssClasses: {
+    CSMV_VISUALIZATION:             "csmv-visualization",
+    CSMV_OUTER_FRAME:               "csmv-outer-frame",
+    CSMV_VIS_TITLE:                 "csmv-visualization-title",
+    CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
+    CSMV_ANIMATION_FRAME:           "csmv-animation-frame",
+    CSMV_CONTROL_FRAME:             "csmv-control-frame",
+    CSMV_BUTTON:                    "csmv-button",
+    CSMV_BUTTON_TO_FIRST_STEP:      "csmv-button-first-step",
+    CSMV_BUTTON_TO_PREVIOUS_STEP:   "csmv-button-previous-step",
+    CSMV_BUTTON_TO_NEXT_STEP:       "csmv-button-next-step",
+    CSMV_BUTTON_TO_LAST_STEP:       "csmv-button-last-step",
+  },
+  
+  htmlAttributes: {
+    VISUALIZATION_NAME:             "cmsv-name",
+  },
+
+  setupDataKeys: {  
+    VIS_NAME:                       "name",
+    VIS_TITLE:                      "title",
+    VIS_DESCRIPTION:                "description",
+    VIS_ENV:                        "environment",
+    VIS_ANIMATION_FRAME:            "animationFrame",
+    WIDTH:                          "width",
+    HEIGHT:                         "height",
+    BUTTONS:                        "buttons",
+    TO_FIRST_STEP_TITLE:            "toFirstStepTitle",
+    TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
+    TO_NEXT_STEP_TITLE:             "toNextStepTitle",
+    TO_LAST_STEP_TITLE:             "toLastStepTitle",
+    VIS_ACTORS:                     "actors"
+  }
+};
 
 
 
@@ -49,7 +62,7 @@ CSMesVis.prototype.init = function() {
 }
 
 CSMesVis.prototype.createControlFrame = function() {
-  const frame = this.helper.createHtmlDiv(classCsmvControlFrame);
+  const frame = this.helper.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
   frame.appendTo(this.frames.outer);
   this.frames.control = frame;
 
@@ -58,42 +71,42 @@ CSMesVis.prototype.createControlFrame = function() {
   var toNextStepTitle = "Next Step";
   var toLastStepTitle = "Last Step";
   
-  if (this.setupData.hasOwnProperty(dataKeyVisEnv)) {
-    const e = this.setupData[dataKeyVisEnv];
+  if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
+    const e = this.setupData[Config.setupDataKeys.VIS_ENV];
 
-    if (e.hasOwnProperty(dataKeyButtons)) {
-      const b = e[dataKeyButtons];
+    if (e.hasOwnProperty(Config.setupDataKeys.BUTTONS)) {
+      const b = e[Config.setupDataKeys.BUTTONS];
 
-      if (b.hasOwnProperty(dataKeyToFirstStepTitle)) {
-        toFirstStepTitle = b[dataKeyToFirstStepTitle];
+      if (b.hasOwnProperty(Config.setupDataKeys.TO_FIRST_STEP_TITLE)) {
+        toFirstStepTitle = b[Config.setupDataKeys.TO_FIRST_STEP_TITLE];
       }
-      if (b.hasOwnProperty(dataKeyToPreviousStepTitle)) {
-        toPreviousStepTitle = b[dataKeyToPreviousStepTitle];
+      if (b.hasOwnProperty(Config.setupDataKeys.TO_PREVIOUS_STEP_TITLE)) {
+        toPreviousStepTitle = b[Config.setupDataKeys.TO_PREVIOUS_STEP_TITLE];
       }
-      if (b.hasOwnProperty(dataKeyToNextStepTitle)) {
-        toNextStepTitle = b[dataKeyToNextStepTitle];
+      if (b.hasOwnProperty(Config.setupDataKeys.TO_NEXT_STEP_TITLE)) {
+        toNextStepTitle = b[Config.setupDataKeys.TO_NEXT_STEP_TITLE];
       }
-      if (b.hasOwnProperty(dataKeyToLastStepTitle)) {
-        toLastStepTitle = b[dataKeyToLastStepTitle];
+      if (b.hasOwnProperty(Config.setupDataKeys.TO_LAST_STEP_TITLE)) {
+        toLastStepTitle = b[Config.setupDataKeys.TO_LAST_STEP_TITLE];
       }
     }
   }
 
   this.buttons.toFirstStep = this.createButton(
-        toFirstStepTitle, classCsmvButtonToFirstStep, frame);
+        toFirstStepTitle, Config.cssClasses.CSMV_BUTTON_TO_FIRST_STEP, frame);
 
   this.buttons.toPreviousStep = this.createButton(
-        toPreviousStepTitle, classCsmvButtonToPreviousStep, frame);
+        toPreviousStepTitle, Config.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP, frame);
 
   this.buttons.toNextStep = this.createButton(
-        toNextStepTitle, classCsmvButtonToNextStep, frame);
+        toNextStepTitle, Config.cssClasses.CSMV_BUTTON_TO_NEXT_STEP, frame);
 
   this.buttons.toLastStep = this.createButton(
-        toLastStepTitle, classCsmvButtonToLastStep, frame);
+        toLastStepTitle, Config.cssClasses.CSMV_BUTTON_TO_LAST_STEP, frame);
 }
 
 CSMesVis.prototype.createButton = function(title, cssClass, parent) {
-  const b = this.helper.createHtmlButton(classCsmvButton);
+  const b = this.helper.createHtmlButton(Config.cssClasses.CSMV_BUTTON);
   b.text(title);
   if (this.helper.isNonEmptyString(cssClass)) {
     b.addClass(cssClass);
@@ -103,19 +116,19 @@ CSMesVis.prototype.createButton = function(title, cssClass, parent) {
 }
 
 CSMesVis.prototype.createAnimationFrame = function() {
-  const frameDiv = this.helper.createHtmlDiv(classCsmvAnimationFrame);
+  const frameDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_ANIMATION_FRAME);
 
-  if (this.setupData.hasOwnProperty(dataKeyVisEnv)) {
-    const e = this.setupData[dataKeyVisEnv];
+  if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
+    const e = this.setupData[Config.setupDataKeys.VIS_ENV];
 
-    if (e.hasOwnProperty(dataKeyVisAnimationFrame)) {
-      const f = e[dataKeyVisAnimationFrame];
+    if (e.hasOwnProperty(Config.setupDataKeys.VIS_ANIMATION_FRAME)) {
+      const f = e[Config.setupDataKeys.VIS_ANIMATION_FRAME];
 
-      if (f.hasOwnProperty(dataKeyWidth)) {
-        frameDiv.css("width", f[dataKeyWidth]);
+      if (f.hasOwnProperty(Config.setupDataKeys.WIDTH)) {
+        frameDiv.css("width", f[Config.setupDataKeys.WIDTH]);
       }
-      if (f.hasOwnProperty(dataKeyHeight)) {
-        frameDiv.css("height", f[dataKeyHeight]);
+      if (f.hasOwnProperty(Config.setupDataKeys.HEIGHT)) {
+        frameDiv.css("height", f[Config.setupDataKeys.HEIGHT]);
       }
     }
   }
@@ -125,15 +138,15 @@ CSMesVis.prototype.createAnimationFrame = function() {
 }
 
 CSMesVis.prototype.createOuterFrame = function() {
-  const frameDiv = this.helper.createHtmlDiv(classCsmvOuterFrame);
+  const frameDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
   frameDiv.appendTo(this.container);
   this.frames.outer = frameDiv;
   
-  if (this.setupData.hasOwnProperty(dataKeyVisTitle)) {
-    const t = this.setupData[dataKeyVisTitle];
+  if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_TITLE)) {
+    const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
     if (this.helper.isNonEmptyString(t)) {
       const title = $.trim(t);
-      const titleDiv = this.helper.createHtmlDiv(classCsmvVisTitle);
+      const titleDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
       titleDiv.text(title);
       titleDiv.appendTo(frameDiv);
       this.title = title;
@@ -146,11 +159,11 @@ CSMesVis.prototype.createOuterFrame = function() {
     }
   }
 
-  if (this.setupData.hasOwnProperty(dataKeyVisDescription)) {
-    const d = this.setupData[dataKeyVisDescription];
+  if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_DESCRIPTION)) {
+    const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
     if (this.helper.isNonEmptyString(d)) {
       const desc = $.trim(d);
-      const descDiv = this.helper.createHtmlDiv(classCsmvVisDescription);
+      const descDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
       descDiv.text(desc);
       descDiv.appendTo(frameDiv);
       this.description = desc;
@@ -183,7 +196,7 @@ CSMesVisBootstrapper.prototype.execute = function() {
     throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
   }
 
-  const allVisualizationElements = $("." + classCsmvVisualization);
+  const allVisualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION);
   if (allVisualizationElements.length != this.setupData.length) {
     const msg = "There are " + allVisualizationElements.length + 
                 " visualization(s) in the HTML file but setup data is given for " + 
@@ -195,7 +208,7 @@ CSMesVisBootstrapper.prototype.execute = function() {
   }
 
   this.setupData.forEach(function(visualizationSetup, idx) {
-    if (!visualizationSetup.hasOwnProperty(dataKeyVisName)) {
+    if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
       const msg = (idx + 1) + ". visualization does not have a name.";
       throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
     }
@@ -204,8 +217,8 @@ CSMesVisBootstrapper.prototype.execute = function() {
 
     console.log(visualizationSetup.name);
 
-    const visualizationElements = $("." + classCsmvVisualization + 
-                "[" + attrVisualizationName + "='" + visualizationSetup.name + "']");
+    const visualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION + 
+                "[" + Config.htmlAttributes.VISUALIZATION_NAME + "='" + visualizationSetup.name + "']");
 
     if (visualizationElements.length === 0) {
       const msg = "Setup data is given for visualization '" +  visualizationSetup.name + 
@@ -270,7 +283,7 @@ const CSMesVisError = function(message) {
 CSMesVisError.prototype = new Error();
 
 CSMesVisError.prototype.formatErrorMessage = function(message) {
-  return this.ensureThatEndsWithPeriod(appName + ": " + message);
+  return this.ensureThatEndsWithPeriod(Config.application.NAME + ": " + message);
 }
 
 CSMesVisError.prototype.ensureThatEndsWithPeriod = function(s) {
