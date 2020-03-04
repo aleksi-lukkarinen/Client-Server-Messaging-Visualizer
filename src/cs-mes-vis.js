@@ -188,6 +188,8 @@ CSMesVisBootstrapper.prototype.execute = function() {
     const msg = "There are " + allVisualizationElements.length + 
                 " visualization(s) in the HTML file but setup data is given for " + 
                 this.setupData.length + " visualiation(s).";
+                
+    // TODO: Print lists of names of both the existing divs and setups
 
     throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
   }
@@ -197,6 +199,8 @@ CSMesVisBootstrapper.prototype.execute = function() {
       const msg = (idx + 1) + ". visualization does not have a name.";
       throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
     }
+    
+    // TODO: Is the name a non-empty string? if (this.helper.isNonEmptyString(t)) {
 
     console.log(visualizationSetup.name);
 
