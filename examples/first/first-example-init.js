@@ -1,12 +1,14 @@
 CSMesVis.setupData = [
   {
     name: "CSMV Example 1.1",
-    
+
     environment: {
-      windowWidth:  "500px",
-      windowHeight: "700px"
+      animationFrame: {
+        width:  "800px",
+        height: "500px"
+      }
     },
-      
+
     actors: [
       {
         name: "Client"
@@ -16,7 +18,9 @@ CSMesVis.setupData = [
       }
     ],
 
+    setup: [
     
+    ],
       
     stages: [
 
@@ -27,8 +31,6 @@ CSMesVis.setupData = [
     name: "CSMV Example 1.2",
     
     environment: {
-      windowWidth:  "500px",
-      windowHeight: "700px"
     },
       
     actors: [
@@ -40,7 +42,9 @@ CSMesVis.setupData = [
       }
     ],
 
+    setup: [
     
+    ],
       
     stages: [
 

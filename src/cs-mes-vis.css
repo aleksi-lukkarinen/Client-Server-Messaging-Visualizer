@@ -1,0 +1,30 @@
+
+
+.csmv-outer-frame {
+  display:        inline-block;
+  margin:         0.2em;
+  padding:        0.5em;
+  background:     lightyellow;
+  border:         1px solid #ddce50;
+}
+
+.csmv-animation-frame {
+  width:          600px;
+  height:         400px;
+  background:     white;
+  border:         1px inset gray;
+}
+
+.csmv-control-frame {
+  margin:         0em;
+  border-width:   0em;
+  padding:        0.25em 0em 0em 0em;
+}
+
+.csmv-button {
+  margin:         0em 0.25em 0em 0em;
+}
+
+.csmv-button-first-step {
+  #margin-left:    -1px;
+}
