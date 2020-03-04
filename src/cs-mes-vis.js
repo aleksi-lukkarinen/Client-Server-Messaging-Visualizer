@@ -26,6 +26,9 @@ const dataKeyVisActors = "actors";
 
 
 
+
+
+
 const CSMesVis = function(container, setupData, helper) {
   this.container = container;
   this.setupData = setupData;
@@ -42,7 +45,7 @@ CSMesVis.prototype.init = function() {
 }
 
 CSMesVis.prototype.createControlFrame = function() {
-  const frame = this.createHtmlDiv(classCsmvControlFrame);
+  const frame = this.helper.createHtmlDiv(classCsmvControlFrame);
   frame.appendTo(this.frames.outer);
   this.frames.control = frame;
 
@@ -86,7 +89,7 @@ CSMesVis.prototype.createControlFrame = function() {
 }
 
 CSMesVis.prototype.createButton = function(title, cssClass, parent) {
-  const b = this.createHtmlButton(classCsmvButton);
+  const b = this.helper.createHtmlButton(classCsmvButton);
   b.text(title);
   if (this.helper.isNonEmptyString(cssClass)) {
     b.addClass(cssClass);
@@ -96,7 +99,7 @@ CSMesVis.prototype.createButton = function(title, cssClass, parent) {
 }
 
 CSMesVis.prototype.createAnimationFrame = function() {
-  const frameDiv = this.createHtmlDiv(classCsmvAnimationFrame);
+  const frameDiv = this.helper.createHtmlDiv(classCsmvAnimationFrame);
 
   if (this.setupData.hasOwnProperty(dataKeyVisEnv)) {
     const e = this.setupData[dataKeyVisEnv];
@@ -118,14 +121,14 @@ CSMesVis.prototype.createAnimationFrame = function() {
 }
 
 CSMesVis.prototype.createOuterFrame = function() {
-  const frameDiv = this.createHtmlDiv(classCsmvOuterFrame);
+  const frameDiv = this.helper.createHtmlDiv(classCsmvOuterFrame);
   frameDiv.appendTo(this.container);
   this.frames.outer = frameDiv;
   
   if (this.setupData.hasOwnProperty(dataKeyVisTitle)) {
     const t = this.setupData[dataKeyVisTitle];
     if (this.helper.isNonEmptyString(t)) {
-      const titleDiv = this.createHtmlDiv(classCsmvVisTitle);
+      const titleDiv = this.helper.createHtmlDiv(classCsmvVisTitle);
       titleDiv.text(t);
       titleDiv.appendTo(frameDiv);
       this.title = t;
@@ -141,7 +144,7 @@ CSMesVis.prototype.createOuterFrame = function() {
   if (this.setupData.hasOwnProperty(dataKeyVisDescription)) {
     const d = this.setupData[dataKeyVisDescription];
     if (this.helper.isNonEmptyString(d)) {
-      const descDiv = this.createHtmlDiv(classCsmvVisDescription);
+      const descDiv = this.helper.createHtmlDiv(classCsmvVisDescription);
       descDiv.text(d);
       descDiv.appendTo(frameDiv);
       this.description = d;
@@ -153,18 +156,6 @@ CSMesVis.prototype.createOuterFrame = function() {
       throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
     }
   }
-}
-
-CSMesVis.prototype.createHtmlDiv = function(cssClass) {
-  return this.createHtmlElement("div", cssClass);
-}
-
-CSMesVis.prototype.createHtmlButton = function(cssClass) {
-  return this.createHtmlElement("button", cssClass);
-}
-
-CSMesVis.prototype.createHtmlElement = function(elementName, cssClass) {
-  return $("<" + elementName + "/>", {"class": cssClass});
 }
 
 
@@ -232,6 +223,18 @@ CSMesVisBootstrapper.prototype.execute = function() {
 
 const CSMesVisHelpers = function() {
   // Nothing
+}
+
+CSMesVisHelpers.prototype.createHtmlDiv = function(cssClass) {
+  return this.createHtmlElement("div", cssClass);
+}
+
+CSMesVisHelpers.prototype.createHtmlButton = function(cssClass) {
+  return this.createHtmlElement("button", cssClass);
+}
+
+CSMesVisHelpers.prototype.createHtmlElement = function(elementName, cssClass) {
+  return $("<" + elementName + "/>", {"class": cssClass});
 }
 
 CSMesVisHelpers.prototype.incorrectSetupDataMessage = function(message) {
