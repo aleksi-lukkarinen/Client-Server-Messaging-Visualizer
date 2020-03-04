@@ -88,7 +88,7 @@ CSMesVis.prototype.createControlFrame = function() {
 CSMesVis.prototype.createButton = function(title, cssClass, parent) {
   const b = this.createHtmlButton(classCsmvButton);
   b.text(title);
-  if (typeof(cssClass) === "string" && cssClass.length > 0) {
+  if (this.helper.isNonEmptyString(cssClass)) {
     b.addClass(cssClass);
   }
   b.appendTo(parent);
@@ -124,7 +124,7 @@ CSMesVis.prototype.createOuterFrame = function() {
   
   if (this.setupData.hasOwnProperty(dataKeyVisTitle)) {
     const t = this.setupData[dataKeyVisTitle];
-    if (typeof(t) === "string" && t.length > 0) {
+    if (this.helper.isNonEmptyString(t)) {
       const titleDiv = this.createHtmlDiv(classCsmvVisTitle);
       titleDiv.text(t);
       titleDiv.appendTo(frameDiv);
@@ -132,14 +132,15 @@ CSMesVis.prototype.createOuterFrame = function() {
       this.titleDiv = titleDiv;
     }
     else {
-      const msg = "Visualization '" + this.name + "' has an invalid title; it must be a string.";
+      const msg = "Visualization '" + this.name + "' has an invalid title; " +
+                  "it must be a string that contains not only whitespace.";
       throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
     }
   }
 
   if (this.setupData.hasOwnProperty(dataKeyVisDescription)) {
     const d = this.setupData[dataKeyVisDescription];
-    if (typeof(d) === "string" && d.length > 0) {
+    if (this.helper.isNonEmptyString(d)) {
       const descDiv = this.createHtmlDiv(classCsmvVisDescription);
       descDiv.text(d);
       descDiv.appendTo(frameDiv);
@@ -147,7 +148,8 @@ CSMesVis.prototype.createOuterFrame = function() {
       this.descriptionDiv = descDiv;
     }
     else {
-      const msg = "Visualization '" + this.name + "' has an invalid description; it must be a string.";
+      const msg = "Visualization '" + this.name + "' has an invalid description; " +
+                  "it must be a string that contains not only whitespace.";
       throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
     }
   }
@@ -240,6 +242,9 @@ CSMesVisHelpers.prototype.incorrectSetupMessage = function(message) {
   return "Incorrect setup: " + message;
 }
 
+CSMesVisHelpers.prototype.isNonEmptyString = function(s) {
+  return $.type(s) === "string" && $.trim(s).length > 0;
+}
 
 
 
