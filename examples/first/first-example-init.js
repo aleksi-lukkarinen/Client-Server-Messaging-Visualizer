@@ -1,6 +1,8 @@
 CSMesVis.setupData = [
   {
     name: "CSMV Example 1.1",
+    title: "Example 1.1: Getting an HTML File from a Web Server",
+    description: "Please use the buttons below to browse through the steps of communication.",
 
     environment: {
       animationFrame: {
