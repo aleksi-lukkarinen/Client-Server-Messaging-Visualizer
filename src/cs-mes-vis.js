@@ -19,9 +19,15 @@ var Config = {
     CSMV_BUTTON_TO_NEXT_STEP:       "csmv-button-next-step",
     CSMV_BUTTON_TO_LAST_STEP:       "csmv-button-last-step",
   },
+
+  cssProperties: {
+    WIDTH:                          "width",
+    HEIGHT:                         "height"
+  },
   
   htmlAttributes: {
     VISUALIZATION_NAME:             "cmsv-name",
+    CLASS:                          "class"
   },
 
   htmlTags: {
@@ -51,7 +57,7 @@ var Config = {
     TO_FIRST_STEP_TITLE:            "First Step",
     TO_PREVIOUS_STEP_TITLE:         "Previous Step",
     TO_NEXT_STEP_TITLE:             "Next Step",
-    TO_LAST_STEP_TITLE:             "Last Step",
+    TO_LAST_STEP_TITLE:             "Last Step"
   }
 };
 
@@ -139,10 +145,10 @@ CSMesVis.prototype.createAnimationFrame = function() {
       const f = e[Config.setupDataKeys.VIS_ANIMATION_FRAME];
 
       if (f.hasOwnProperty(Config.setupDataKeys.WIDTH)) {
-        frameDiv.css("width", f[Config.setupDataKeys.WIDTH]);
+        frameDiv.css(Config.cssProperties.WIDTH, f[Config.setupDataKeys.WIDTH]);
       }
       if (f.hasOwnProperty(Config.setupDataKeys.HEIGHT)) {
-        frameDiv.css("height", f[Config.setupDataKeys.HEIGHT]);
+        frameDiv.css(Config.cssProperties.HEIGHT, f[Config.setupDataKeys.HEIGHT]);
       }
     }
   }
@@ -229,7 +235,7 @@ CSMesVisBootstrapper.prototype.execute = function() {
     
     // TODO: Is the name a non-empty string? if (this.helper.isNonEmptyString(t)) {
 
-    console.log(visualizationSetup.name);
+    // console.log(visualizationSetup.name);
 
     const visualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION + 
                 "[" + Config.htmlAttributes.VISUALIZATION_NAME + "='" + visualizationSetup.name + "']");
@@ -245,7 +251,7 @@ CSMesVisBootstrapper.prototype.execute = function() {
       throw new CSMesVisError(helper.incorrectSetupMessage(msg));
     }
     const visualizationContainer = visualizationElements[0];
-    console.log(visualizationContainer);
+    //console.log(visualizationContainer);
 
     const V = new CSMesVis(visualizationContainer, visualizationSetup, helper);
     V.init();
@@ -272,7 +278,9 @@ CSMesVisHelpers.prototype.createHtmlButton = function(cssClass) {
 
 CSMesVisHelpers.prototype.createHtmlTag = function(tagName, cssClass) {
   const tag = Config.htmlTags.TAG_START + tagName + Config.htmlTags.SINGLE_TAG_END;
-  return $(tag, {"class": cssClass});
+  const attributes = {};
+  attributes[Config.htmlAttributes.CLASS] = cssClass;
+  return $(tag, attributes);
 }
 
 CSMesVisHelpers.prototype.incorrectSetupDataMessage = function(message) {
