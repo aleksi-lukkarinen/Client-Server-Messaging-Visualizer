@@ -7,6 +7,10 @@ const classCsmvVisDescription = "csmv-visualization-description";
 const classCsmvAnimationFrame = "csmv-animation-frame";
 const classCsmvControlFrame = "csmv-control-frame";
 const classCsmvButton = "csmv-button";
+const classCsmvButtonToFirstStep = "csmv-button-first-step";
+const classCsmvButtonToPreviousStep = "csmv-button-previous-step";
+const classCsmvButtonToNextStep = "csmv-button-next-step";
+const classCsmvButtonToLastStep = "csmv-button-last-step";
 
 const attrVisualizationName = "cmsv-name";
 
@@ -76,16 +80,16 @@ CSMesVis.prototype.createControlFrame = function() {
   }
 
   this.buttons.toFirstStep = this.createButton(
-        toFirstStepTitle, "csmv-button-first-step", frame);
+        toFirstStepTitle, classCsmvButtonToFirstStep, frame);
 
   this.buttons.toPreviousStep = this.createButton(
-        toPreviousStepTitle, "csmv-button-previous-step", frame);
+        toPreviousStepTitle, classCsmvButtonToPreviousStep, frame);
 
   this.buttons.toNextStep = this.createButton(
-        toNextStepTitle, "csmv-button-next-step", frame);
+        toNextStepTitle, classCsmvButtonToNextStep, frame);
 
   this.buttons.toLastStep = this.createButton(
-        toLastStepTitle, "csmv-button-last-step", frame);
+        toLastStepTitle, classCsmvButtonToLastStep, frame);
 }
 
 CSMesVis.prototype.createButton = function(title, cssClass, parent) {
