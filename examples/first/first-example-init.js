@@ -6,6 +6,12 @@ CSMesVis.setupData = [
       animationFrame: {
         width:  "800px",
         height: "500px"
+      },
+      buttons: {
+        toFirstStepTitle: "Beginning",
+        toPreviousStepTitle: "Back",
+        toNextStepTitle: "Forward",
+        toLastStepTitle: "End",
       }
     },
 

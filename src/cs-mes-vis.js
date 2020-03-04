@@ -13,6 +13,11 @@ const dataKeyVisEnv = "environment";
 const dataKeyVisAnimationFrame = "animationFrame";
 const dataKeyWidth = "width";
 const dataKeyHeight = "height";
+const dataKeyButtons = "buttons";
+const dataKeyToFirstStepTitle = "toFirstStepTitle";
+const dataKeyToPreviousStepTitle = "toPreviousStepTitle";
+const dataKeyToNextStepTitle = "toNextStepTitle";
+const dataKeyToLastStepTitle = "toLastStepTitle";
 const dataKeyVisActors = "actors";
 
 
@@ -34,11 +39,44 @@ CSMesVis.prototype.createControlFrame = function() {
   const frame = this.createHtmlDiv(classCsmvControlFrame);
   frame.appendTo(this.frames.outer);
   this.frames.control = frame;
+
+  var toFirstStepTitle = "First Step";
+  var toPreviousStepTitle = "Previous Step";
+  var toNextStepTitle = "Next Step";
+  var toLastStepTitle = "Last Step";
   
-  this.buttons.toFirstStep    = this.createButton("First Step", "csmv-button-first-step", frame);
-  this.buttons.toPreviousStep = this.createButton("Previous Step", "csmv-button-previous-step", frame);
-  this.buttons.toNextStep     = this.createButton("Next Step", "csmv-button-next-step", frame);
-  this.buttons.toLastStep     = this.createButton("Last Step", "csmv-button-last-step", frame);
+  if (this.setupData.hasOwnProperty(dataKeyVisEnv)) {
+    const e = this.setupData[dataKeyVisEnv];
+
+    if (e.hasOwnProperty(dataKeyButtons)) {
+      const b = e[dataKeyButtons];
+
+      if (b.hasOwnProperty(dataKeyToFirstStepTitle)) {
+        toFirstStepTitle = b[dataKeyToFirstStepTitle];
+      }
+      if (b.hasOwnProperty(dataKeyToPreviousStepTitle)) {
+        toPreviousStepTitle = b[dataKeyToPreviousStepTitle];
+      }
+      if (b.hasOwnProperty(dataKeyToNextStepTitle)) {
+        toNextStepTitle = b[dataKeyToNextStepTitle];
+      }
+      if (b.hasOwnProperty(dataKeyToLastStepTitle)) {
+        toLastStepTitle = b[dataKeyToLastStepTitle];
+      }
+    }
+  }
+
+  this.buttons.toFirstStep = this.createButton(
+        toFirstStepTitle, "csmv-button-first-step", frame);
+
+  this.buttons.toPreviousStep = this.createButton(
+        toPreviousStepTitle, "csmv-button-previous-step", frame);
+
+  this.buttons.toNextStep = this.createButton(
+        toNextStepTitle, "csmv-button-next-step", frame);
+
+  this.buttons.toLastStep = this.createButton(
+        toLastStepTitle, "csmv-button-last-step", frame);
 }
 
 CSMesVis.prototype.createButton = function(title, cssClass, parent) {
