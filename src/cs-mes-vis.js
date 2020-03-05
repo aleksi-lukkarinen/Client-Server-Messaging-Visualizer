@@ -28,7 +28,7 @@
       WIDTH:                          "width",
       HEIGHT:                         "height"
     },
-    
+
     htmlAttributes: {
       VISUALIZATION_NAME:             "cmsv-name",
       CLASS:                          "class"
@@ -41,7 +41,7 @@
       BUTTON:                         "button"
     },
 
-    setupDataKeys: {  
+    setupDataKeys: {
       VIS_NAME:                       "name",
       VIS_TITLE:                      "title",
       VIS_DESCRIPTION:                "description",
@@ -56,7 +56,7 @@
       TO_LAST_STEP_TITLE:             "toLastStepTitle",
       VIS_ACTORS:                     "actors"
     },
-    
+
     uiTexts: {
       TO_FIRST_STEP_TITLE:            "First Step",
       TO_PREVIOUS_STEP_TITLE:         "Previous Step",
@@ -97,7 +97,7 @@
     var toPreviousStepTitle = this.config.uiTexts.TO_PREVIOUS_STEP_TITLE;
     var toNextStepTitle = this.config.uiTexts.TO_NEXT_STEP_TITLE;
     var toLastStepTitle = this.config.uiTexts.TO_LAST_STEP_TITLE;
-    
+
     if (this.setupData.hasOwnProperty(this.config.setupDataKeys.VIS_ENV)) {
       const e = this.setupData[this.config.setupDataKeys.VIS_ENV];
 
@@ -168,7 +168,7 @@
     const frameDiv = this.helper.createHtmlDiv(this.config.cssClasses.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
-    
+
     if (this.setupData.hasOwnProperty(this.config.setupDataKeys.VIS_TITLE)) {
       const t = this.setupData[this.config.setupDataKeys.VIS_TITLE];
       if (this.helper.isNonEmptyString(t)) {
@@ -214,7 +214,7 @@
 
   CSMesVisBootstrapper.prototype.execute = function() {
     const helper = new CSMesVisHelpers(this.config);
-    
+
     if (this.setupData == null) {
       throw new CSMesVisError("Configuration using CSMesVis.setupData is missing.");
     }
@@ -225,10 +225,10 @@
 
     const allVisualizationElements = $("." + this.config.cssClasses.CSMV_VISUALIZATION);
     if (allVisualizationElements.length != this.setupData.length) {
-      const msg = "There are " + allVisualizationElements.length + 
-                  " visualization(s) in the HTML file but setup data is given for " + 
+      const msg = "There are " + allVisualizationElements.length +
+                  " visualization(s) in the HTML file but setup data is given for " +
                   this.setupData.length + " visualiation(s).";
-                  
+
       // TODO: Print lists of names of both the existing divs and setups
 
       throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
@@ -239,23 +239,23 @@
         const msg = (idx + 1) + ". visualization does not have a name.";
         throw new CSMesVisError(helper.incorrectSetupDataMessage(msg));
       }
-      
+
       // TODO: Is the name a non-empty string? if (this.helper.isNonEmptyString(t)) {
 
       // console.log(visualizationSetup.name);
 
-      const visualizationElements = 
-              $("." + this.config.cssClasses.CSMV_VISUALIZATION + 
-              "[" + this.config.htmlAttributes.VISUALIZATION_NAME + "='" + 
+      const visualizationElements =
+              $("." + this.config.cssClasses.CSMV_VISUALIZATION +
+              "[" + this.config.htmlAttributes.VISUALIZATION_NAME + "='" +
               visualizationSetup.name + "']");
 
       if (visualizationElements.length === 0) {
-        const msg = "Setup data is given for visualization '" +  visualizationSetup.name + 
+        const msg = "Setup data is given for visualization '" +  visualizationSetup.name +
                     "', but the HTML file does not contain a container element for it.";
         throw new CSMesVisError(helper.incorrectSetupMessage(msg));
       }
       if (visualizationElements.length > 1) {
-        const msg = "The HTML file contains multiple container element for visualization '" + 
+        const msg = "The HTML file contains multiple container element for visualization '" +
                     visualizationSetup.name + "'."
         throw new CSMesVisError(helper.incorrectSetupMessage(msg));
       }
