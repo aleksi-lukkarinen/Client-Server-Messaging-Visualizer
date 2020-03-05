@@ -435,10 +435,7 @@
   }
 
   CSMesVisError.prototype.ensureThatEndsWithPeriod = function(s) {
-    if (s.charAt(s.length - 1) != ".")
-      return s + ".";
-
-    return s;
+    return !s.endsWith(".") ? s + "." : s;
   }
 
   if (!window.hasOwnProperty("CSMesVis")) {
