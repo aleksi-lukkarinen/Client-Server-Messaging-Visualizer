@@ -321,6 +321,5 @@ CSMesVisError.prototype.ensureThatEndsWithPeriod = function(s) {
 
 
 $(document).ready(function() {
-  const b = new CSMesVisBootstrapper(CSMesVis.setupData);
-  b.execute();
+  new CSMesVisBootstrapper(CSMesVis.setupData).execute();
 });
