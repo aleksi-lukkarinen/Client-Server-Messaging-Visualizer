@@ -89,6 +89,7 @@
       webPage: {
         location: {
           url:        document.URL,
+          /*
           protocol:   window.location.protocol,
           host:       window.location.host,
           hostname:   window.location.hostname,
@@ -96,6 +97,7 @@
           pathname:   window.location.pathname,
           hash:       window.location.hash,
           query:      window.location.search,
+          */
         },
         referrer:     document.referrer,
         title:        document.title,
