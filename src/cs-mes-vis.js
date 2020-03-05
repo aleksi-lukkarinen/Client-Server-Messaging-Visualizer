@@ -72,7 +72,7 @@
 (function($) {
   'use strict';
 
-  const CSMesVis = function(container, setupData, config, helper) {
+  const CSMesVisUI = function(container, setupData, config, helper) {
     this.container = container;
     this.setupData = setupData;
     this.config = config;
@@ -82,13 +82,13 @@
     this.buttons = {};
   }
 
-  CSMesVis.prototype.init = function() {
+  CSMesVisUI.prototype.init = function() {
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
   }
 
-  CSMesVis.prototype.createControlFrame = function() {
+  CSMesVisUI.prototype.createControlFrame = function() {
     const frame = this.helper.createHtmlDiv(this.config.cssClasses.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
@@ -132,7 +132,7 @@
           toLastStepTitle, this.config.cssClasses.CSMV_BUTTON_TO_LAST_STEP, frame);
   }
 
-  CSMesVis.prototype.createButton = function(title, cssClass, parent) {
+  CSMesVisUI.prototype.createButton = function(title, cssClass, parent) {
     const b = this.helper.createHtmlButton(this.config.cssClasses.CSMV_BUTTON);
     b.text(title);
     if (this.helper.isNonEmptyString(cssClass)) {
@@ -142,7 +142,7 @@
     return b;
   }
 
-  CSMesVis.prototype.createAnimationFrame = function() {
+  CSMesVisUI.prototype.createAnimationFrame = function() {
     const frameDiv = this.helper.createHtmlDiv(this.config.cssClasses.CSMV_ANIMATION_FRAME);
 
     if (this.setupData.hasOwnProperty(this.config.setupDataKeys.VIS_ENV)) {
@@ -164,7 +164,7 @@
     this.frames.animation = frameDiv;
   }
 
-  CSMesVis.prototype.createOuterFrame = function() {
+  CSMesVisUI.prototype.createOuterFrame = function() {
     const frameDiv = this.helper.createHtmlDiv(this.config.cssClasses.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
@@ -204,8 +204,18 @@
     }
   }
 
+  if (!window.hasOwnProperty("CSMesVis")) {
+    window.CSMesVis = {};
+  }
+
+  window.CSMesVis.UI = CSMesVisUI;
+}(jQuery));
 
 
+
+
+(function($) {
+  'use strict';
 
   const CSMesVisBootstrapper = function(csMesVis) {
     this.setupData = csMesVis.setupData;
@@ -213,7 +223,7 @@
   }
 
   CSMesVisBootstrapper.prototype.execute = function() {
-    const helper = new CSMesVisHelpers(this.config);
+    const helper = new window.CSMesVis.Helper(this.config);
 
     if (this.setupData == null) {
       throw new CSMesVisError("Configuration using CSMesVis.setupData is missing.");
@@ -262,20 +272,28 @@
       const visualizationContainer = visualizationElements[0];
       //console.log(visualizationContainer);
 
-      const V = new CSMesVis(visualizationContainer, visualizationSetup, this.config, helper);
+      const V = new window.CSMesVis.UI(
+                  visualizationContainer, visualizationSetup, this.config, helper);
       V.init();
     }, this);
   }
 
-  $(document).ready(function() {
-    new CSMesVisBootstrapper(window.CSMesVis).execute();
-  });
+  if (!window.hasOwnProperty("CSMesVis")) {
+    window.CSMesVis = {};
+  }
+
+  window.CSMesVis.Bootstrapper = CSMesVisBootstrapper;
+}(jQuery));
+
+$(document).ready(function() {
+  new window.CSMesVis.Bootstrapper(window.CSMesVis).execute();
+});
 
 
 
 
-
-
+(function($) {
+  'use strict';
 
   const CSMesVisHelpers = function(config) {
     this.config = config;
@@ -308,9 +326,18 @@
     return $.type(s) === "string" && $.trim(s).length > 0;
   }
 
+  if (!window.hasOwnProperty("CSMesVis")) {
+    window.CSMesVis = {};
+  }
+
+  window.CSMesVis.Helper = CSMesVisHelpers;
+}(jQuery));
 
 
 
+
+(function($) {
+  'use strict';
 
   const CSMesVisError = function(message) {
     this.message = this.formatErrorMessage(message);
@@ -329,4 +356,9 @@
     return s;
   }
 
+  if (!window.hasOwnProperty("CSMesVis")) {
+    window.CSMesVis = {};
+  }
+
+  window.CSMesVis.Error = CSMesVisError;
 }(jQuery));
