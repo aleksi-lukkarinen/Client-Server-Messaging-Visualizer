@@ -88,35 +88,35 @@
     this.add(CSMesVis.config.loggingKeys.METADATA, {
       webPage: {
         location: {
-          url:        document.URL,
-          /*
-          protocol:   window.location.protocol,
-          host:       window.location.host,
-          hostname:   window.location.hostname,
-          port:       window.location.port,
-          pathname:   window.location.pathname,
-          hash:       window.location.hash,
-          query:      window.location.search,
-          */
+          url:            helper.documentURL,
+
+          protocol:       helper.locationProtocol,
+          host:           helper.locationHost,
+          hostname:       helper.locationHostname,
+          port:           helper.locationPort,
+          pathname:       helper.locationPathname,
+          hash:           helper.locationHash,
+          query:          helper.locationQuery,
+
         },
-        referrer:     document.referrer,
-        title:        document.title,
-        charSet:      document.characterSet,
+        referrer:         helper.documentReferrer,
+        title:            helper.documentTitle,
+        charSet:          helper.documentCharacterSet,
       },
       navigator: {
-        userAgent:    navigator.userAgent,
-        platform:     navigator.platform,
-        appName:      navigator.appName,
-        appVersion:   navigator.appVersion,
-        product:      navigator.product,
+        userAgent:        helper.userAgent,
+        platform:         helper.platform,
+        appName:          helper.appName,
+        appVersion:       helper.appVersion,
+        product:          helper.product,
       },
       screen: {
-        totalHeight:  screen.height,
-        totalWidth:   screen.width,
-        colorDepth:   screen.colorDepth,
+        totalHeight:      helper.totalScreenHeight,
+        totalWidth:       helper.totalScreenWidth,
+        colorDepth:       helper.colorDepth,
       },
       visualization: {
-        name:         visualizationName,
+        name:             visualizationName,
       },
     });
   }
@@ -142,9 +142,10 @@
   }
 
   CSMesVisLogger.prototype.add = function(type, data) {
-    const timestamp = this.helper.timestamp();
-    const logEntry = [timestamp, type];
-    
+    const timestamp = Date.now();
+    const timezoneOffset = new Date(timestamp).getTimezoneOffset();
+    const logEntry = [timestamp, timezoneOffset, type];
+
     if (arguments.length == 2) {
       if ($.isArray(data)) {
         data.forEach(function(item, idx) {
@@ -189,7 +190,7 @@
 
   CSMesVisUI.prototype.init = function() {
     this.emitInitializationStartsEvent();
-    
+
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
@@ -200,7 +201,7 @@
   CSMesVisUI.prototype.emitInitializationStartsEvent = function() {
     var e = jQuery.Event("InitializationStartsEvent")
   }
-  
+
   CSMesVisUI.prototype.createControlFrame = function() {
     const conf = CSMesVis.config;
     const frame = this.helper.createHtmlDiv(conf.cssClasses.CSMV_CONTROL_FRAME);
@@ -234,55 +235,55 @@
     }
 
     this.buttons.toFirstStep = this.createButton(
-          toFirstStepTitle, 
-          conf.cssClasses.CSMV_BUTTON_TO_FIRST_STEP, 
-          this.handleToFirstStepClick, 
+          toFirstStepTitle,
+          conf.cssClasses.CSMV_BUTTON_TO_FIRST_STEP,
+          this.handleToFirstStepClick,
           frame);
 
     this.buttons.toPreviousStep = this.createButton(
-          toPreviousStepTitle, 
-          conf.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP, 
-          this.handleToPreviousStepClick, 
+          toPreviousStepTitle,
+          conf.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP,
+          this.handleToPreviousStepClick,
           frame);
 
     this.buttons.toNextStep = this.createButton(
-          toNextStepTitle, 
-          conf.cssClasses.CSMV_BUTTON_TO_NEXT_STEP, 
-          this.handleToNextStepClick, 
+          toNextStepTitle,
+          conf.cssClasses.CSMV_BUTTON_TO_NEXT_STEP,
+          this.handleToNextStepClick,
           frame);
 
     this.buttons.toLastStep = this.createButton(
-          toLastStepTitle, 
-          conf.cssClasses.CSMV_BUTTON_TO_LAST_STEP, 
-          this.handleToLastStepClick, 
+          toLastStepTitle,
+          conf.cssClasses.CSMV_BUTTON_TO_LAST_STEP,
+          this.handleToLastStepClick,
           frame);
   }
 
   CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     this.log.addToFirstClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToPreviousStepClick = function(event) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     this.log.addToPreviousClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToNextStepClick = function(event) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     this.log.addToNextClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToLastStepClick = function(event) {
     event.preventDefault();
     event.stopPropagation();
-    
+
     this.log.addToLastClickedEvent();
     console.log(this.log.get());
   }
@@ -377,7 +378,25 @@
   'use strict';
 
   const CSMesVisHelpers = function() {
-    // Nothing
+    this.totalScreenHeight = screen.height;
+    this.totalScreenWidth = screen.width;
+    this.colorDepth = screen.colorDepth;
+    this.userAgent = navigator.userAgent;
+    this.platform = navigator.platform;
+    this.appName = navigator.appName;
+    this.appVersion = navigator.appVersion;
+    this.product = navigator.product;
+    this.documentTitle = document.title;
+    this.documentReferrer = document.referrer;
+    this.documentCharacterSet = document.characterSet;
+    this.documentURL = document.URL;
+    this.locationProtocol = window.location.protocol;
+    this.locationHost = window.location.host;
+    this.locationHostname = window.location.hostname;
+    this.locationPort = window.location.port;
+    this.locationPathname = window.location.pathname;
+    this.locationHash = window.location.hash;
+    this.locationQuery = window.location.search;
   }
 
   CSMesVisHelpers.prototype.createHtmlDiv = function(cssClass) {
@@ -406,10 +425,6 @@
 
   CSMesVisHelpers.prototype.isNonEmptyString = function(s) {
     return $.type(s) === "string" && $.trim(s).length > 0;
-  }
-
-  CSMesVisHelpers.prototype.timestamp = function() {
-    return Date.now();
   }
 
   if (!window.hasOwnProperty("CSMesVis")) {
