@@ -29,6 +29,15 @@
       HEIGHT:                         "height",
     },
 
+    eventNames: {
+      INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
+      INITIALIZATION_FINISHED:        "CSMesVis-initialization-finished",
+      TO_FIRST_STEP_CLICKED:          "CSMesVis-to-first-step-button-clicked",
+      TO_PREVIOUS_STEP_CLICKED:       "CSMesVis-to-previous-step-button-clicked",
+      TO_NEXT_STEP_CLICKED:           "CSMesVis-to-next-step-button-clicked",
+      TO_LAST_STEP_CLICKED:           "CSMesVis-to-last-step-button-clicked",
+    },
+
     htmlAttributes: {
       VISUALIZATION_NAME:             "cmsv-name",
       CLASS:                          "class",
@@ -43,7 +52,8 @@
 
     loggingKeys: {
       METADATA:                       "Metadata",
-      INITIALIZED:                    "Initialized",
+      INITIALIZATION_BEGINS:          "Initialization begins",
+      INITIALIZATION_FINISHED:        "Initialization finished",
       TO_FIRST_STEP_CLICKED:          "'First' button clicked",
       TO_PREVIOUS_STEP_CLICKED:       "'Previous' button clicked",
       TO_NEXT_STEP_CLICKED:           "'Next' button clicked",
@@ -73,6 +83,14 @@
       TO_LAST_STEP_TITLE:             "Last Step",
     }
   };
+
+  // Create a convenience constant that contains all event keys.
+  const names = CSMesVis.config.eventNames;
+  var allEvents = "";
+  for (const n in names) {
+    allEvents = allEvents + " " + names[n];
+  }
+  names.ALL_EVENTS = allEvents.substring(0, allEvents.length);
 }());
 
 
@@ -121,8 +139,12 @@
     });
   }
 
-  CSMesVisLogger.prototype.addInitializedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.INITIALIZED);
+  CSMesVisLogger.prototype.addInitializationBeginsEvent = function() {
+    this.add(CSMesVis.config.loggingKeys.INITIALIZATION_BEGINS);
+  }
+
+  CSMesVisLogger.prototype.addInitializationFinishedEvent = function() {
+    this.add(CSMesVis.config.loggingKeys.INITIALIZATION_FINISHED);
   }
 
   CSMesVisLogger.prototype.addToFirstClickedEvent = function() {
@@ -189,17 +211,15 @@
   }
 
   CSMesVisUI.prototype.init = function() {
-    this.emitInitializationStartsEvent();
+    this.emitInitializationBeginsEvent();
+    this.log.addInitializationBeginsEvent();
 
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
 
-    this.log.addInitializedEvent();
-  }
-
-  CSMesVisUI.prototype.emitInitializationStartsEvent = function() {
-    var e = jQuery.Event("InitializationStartsEvent")
+    this.emitInitializationFinishedEvent();
+    this.log.addInitializationFinishedEvent();
   }
 
   CSMesVisUI.prototype.createControlFrame = function() {
@@ -263,6 +283,7 @@
     event.preventDefault();
     event.stopPropagation();
 
+    this.emitToFirstStepButtonClickedEvent();
     this.log.addToFirstClickedEvent();
   }
 
@@ -270,6 +291,7 @@
     event.preventDefault();
     event.stopPropagation();
 
+    this.emitToPreviousStepButtonClickedEvent();
     this.log.addToPreviousClickedEvent();
   }
 
@@ -277,6 +299,7 @@
     event.preventDefault();
     event.stopPropagation();
 
+    this.emitToNextStepButtonClickedEvent();
     this.log.addToNextClickedEvent();
   }
 
@@ -284,6 +307,7 @@
     event.preventDefault();
     event.stopPropagation();
 
+    this.emitToLastStepButtonClickedEvent();
     this.log.addToLastClickedEvent();
     console.log(this.log.get());
   }
@@ -362,6 +386,35 @@
         throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
       }
     }
+  }
+
+  CSMesVisUI.prototype.emitInitializationBeginsEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.INITIALIZATION_BEGINS, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitInitializationFinishedEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.INITIALIZATION_FINISHED, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitToFirstStepButtonClickedEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.TO_FIRST_STEP_CLICKED, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitToPreviousStepButtonClickedEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitToNextStepButtonClickedEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.TO_NEXT_STEP_CLICKED, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitToLastStepButtonClickedEvent = function() {
+    this.emitEvent(CSMesVis.config.eventNames.TO_LAST_STEP_CLICKED, [this.name]);
+  }
+
+  CSMesVisUI.prototype.emitEvent = function(id, params) {
+    const e = jQuery.Event(id);
+    $(this.container).trigger(e, params);
   }
 
   if (!window.hasOwnProperty("CSMesVis")) {
