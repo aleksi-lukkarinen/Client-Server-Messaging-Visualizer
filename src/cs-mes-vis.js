@@ -89,7 +89,7 @@
       webPage: {
         location: {
           url:            helper.documentURL,
-
+          /*
           protocol:       helper.locationProtocol,
           host:           helper.locationHost,
           hostname:       helper.locationHostname,
@@ -97,7 +97,7 @@
           pathname:       helper.locationPathname,
           hash:           helper.locationHash,
           query:          helper.locationQuery,
-
+          */
         },
         referrer:         helper.documentReferrer,
         title:            helper.documentTitle,
