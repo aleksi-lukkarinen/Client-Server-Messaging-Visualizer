@@ -26,19 +26,28 @@
 
     cssProperties: {
       WIDTH:                          "width",
-      HEIGHT:                         "height"
+      HEIGHT:                         "height",
     },
 
     htmlAttributes: {
       VISUALIZATION_NAME:             "cmsv-name",
-      CLASS:                          "class"
+      CLASS:                          "class",
     },
 
     htmlTags: {
       TAG_START:                      "<",
       SINGLE_TAG_END:                 "/>",
       DIV:                            "div",
-      BUTTON:                         "button"
+      BUTTON:                         "button",
+    },
+
+    loggingKeys: {
+      METADATA:                       "Metadata",
+      INITIALIZED:                    "Initialized",
+      TO_FIRST_STEP_CLICKED:          "'First' button clicked",
+      TO_PREVIOUS_STEP_CLICKED:       "'Previous' button clicked",
+      TO_NEXT_STEP_CLICKED:           "'Next' button clicked",
+      TO_LAST_STEP_CLICKED:           "'Last' button clicked",
     },
 
     setupDataKeys: {
@@ -54,14 +63,14 @@
       TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
       TO_NEXT_STEP_TITLE:             "toNextStepTitle",
       TO_LAST_STEP_TITLE:             "toLastStepTitle",
-      VIS_ACTORS:                     "actors"
+      VIS_ACTORS:                     "actors",
     },
 
     uiTexts: {
       TO_FIRST_STEP_TITLE:            "First Step",
       TO_PREVIOUS_STEP_TITLE:         "Previous Step",
       TO_NEXT_STEP_TITLE:             "Next Step",
-      TO_LAST_STEP_TITLE:             "Last Step"
+      TO_LAST_STEP_TITLE:             "Last Step",
     }
   };
 }());
@@ -72,33 +81,79 @@
 (function($) {
   'use strict';
 
-  const CSMesVisLogger = function() {
+  const CSMesVisLogger = function(visualizationName, helper) {
+    this.helper = helper;
     this.log = [];
+
+    this.add(CSMesVis.config.loggingKeys.METADATA, {
+      webPage: {
+        location: {
+          url:        document.URL,
+          protocol:   window.location.protocol,
+          host:       window.location.host,
+          hostname:   window.location.hostname,
+          port:       window.location.port,
+          pathname:   window.location.pathname,
+          hash:       window.location.hash,
+          query:      window.location.search,
+        },
+        referrer:     document.referrer,
+        title:        document.title,
+        charSet:      document.characterSet,
+      },
+      navigator: {
+        userAgent:    navigator.userAgent,
+        platform:     navigator.platform,
+        appName:      navigator.appName,
+        appVersion:   navigator.appVersion,
+        product:      navigator.product,
+      },
+      screen: {
+        totalHeight:  screen.height,
+        totalWidth:   screen.width,
+        colorDepth:   screen.colorDepth,
+      },
+      visualization: {
+        name:         visualizationName,
+      },
+    });
   }
 
   CSMesVisLogger.prototype.addInitializedEvent = function() {
-    this.add("initialized");
+    this.add(CSMesVis.config.loggingKeys.INITIALIZED);
   }
 
   CSMesVisLogger.prototype.addToFirstClickedEvent = function() {
-    this.add("toFirstClicked");
+    this.add(CSMesVis.config.loggingKeys.TO_FIRST_STEP_CLICKED);
   }
 
   CSMesVisLogger.prototype.addToPreviousClickedEvent = function() {
-    this.add("toPreviousClicked");
+    this.add(CSMesVis.config.loggingKeys.TO_PREVIOUS_STEP_CLICKED);
   }
 
   CSMesVisLogger.prototype.addToNextClickedEvent = function() {
-    this.add("toNextClicked");
+    this.add(CSMesVis.config.loggingKeys.TO_NEXT_STEP_CLICKED);
   }
 
   CSMesVisLogger.prototype.addToLastClickedEvent = function() {
-    this.add("toLastClicked");
+    this.add(CSMesVis.config.loggingKeys.TO_LAST_STEP_CLICKED);
   }
 
-  CSMesVisLogger.prototype.add = function(type) {
-    const timestamp = Date.now();
+  CSMesVisLogger.prototype.add = function(type, data) {
+    const timestamp = this.helper.timestamp();
     const logEntry = [timestamp, type];
+    
+    if (arguments.length == 2) {
+      if ($.isArray(data)) {
+        data.forEach(function(item, idx) {
+          logEntry.push(item);
+        });
+      }
+      else {
+        logEntry.push(data);
+      }
+    }
+
     this.log.push(logEntry);
   }
 
@@ -127,10 +182,12 @@
     this.helper = helper;
     this.frames = {};
     this.buttons = {};
-    this.log = new CSMesVis.Logger();
+    this.log = new CSMesVis.Logger(this.name, this.helper);
   }
 
   CSMesVisUI.prototype.init = function() {
+    this.emitInitializationStartsEvent();
+    
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
@@ -138,6 +195,10 @@
     this.log.addInitializedEvent();
   }
 
+  CSMesVisUI.prototype.emitInitializationStartsEvent = function() {
+    var e = jQuery.Event("InitializationStartsEvent")
+  }
+  
   CSMesVisUI.prototype.createControlFrame = function() {
     const conf = CSMesVis.config;
     const frame = this.helper.createHtmlDiv(conf.cssClasses.CSMV_CONTROL_FRAME);
@@ -196,29 +257,32 @@
   }
 
   CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
-    console.log("'First' button clicked.");
-
+    event.preventDefault();
+    event.stopPropagation();
+    
     this.log.addToFirstClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToPreviousStepClick = function(event) {
-    console.log("'Previous' button clicked.");
-
+    event.preventDefault();
+    event.stopPropagation();
+    
     this.log.addToPreviousClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToNextStepClick = function(event) {
-    console.log("'Next' button clicked.");
-
+    event.preventDefault();
+    event.stopPropagation();
+    
     this.log.addToNextClickedEvent();
   }
 
   CSMesVisUI.prototype.handleToLastStepClick = function(event) {
-    console.log("'Last' button clicked.");
-
-    this.log.addToNextClickedEvent();
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.log.addToLastClickedEvent();
     console.log(this.log.get());
-    console.log(this.log.get().length);
   }
 
   CSMesVisUI.prototype.createButton = function(title, cssClass, clickHandler, parent) {
@@ -340,6 +404,10 @@
 
   CSMesVisHelpers.prototype.isNonEmptyString = function(s) {
     return $.type(s) === "string" && $.trim(s).length > 0;
+  }
+
+  CSMesVisHelpers.prototype.timestamp = function() {
+    return Date.now();
   }
 
   if (!window.hasOwnProperty("CSMesVis")) {
