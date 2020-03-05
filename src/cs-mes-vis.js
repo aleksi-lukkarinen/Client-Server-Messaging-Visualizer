@@ -72,6 +72,54 @@
 (function($) {
   'use strict';
 
+  const CSMesVisLogger = function() {
+    this.log = [];
+  }
+
+  CSMesVisLogger.prototype.addInitializedEvent = function() {
+    this.add("initialized");
+  }
+
+  CSMesVisLogger.prototype.addToFirstClickedEvent = function() {
+    this.add("toFirstClicked");
+  }
+
+  CSMesVisLogger.prototype.addToPreviousClickedEvent = function() {
+    this.add("toPreviousClicked");
+  }
+
+  CSMesVisLogger.prototype.addToNextClickedEvent = function() {
+    this.add("toNextClicked");
+  }
+
+  CSMesVisLogger.prototype.addToLastClickedEvent = function() {
+    this.add("toLastClicked");
+  }
+
+  CSMesVisLogger.prototype.add = function(type) {
+    const timestamp = Date.now();
+    const logEntry = [timestamp, type];
+    this.log.push(logEntry);
+  }
+
+  CSMesVisLogger.prototype.get = function() {
+    return this.log;
+  }
+
+  if (!window.hasOwnProperty("CSMesVis")) {
+    window.CSMesVis = {};
+  }
+
+  CSMesVis.Logger = CSMesVisLogger;
+}(jQuery));
+
+
+
+
+
+(function($) {
+  'use strict';
+
   const CSMesVisUI = function(container, setupData, helper) {
     this.container = container;
     this.setupData = setupData;
@@ -79,12 +127,15 @@
     this.helper = helper;
     this.frames = {};
     this.buttons = {};
+    this.log = new CSMesVis.Logger();
   }
 
   CSMesVisUI.prototype.init = function() {
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
+
+    this.log.addInitializedEvent();
   }
 
   CSMesVisUI.prototype.createControlFrame = function() {
@@ -145,28 +196,38 @@
   }
 
   CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
-    alert("First");
+    console.log("'First' button clicked.");
+
+    this.log.addToFirstClickedEvent();
   }
-  
+
   CSMesVisUI.prototype.handleToPreviousStepClick = function(event) {
-    alert("Previous");
+    console.log("'Previous' button clicked.");
+
+    this.log.addToPreviousClickedEvent();
   }
-  
+
   CSMesVisUI.prototype.handleToNextStepClick = function(event) {
-    alert("Next");
+    console.log("'Next' button clicked.");
+
+    this.log.addToNextClickedEvent();
   }
-  
+
   CSMesVisUI.prototype.handleToLastStepClick = function(event) {
-    alert("Last");
+    console.log("'Last' button clicked.");
+
+    this.log.addToNextClickedEvent();
+    console.log(this.log.get());
+    console.log(this.log.get().length);
   }
-  
+
   CSMesVisUI.prototype.createButton = function(title, cssClass, clickHandler, parent) {
     const b = this.helper.createHtmlButton(CSMesVis.config.cssClasses.CSMV_BUTTON);
     b.text(title);
     if (this.helper.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
-    b.click(clickHandler);
+    b.click($.proxy(clickHandler, this));
     b.appendTo(parent);
     return b;
   }
