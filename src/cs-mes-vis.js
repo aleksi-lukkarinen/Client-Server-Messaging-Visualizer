@@ -1,4 +1,4 @@
-(function($) {
+(function() {
   'use strict';
 
   if (!window.hasOwnProperty("CSMesVis")) {
@@ -64,11 +64,13 @@
       TO_LAST_STEP_TITLE:             "Last Step"
     }
   };
+}());
 
 
 
 
-
+(function($) {
+  'use strict';
 
   const CSMesVis = function(container, setupData, config, helper) {
     this.container = container;
@@ -265,6 +267,10 @@
     }, this);
   }
 
+  $(document).ready(function() {
+    new CSMesVisBootstrapper(window.CSMesVis).execute();
+  });
+
 
 
 
@@ -322,13 +328,5 @@
 
     return s;
   }
-
-
-
-
-
-  $(document).ready(function() {
-    new CSMesVisBootstrapper(window.CSMesVis).execute();
-  });
 
 }(jQuery));
