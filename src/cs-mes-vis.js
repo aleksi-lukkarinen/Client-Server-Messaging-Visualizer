@@ -120,24 +120,53 @@
     }
 
     this.buttons.toFirstStep = this.createButton(
-          toFirstStepTitle, conf.cssClasses.CSMV_BUTTON_TO_FIRST_STEP, frame);
+          toFirstStepTitle, 
+          conf.cssClasses.CSMV_BUTTON_TO_FIRST_STEP, 
+          this.handleToFirstStepClick, 
+          frame);
 
     this.buttons.toPreviousStep = this.createButton(
-          toPreviousStepTitle, conf.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP, frame);
+          toPreviousStepTitle, 
+          conf.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP, 
+          this.handleToPreviousStepClick, 
+          frame);
 
     this.buttons.toNextStep = this.createButton(
-          toNextStepTitle, conf.cssClasses.CSMV_BUTTON_TO_NEXT_STEP, frame);
+          toNextStepTitle, 
+          conf.cssClasses.CSMV_BUTTON_TO_NEXT_STEP, 
+          this.handleToNextStepClick, 
+          frame);
 
     this.buttons.toLastStep = this.createButton(
-          toLastStepTitle, conf.cssClasses.CSMV_BUTTON_TO_LAST_STEP, frame);
+          toLastStepTitle, 
+          conf.cssClasses.CSMV_BUTTON_TO_LAST_STEP, 
+          this.handleToLastStepClick, 
+          frame);
   }
 
-  CSMesVisUI.prototype.createButton = function(title, cssClass, parent) {
+  CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
+    alert("First");
+  }
+  
+  CSMesVisUI.prototype.handleToPreviousStepClick = function(event) {
+    alert("Previous");
+  }
+  
+  CSMesVisUI.prototype.handleToNextStepClick = function(event) {
+    alert("Next");
+  }
+  
+  CSMesVisUI.prototype.handleToLastStepClick = function(event) {
+    alert("Last");
+  }
+  
+  CSMesVisUI.prototype.createButton = function(title, cssClass, clickHandler, parent) {
     const b = this.helper.createHtmlButton(CSMesVis.config.cssClasses.CSMV_BUTTON);
     b.text(title);
     if (this.helper.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
+    b.click(clickHandler);
     b.appendTo(parent);
     return b;
   }
