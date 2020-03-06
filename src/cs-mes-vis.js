@@ -424,7 +424,7 @@
       else {
         const msg = "Visualization '" + this.name + "' has an invalid title; " +
                     "it must be a string that contains not only whitespace.";
-        throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
+        throw this.helper.incorrectSetupDataError(msg);
       }
     }
 
@@ -441,7 +441,7 @@
       else {
         const msg = "Visualization '" + this.name + "' has an invalid description; " +
                     "it must be a string that contains not only whitespace.";
-        throw new CSMesVisError(this.helper.incorrectSetupDataMessage(msg));
+        throw this.helper.incorrectSetupDataError(msg);
       }
     }
   }
@@ -626,12 +626,16 @@
     return $(tag, attributes);
   }
 
-  CSMesVisHelpers.prototype.incorrectSetupDataMessage = function(message) {
-    return "Incorrect setup data: " + message;
+  CSMesVisHelpers.prototype.incorrectSetupDataError = function(message) {
+    return this.newCSMVError("Incorrect setup data: " + message);
   }
 
-  CSMesVisHelpers.prototype.incorrectSetupMessage = function(message) {
-    return "Incorrect setup: " + message;
+  CSMesVisHelpers.prototype.incorrectSetupError = function(message) {
+    return this.newCSMVError("Incorrect setup: " + message);
+  }
+
+  CSMesVisHelpers.prototype.newCSMVError = function(message) {
+    return new CSMesVis.Error(message);
   }
 
   CSMesVisHelpers.prototype.isNonEmptyString = function(s) {
@@ -687,11 +691,11 @@
     const helper = new CSMesVis.Helper();
 
     if (CSMesVis.setupData == null) {
-      throw new CSMesVis.Error("Configuration using CSMesVis.setupData is missing.");
+      throw helper.newCSMVError("Configuration using CSMesVis.setupData is missing.");
     }
     if (!Array.isArray(CSMesVis.setupData)) {
       const msg = "The root element must be an array.";
-      throw new CSMesVis.Error(helper.incorrectSetupDataMessage(msg));
+      throw helper.incorrectSetupDataError(msg);
     }
 
     const allVisualizationElements = $("." + CSMesVis.config.cssClasses.CSMV_VISUALIZATION);
@@ -702,13 +706,13 @@
 
       // TODO: Print lists of names of both the existing divs and setups
 
-      throw new CSMesVis.Error(helper.incorrectSetupDataMessage(msg));
+      throw helper.incorrectSetupDataError(msg);
     }
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
       if (!visualizationSetup.hasOwnProperty(CSMesVis.config.setupDataKeys.VIS_NAME)) {
         const msg = (idx + 1) + ". visualization does not have a name.";
-        throw new CSMesVis.Error(helper.incorrectSetupDataMessage(msg));
+        throw helper.incorrectSetupDataError(msg);
       }
 
       // TODO: Is the name a non-empty string? if (helper.isNonEmptyString(t)) {
@@ -723,12 +727,12 @@
       if (visualizationElements.length === 0) {
         const msg = "Setup data is given for visualization '" +  visualizationSetup.name +
                     "', but the HTML file does not contain a container element for it.";
-        throw new CSMesVis.Error(helper.incorrectSetupMessage(msg));
+        throw helper.incorrectSetupError(msg);
       }
       if (visualizationElements.length > 1) {
         const msg = "The HTML file contains multiple container element for visualization '" +
                     visualizationSetup.name + "'."
-        throw new CSMesVis.Error(helper.incorrectSetupMessage(msg));
+        throw helper.incorrectSetupError(msg);
       }
       const visualizationContainer = visualizationElements[0];
       //console.log(visualizationContainer);
