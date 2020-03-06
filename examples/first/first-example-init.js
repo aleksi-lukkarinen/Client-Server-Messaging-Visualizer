@@ -19,23 +19,55 @@ CSMesVis.setupData = [
 
     actors: [
       {
-        name: "Client"
+        id: "c",
+        title: "Browser",
+        cssClasses: ["csmv-browser"],
+        width: "100px",
+        height: "200px",
       },
       {
-        name: "Server"
-      }
+        id: "s",   
+        title: "Web Server",
+        cssClasses: ["csmv-server"],
+        width: "100px",
+        height: "200px",
+      },
+      {
+        id: "req", 
+        cssClasses: ["csmv-textblock"],
+        contentHTML: "<div class='csmv-textblock-title'>Can I please have the default file at the root?</div><div class='csmv-textblock-body'><tt>GET / HTTP/1.1</tt><br/><tt>Host: www.example.com</tt></div>",
+        width: "300px",
+        height: "300px",
+      },
     ],
 
-    setup: [
-    
-    ],
-      
     steps: [
-      [1],
-      [2],
-      [3],
-      [4],
-      [5],
+      {
+        setup: [
+          ["set-pos", "c", 200, 200],
+          ["show", "c"],
+          ["set-pos", "s", 400, 200],
+          ["show", "s"],
+          ["set-pos", "req", 300, 100],
+          ["hide", "req"],
+        ],
+        transitionBackwards: [],
+        transitionForwards: [],
+      },
+      {
+        setup: [
+          ["show", "req"],
+        ],
+      },
+      {
+        
+      },
+      {
+        
+      },
+      {
+        
+      },
     ]
   },
   
@@ -47,10 +79,12 @@ CSMesVis.setupData = [
       
     actors: [
       {
-        name: "Client"
+        class: "c",
+        title: "Client",
       },
       {
-        name: "Server"
+        class: "s",
+        name: "Server",
       }
     ],
 
