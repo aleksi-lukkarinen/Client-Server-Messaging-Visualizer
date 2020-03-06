@@ -112,7 +112,7 @@
     this.actors = {};
     this.steps = [];
     this.currentStep = 1;
-    
+
     this.setupModel(setupData);
   }
 
@@ -124,7 +124,7 @@
     this.currentStep = 1;
     console.log(this.steps);
     this.emitModelChangedEvent();
-  }  
+  }
 
   CSMesVisModel.prototype.moveToFirstStep = function() {
     if (!this.canMoveToFirstStep()) {
@@ -173,7 +173,7 @@
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
       throw this.helper.newCSMVError(msg);
     }
-    
+
     this.currentStep = this.steps.length;
     this.emitModelChangedEvent();
   }
@@ -236,73 +236,76 @@
 
   CSMesVisUI.prototype.createControlFrame = function() {
     const conf = CSMesVis.config;
-    const uiTexts = conf.uiTexts;
-  
-    var toFirstStepTitle = uiTexts.TO_FIRST_STEP_TITLE;
-    var toPreviousStepTitle = uiTexts.TO_PREVIOUS_STEP_TITLE;
-    var toNextStepTitle = uiTexts.TO_NEXT_STEP_TITLE;
-    var toLastStepTitle = uiTexts.TO_LAST_STEP_TITLE;
-
-    const sdKeys = conf.setupDataKeys;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
-      const e = this.setupData[sdKeys.VIS_ENV];
-
-      if (e.hasOwnProperty(sdKeys.BUTTONS)) {
-        const b = e[sdKeys.BUTTONS];
-
-        if (b.hasOwnProperty(sdKeys.TO_FIRST_STEP_TITLE)) {
-          toFirstStepTitle = b[sdKeys.TO_FIRST_STEP_TITLE];
-        }
-        if (b.hasOwnProperty(sdKeys.TO_PREVIOUS_STEP_TITLE)) {
-          toPreviousStepTitle = b[sdKeys.TO_PREVIOUS_STEP_TITLE];
-        }
-        if (b.hasOwnProperty(sdKeys.TO_NEXT_STEP_TITLE)) {
-          toNextStepTitle = b[sdKeys.TO_NEXT_STEP_TITLE];
-        }
-        if (b.hasOwnProperty(sdKeys.TO_LAST_STEP_TITLE)) {
-          toLastStepTitle = b[sdKeys.TO_LAST_STEP_TITLE];
-        }
-      }
-    }
-
     const cssClasses = conf.cssClasses;
+    const uiTexts = conf.uiTexts;
+    const sdKeys = conf.setupDataKeys;
+
     const frame = this.helper.createHtmlDiv(cssClasses.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
-    this.buttons.toFirstStep = this.createButton(
-          toFirstStepTitle,
+    this.createButton("toFirstStep",
+          uiTexts.TO_FIRST_STEP_TITLE, sdKeys.TO_FIRST_STEP_TITLE,
           cssClasses.CSMV_BUTTON_TO_FIRST_STEP,
-          this.handleToFirstStepClick,
-          frame);
+          this.handleToFirstStepClick, frame);
 
-    this.buttons.toPreviousStep = this.createButton(
-          toPreviousStepTitle,
+    this.createButton("toPreviousStep",
+          uiTexts.TO_PREVIOUS_STEP_TITLE, sdKeys.TO_PREVIOUS_STEP_TITLE,
           cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP,
-          this.handleToPreviousStepClick,
-          frame);
+          this.handleToPreviousStepClick, frame);
 
-    this.buttons.toNextStep = this.createButton(
-          toNextStepTitle,
+    this.createButton("toNextStep",
+          uiTexts.TO_NEXT_STEP_TITLE, sdKeys.TO_NEXT_STEP_TITLE,
           cssClasses.CSMV_BUTTON_TO_NEXT_STEP,
-          this.handleToNextStepClick,
-          frame);
+          this.handleToNextStepClick, frame);
 
-    this.buttons.toLastStep = this.createButton(
-          toLastStepTitle,
+    this.createButton("toLastStep",
+          uiTexts.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
           cssClasses.CSMV_BUTTON_TO_LAST_STEP,
-          this.handleToLastStepClick,
-          frame);
+          this.handleToLastStepClick, frame);
+  }
+
+  CSMesVisUI.prototype.createButton = function(
+                collectionName, defaultTitle, setupDataKeyForTitle,
+                cssClass, clickHandler, parent) {
+
+    const conf = CSMesVis.config;
+    const sdKeys = conf.setupDataKeys;
+
+    var title = defaultTitle;
+    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
+      const env = this.setupData[sdKeys.VIS_ENV];
+
+      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
+        const btns = env[sdKeys.BUTTONS];
+
+        if (btns.hasOwnProperty(setupDataKeyForTitle)) {
+          title = btns[setupDataKeyForTitle];
+        }
+      }
+    }
+
+    const b = this.helper.createHtmlButton(
+                conf.cssClasses.CSMV_BUTTON);
+    b.text(title);
+    
+    if (this.helper.isNonEmptyString(cssClass)) {
+      b.addClass(cssClass);
+    }
+    
+    b.click($.proxy(clickHandler, this));
+    b.appendTo(parent);
+    this.buttons[collectionName] = b;
   }
 
   CSMesVisUI.prototype.update = function() {
     this.updateButtonStates();
   }
-  
+
   CSMesVisUI.prototype.updateButtonStates = function() {
     const btns = this.buttons;
     const mdl = this.model;
-    
+
     this.updateButtonState(btns.toFirstStep, mdl.canMoveToFirstStep());
     this.updateButtonState(btns.toPreviousStep, mdl.canMoveToPreviousStep());
     this.updateButtonState(btns.toNextStep, mdl.canMoveToNextStep());
@@ -315,7 +318,7 @@
     const cssClasses = conf.cssClasses;
 
     b.attr(conf.htmlAttributes.DISABLED, !isEnabled);
-    
+
     if (isEnabled) {
       b.addClass(cssClasses.CSMV_ENABLED);
       b.removeClass(cssClasses.CSMV_DISABLED);
@@ -326,7 +329,7 @@
       b.blur();
     }
   }
-  
+
   CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -366,17 +369,6 @@
     this.emitToLastStepButtonClickedEvent();
     this.log.addToLastClickedEvent();
     console.log(this.log.get());
-  }
-
-  CSMesVisUI.prototype.createButton = function(title, cssClass, clickHandler, parent) {
-    const b = this.helper.createHtmlButton(CSMesVis.config.cssClasses.CSMV_BUTTON);
-    b.text(title);
-    if (this.helper.isNonEmptyString(cssClass)) {
-      b.addClass(cssClass);
-    }
-    b.click($.proxy(clickHandler, this));
-    b.appendTo(parent);
-    return b;
   }
 
   CSMesVisUI.prototype.createAnimationFrame = function() {
