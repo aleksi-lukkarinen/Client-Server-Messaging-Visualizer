@@ -30,8 +30,12 @@ CSMesVis.setupData = [
     
     ],
       
-    stages: [
-
+    steps: [
+      [1],
+      [2],
+      [3],
+      [4],
+      [5],
     ]
   },
   
@@ -54,7 +58,7 @@ CSMesVis.setupData = [
     
     ],
       
-    stages: [
+    steps: [
 
     ]
   }
