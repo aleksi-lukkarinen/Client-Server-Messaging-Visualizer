@@ -129,7 +129,7 @@
   CSMesVisModel.prototype.moveToFirstStep = function() {
     if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
-      throw new CSMesVis.Error(msg);
+      throw this.helper.newCSMVError(msg);
     }
 
     this.currentStep = 1;
@@ -142,8 +142,8 @@
 
   CSMesVisModel.prototype.moveToPreviousStep = function() {
     if (!this.canMoveToPreviousStep()) {
-      const msg = "CSMesVis Model: Cannot move to the previous step while already being in the last one.";
-      throw new CSMesVis.Error(msg);
+      const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
+      throw this.helper.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep - 1;
@@ -157,7 +157,7 @@
   CSMesVisModel.prototype.moveToNextStep = function() {
     if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
-      throw new CSMesVis.Error(msg);
+      throw this.helper.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep + 1;
@@ -171,7 +171,7 @@
   CSMesVisModel.prototype.moveToLastStep = function() {
     if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
-      throw new CSMesVis.Error(msg);
+      throw this.helper.newCSMVError(msg);
     }
     
     this.currentStep = this.steps.length;
