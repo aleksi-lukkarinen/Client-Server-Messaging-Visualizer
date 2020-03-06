@@ -127,14 +127,13 @@
   }  
 
   CSMesVisModel.prototype.moveToFirstStep = function() {
-    if (this.canMoveToFirstStep()) {
-      this.currentStep = 1;
-      this.ui.update();
-    }
-    else {
+    if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
       throw new CSMesVis.Error(msg);
     }
+
+    this.currentStep = 1;
+    this.emitModelChangedEvent();
   }
 
   CSMesVisModel.prototype.canMoveToFirstStep = function() {
@@ -142,14 +141,13 @@
   }
 
   CSMesVisModel.prototype.moveToPreviousStep = function() {
-    if (this.canMoveToPreviousStep()) {
-      this.currentStep = this.currentStep - 1;
-      this.ui.update();
-    }
-    else {
+    if (!this.canMoveToPreviousStep()) {
       const msg = "CSMesVis Model: Cannot move to the previous step while already being in the last one.";
       throw new CSMesVis.Error(msg);
     }
+
+    this.currentStep = this.currentStep - 1;
+    this.emitModelChangedEvent();
   }
 
   CSMesVisModel.prototype.canMoveToPreviousStep = function() {
@@ -157,14 +155,13 @@
   }
 
   CSMesVisModel.prototype.moveToNextStep = function() {
-    if (this.canMoveToNextStep()) {
-      this.currentStep = this.currentStep + 1;
-      this.ui.update();
-    }
-    else {
+    if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
       throw new CSMesVis.Error(msg);
     }
+
+    this.currentStep = this.currentStep + 1;
+    this.emitModelChangedEvent();
   }
 
   CSMesVisModel.prototype.canMoveToNextStep = function() {
@@ -172,14 +169,13 @@
   }
 
   CSMesVisModel.prototype.moveToLastStep = function() {
-    if (this.canMoveToLastStep()) {
-      this.currentStep = this.steps.length;
-      this.ui.update();
-    }
-    else {
+    if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
       throw new CSMesVis.Error(msg);
     }
+    
+    this.currentStep = this.steps.length;
+    this.emitModelChangedEvent();
   }
 
   CSMesVisModel.prototype.canMoveToLastStep = function() {
@@ -227,7 +223,10 @@
     this.createAnimationFrame();
     this.createControlFrame();
 
-    $(this.model).bind(CSMesVis.config.eventNames.MODEL_CHANGED, this.update);
+    // The UI listens change events from the model to update itself
+    $(this.model).bind(
+            CSMesVis.config.eventNames.MODEL_CHANGED,
+            $.proxy(this.update, this));
 
     this.update();
 
