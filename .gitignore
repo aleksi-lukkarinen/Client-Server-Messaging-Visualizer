@@ -12,6 +12,7 @@
 !/src
 !/.gitattributes
 !/.gitignore
+!/.jshintrc
 !/CHANGELOG
 !/CODE_OF_CONDUCT.md
 !/CONTRIBUTING.md

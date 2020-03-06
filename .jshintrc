@@ -1,0 +1,33 @@
+{
+  "curly":                true,
+  "forin":                true,
+  "freeze":               true,
+  "futurehostile":        true,
+  "esversion":            6,
+  "latedef":              true,
+  "leanswitch":           true,
+  "maxcomplexity":        10,
+  "maxdepth":             5,
+  "maxerr":               500,
+  "maxparams":            6,
+  "noarg":                true,
+  "nocomma":              true,
+  "nonbsp":               true,
+  "nonew":                true,
+  "noreturnawait":        true,
+  "regexpu":              true,
+  "singleGroups":         true,
+  "strict":               true,
+  "trailingcomma":        true,
+  "undef":                true,
+  "unused":               true,
+  "varstmt":              true,
+
+  "browser":              true,
+  "devel":                true,
+  "jquery":               true,
+  
+  "globals": {
+    "CSMesVis":           true
+  }
+}
