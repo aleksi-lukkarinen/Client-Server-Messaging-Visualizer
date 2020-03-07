@@ -2,6 +2,7 @@ const { src, dest, series, parallel } = require('gulp');
 const babel = require('gulp-babel');
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
+const csso = require('gulp-csso');
 const del = require('del');
 const jshint = require('gulp-jshint');
 const log = require('gulplog');
@@ -18,12 +19,16 @@ const buildDir = targetDir + "build/";
 const esFiveBuildDir = buildDir + "es5/";
 const esFiveBabelDir = esFiveBuildDir + "babel/";
 const esFiveDistributionDir = esFiveBuildDir + "dist/";
-const stagingDir = targetDir + "staging/";
+const stagingDir = targetDir + "./staging/";
 const esFiveStagingDir = stagingDir + "es5/";
 
+const extCSS = ".css"
+const extMinCSS = ".min" + extCSS;
 const extJS = ".js"
 const extMinJS = ".min" + extJS;
 
+const globAllCSS = "*" + extCSS;
+const globAllMinCSS = "*" + extMinCSS;
 const globAllJS = "*" + extJS;
 const globAllMinJS = "*" + extMinJS;
 const primaryJSFile = "main" + extJS;
@@ -35,7 +40,10 @@ function clean() {
 }
 
 function cssMinify(cb) {
-  cb();
+  return src([srcDir + globAllCSS])
+    .pipe(csso())
+    .pipe(rename({ extname: extMinCSS }))
+    .pipe(dest(esFiveDistributionDir));
 }
 
 function jsHint() {
@@ -74,7 +82,6 @@ function stage(cb) {
   const sourceFiles = [
     esFiveDistributionDir + "*.*",
     examplesDir + "*.*",
-    srcDir + "*.css",
   ];
 
   return src(sourceFiles)
