@@ -19,7 +19,7 @@ const buildDir = targetDir + "build/";
 const esFiveBuildDir = buildDir + "es5/";
 const esFiveBabelDir = esFiveBuildDir + "babel/";
 const esFiveDistributionDir = esFiveBuildDir + "dist/";
-const stagingDir = targetDir + "./staging/";
+const stagingDir = targetDir + "staging/";
 const esFiveStagingDir = stagingDir + "es5/";
 
 const extCSS = ".css"
