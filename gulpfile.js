@@ -1,4 +1,4 @@
-const { src, dest, series, parallel } = require('gulp');
+const { src, dest, series, parallel, watch } = require('gulp');
 const babel = require('gulp-babel');
 const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
@@ -98,6 +98,11 @@ function publish(cb) {
   cb();
 }
 
+function watchSources(cb) {
+  watch(srcDir + globAllJS,     series(jsBabel, jsBundle, stage));
+  watch(srcDir + globAllCSS,    series(cssMinify, stage));
+  watch(examplesDir + "*.*",    series(stage));
+}
 
 exports.clean = clean;
 exports.jshint = jsHint;
@@ -116,4 +121,5 @@ exports.build = series(
   exports.publish
 );
 exports.cleanBuild = series(exports.clean, exports.build);
+exports.watch = watchSources;
 exports.default = exports.build;
