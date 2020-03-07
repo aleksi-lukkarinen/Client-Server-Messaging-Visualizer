@@ -10,6 +10,7 @@
 !/conf
 !/examples
 !/src
+!/.babelrc
 !/.gitattributes
 !/.gitignore
 !/.jshintrc
