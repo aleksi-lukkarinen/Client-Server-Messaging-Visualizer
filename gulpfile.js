@@ -41,8 +41,10 @@ function clean() {
 
 function cssMinify(cb) {
   return src([srcDir + globAllCSS])
-    .pipe(csso())
+    .pipe(sourcemaps.init())
     .pipe(rename({ extname: extMinCSS }))
+    .pipe(csso())
+    .pipe(sourcemaps.write('.'))
     .pipe(dest(esFiveDistributionDir));
 }
 
