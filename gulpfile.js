@@ -11,11 +11,15 @@ const sourcemaps = require('gulp-sourcemaps');
 const streamify = require('gulp-streamify');
 const uglify = require('gulp-uglify');
 
-const srcDir = "src/";
-const targetDir = "target/";
-const esFiveDir = targetDir + "es5/";
-const esFiveBabelDir = esFiveDir + "babel/";
-const esFiveDistributionDir = esFiveDir + "dist/";
+const srcDir = "./src/";
+const examplesDir = "./examples/";
+const targetDir = "./target/";
+const buildDir = targetDir + "build/";
+const esFiveBuildDir = buildDir + "es5/";
+const esFiveBabelDir = esFiveBuildDir + "babel/";
+const esFiveDistributionDir = esFiveBuildDir + "dist/";
+const stagingDir = targetDir + "staging/";
+const esFiveStagingDir = stagingDir + "es5/";
 
 const extJS = ".js"
 const extMinJS = ".min" + extJS;
@@ -27,7 +31,7 @@ const esFiveDistroJSFile = "cs-mes-vis" + extMinJS;
 
 
 function clean() {
-  return del([targetDir]);
+  return del([targetDir, stagingDir]);
 }
 
 function cssMinify(cb) {
@@ -66,6 +70,17 @@ function images(cb) {
   cb();
 }
 
+function stage(cb) {
+  const sourceFiles = [
+    esFiveDistributionDir + "*.*",
+    examplesDir + "*.*",
+    srcDir + "*.css",
+  ];
+
+  return src(sourceFiles)
+    .pipe(dest(esFiveStagingDir));
+}
+
 function unitTest(cb) {
   cb();
 }
@@ -76,21 +91,20 @@ function publish(cb) {
 
 
 exports.clean = clean;
+exports.jshint = jsHint;
+exports.js = series(jsHint, jsBabel, jsBundle)
 exports.css = series(cssMinify)
 exports.images = images
-exports.js = series(jsHint, jsBabel, jsBundle)
-exports.jshint = jsHint;
+exports.compile = parallel(exports.js, exports.css, images);
+exports.stage = stage;
 exports.unittest = unitTest;
 exports.test = series(unitTest);
 exports.publish = publish;
 exports.build = series(
-  clean,
-  parallel(
-    exports.js,
-    exports.css,
-    images
-  ),
+  exports.compile,
   exports.test,
+  exports.stage,
   exports.publish
 );
+exports.cleanBuild = series(exports.clean, exports.build);
 exports.default = exports.build;
