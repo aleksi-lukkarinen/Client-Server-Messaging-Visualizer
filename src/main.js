@@ -135,7 +135,7 @@ import * as Config from "./Config.js";
   };
 
   CSMesVisUI.prototype.createControlFrame = function() {
-    const frame = Helpers.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
+    const frame = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
@@ -179,7 +179,7 @@ import * as Config from "./Config.js";
       }
     }
 
-    const b = Helpers.createHtmlButton(
+    const b = DOMFactory.createHtmlButton(
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
@@ -264,7 +264,7 @@ import * as Config from "./Config.js";
   };
 
   CSMesVisUI.prototype.createAnimationFrame = function() {
-    const frameDiv = Helpers.createHtmlDiv(
+    const frameDiv = DOMFactory.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
@@ -288,7 +288,7 @@ import * as Config from "./Config.js";
 
   CSMesVisUI.prototype.createOuterFrame = function() {
     const conf = CSMesVis.config;
-    const frameDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
+    const frameDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
@@ -296,7 +296,7 @@ import * as Config from "./Config.js";
       const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
       if (StringUtils.isNonEmptyString(t)) {
         const title = $.trim(t);
-        const titleDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
+        const titleDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
         titleDiv.text(title);
         titleDiv.appendTo(frameDiv);
         this.title = title;
@@ -313,7 +313,7 @@ import * as Config from "./Config.js";
       const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
       if (StringUtils.isNonEmptyString(d)) {
         const desc = $.trim(d);
-        const descDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
+        const descDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
         descDiv.appendTo(frameDiv);
         this.description = desc;
@@ -488,6 +488,13 @@ class Helpers {
     this.locationHash           = window.location.hash;
     this.locationQuery          = window.location.search;
   }
+
+}
+
+
+
+
+class DOMFactory {
 
   static createHtmlDiv(cssClass) {
     return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
