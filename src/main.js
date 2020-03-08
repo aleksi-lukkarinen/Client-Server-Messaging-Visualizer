@@ -490,6 +490,10 @@ class DOMFactory {
 
 class StringUtils {
 
+  static ensureThatEndsWithPeriod(s) {
+    return !s.endsWith(".") ? s + "." : s;
+  }
+
   static isNonEmptyString(s) {
     return $.type(s) === "string" && $.trim(s).length > 0;
   }
@@ -528,12 +532,8 @@ class ErrorFactory {
   CSMesVisError.prototype = new Error();
 
   CSMesVisError.prototype.formatErrorMessage = function(message) {
-    return this.ensureThatEndsWithPeriod(
+    return StringUtils.ensureThatEndsWithPeriod(
             Config.application.NAME + ": " + message);
-  };
-
-  CSMesVisError.prototype.ensureThatEndsWithPeriod = function(s) {
-    return !s.endsWith(".") ? s + "." : s;
   };
 
   if (!window.hasOwnProperty("CSMesVis")) {
