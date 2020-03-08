@@ -55,9 +55,9 @@ function jsHint() {
 }
 
 function jsBabel() {
-  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS])
+  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS], {sourcemaps: true})
     .pipe(babel())
-    .pipe(dest(esFiveBabelDir));
+    .pipe(dest(esFiveBabelDir, {sourcemaps: true}));
 }
 
 function jsBundle() {
