@@ -546,75 +546,83 @@ class ErrorFactory {
 
 
 
-(function($) {
-  'use strict';
+class Bootstrapper {
 
-  const CSMesVisBootstrapper = function() {
-    // Nothing
-  };
+  execute() {
+    this.ensureThatSetupDataArrayIsGiven();
+    this.ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations();
+    this.instantiateVisualizations();
+  }
 
-  CSMesVisBootstrapper.prototype.execute = function() {
+  ensureThatSetupDataArrayIsGiven() {
     if (CSMesVis.setupData == null) {
       throw ErrorFactory.createBaseErrorFor(
               "Configuration using CSMesVis.setupData is missing.");
     }
-    if (!Array.isArray(CSMesVis.setupData)) {
-      const msg = "The root element must be an array.";
-      throw ErrorFactory.forIncorrectSetupData(msg);
-    }
 
-    const allVisualizationElements = $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
-    if (allVisualizationElements.length != CSMesVis.setupData.length) {
-      const msg = `There are ${allVisualizationElements.length} ` +
-                  `visualization(s) in the HTML file but setup data is given for ` +
-                  `${CSMesVis.setupData.length} visualiation(s).`;
+    if (!Array.isArray(CSMesVis.setupData)) {
+      throw ErrorFactory.forIncorrectSetupData(
+              "The root element must be an array.");
+    }
+  }
+
+  ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations() {
+    const elems = this.allVisualizationElements();
+    if (elems.length != CSMesVis.setupData.length) {
+      const msg = `There are ${elems.length} visualization(s) in the HTML file ` +
+                  `but setup data is given for ${CSMesVis.setupData.length} visualiation(s).`;
 
       // TODO: Print lists of names of both the existing divs and setups
 
       throw ErrorFactory.forIncorrectSetupData(msg);
     }
+  }
 
-    CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
+  instantiateVisualizations() {
+    for (const [idx, visualizationSetup] of CSMesVis.setupData.entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
-        const msg = `${idx + 1}. visualization does not have a name.`;
-        throw ErrorFactory.forIncorrectSetupData(msg);
+        throw ErrorFactory.forIncorrectSetupData(
+                `${idx + 1}. visualization does not have a name.`);
       }
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
 
-      // console.log(visualizationSetup.name);
-
-      const visualizationElements =
-              $(`.${Config.cssClasses.CSMV_VISUALIZATION}` +
-              `[${Config.htmlAttributes.VISUALIZATION_NAME}=` +
-              `'${visualizationSetup.name}']`);
-
-      if (visualizationElements.length === 0) {
-        const msg = `Setup data is given for visualization '${visualizationSetup.name}', `+
-                    `but the HTML file does not contain a container element for it.`;
-        throw ErrorFactory.forIncorrectSetup(msg);
-      }
-      if (visualizationElements.length > 1) {
-        const msg = `The HTML file contains multiple container elements for visualization ` +
-                    `'${visualizationSetup.name}'.`;
-        throw ErrorFactory.forIncorrectSetup(msg);
-      }
-      const visualizationContainer = visualizationElements[0];
-      //console.log(visualizationContainer);
-
-      const V = new CSMesVis.UI(visualizationContainer, visualizationSetup);
-      V.init();
-    }, this);
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
+      this.instantiateVisualizationBasedOn(visualizationSetup);
+    }
   }
 
-  CSMesVis.Bootstrapper = CSMesVisBootstrapper;
-}(jQuery));
+  instantiateVisualizationBasedOn(setupDataEntry) {
+    const elems = this.visualizationElementsFor(setupDataEntry.name);
+
+    if (elems.length === 0) {
+      throw ErrorFactory.forIncorrectSetup(
+              `Setup data is given for visualization '${setupDataEntry.name}', `+
+              `but the HTML file does not contain a container element for it.`);
+    }
+    if (elems.length > 1) {
+      throw ErrorFactory.forIncorrectSetup(
+              `The HTML file contains multiple container elements ` +
+              `for visualization '${setupDataEntry.name}'.`);
+    }
+
+    const containerElement = elems[0];
+    const V = new CSMesVis.UI(containerElement, setupDataEntry);
+    V.init();
+  }
+
+  allVisualizationElements() {
+    return $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
+  }
+  
+  visualizationElementsFor(visualizationName) {
+    const clazz = Config.cssClasses.CSMV_VISUALIZATION;
+    const nameAttr = Config.htmlAttributes.VISUALIZATION_NAME;
+    
+    return $(`.${clazz}[${nameAttr}='${visualizationName}']`);
+  }
+
+}
 
 $(document).ready(function() {
-  'use strict';
-  (new CSMesVis.Bootstrapper()).execute();
+  (new Bootstrapper()).execute();
 });
