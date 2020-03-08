@@ -1,107 +1,4 @@
-import {CSMesVisError} from "./CSMesVisError.js";
-
-
-(function() {
-  'use strict';
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
-  }
-
-  CSMesVis.config = {
-    application: {
-      NAME:                           "Client-Server Messaging Visualizer",
-    },
-
-    cssClasses: {
-      CSMV_VISUALIZATION:             "csmv-visualization",
-      CSMV_OUTER_FRAME:               "csmv-outer-frame",
-      CSMV_VIS_TITLE:                 "csmv-visualization-title",
-      CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
-      CSMV_ANIMATION_FRAME:           "csmv-animation-frame",
-      CSMV_CONTROL_FRAME:             "csmv-control-frame",
-      CSMV_BUTTON:                    "csmv-button",
-      CSMV_BUTTON_TO_FIRST_STEP:      "csmv-button-first-step",
-      CSMV_BUTTON_TO_PREVIOUS_STEP:   "csmv-button-previous-step",
-      CSMV_BUTTON_TO_NEXT_STEP:       "csmv-button-next-step",
-      CSMV_BUTTON_TO_LAST_STEP:       "csmv-button-last-step",
-      CSMV_ENABLED:                   "csmv-enabled",
-      CSMV_DISABLED:                  "csmv-disabled",
-    },
-
-    cssProperties: {
-      WIDTH:                          "width",
-      HEIGHT:                         "height",
-    },
-
-    eventNames: {
-      INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
-      INITIALIZATION_FINISHED:        "CSMesVis-initialization-finished",
-      TO_FIRST_STEP_CLICKED:          "CSMesVis-to-first-step-button-clicked",
-      TO_PREVIOUS_STEP_CLICKED:       "CSMesVis-to-previous-step-button-clicked",
-      TO_NEXT_STEP_CLICKED:           "CSMesVis-to-next-step-button-clicked",
-      TO_LAST_STEP_CLICKED:           "CSMesVis-to-last-step-button-clicked",
-      MODEL_CHANGED:                  "CSMesVis-model-changed",
-    },
-
-    htmlAttributes: {
-      VISUALIZATION_NAME:             "cmsv-name",
-      CLASS:                          "class",
-      DISABLED:                       "disabled",
-    },
-
-    htmlTags: {
-      TAG_START:                      "<",
-      SINGLE_TAG_END:                 "/>",
-      DIV:                            "div",
-      BUTTON:                         "button",
-    },
-
-    loggingKeys: {
-      METADATA:                       "Metadata",
-      INITIALIZATION_BEGINS:          "Initialization begins",
-      INITIALIZATION_FINISHED:        "Initialization finished",
-      TO_FIRST_STEP_CLICKED:          "'First' button clicked",
-      TO_PREVIOUS_STEP_CLICKED:       "'Previous' button clicked",
-      TO_NEXT_STEP_CLICKED:           "'Next' button clicked",
-      TO_LAST_STEP_CLICKED:           "'Last' button clicked",
-    },
-
-    setupDataKeys: {
-      VIS_NAME:                       "name",
-      VIS_TITLE:                      "title",
-      VIS_DESCRIPTION:                "description",
-      VIS_ENV:                        "environment",
-      VIS_ANIMATION_FRAME:            "animationFrame",
-      WIDTH:                          "width",
-      HEIGHT:                         "height",
-      BUTTONS:                        "buttons",
-      TO_FIRST_STEP_TITLE:            "toFirstStepTitle",
-      TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
-      TO_NEXT_STEP_TITLE:             "toNextStepTitle",
-      TO_LAST_STEP_TITLE:             "toLastStepTitle",
-      VIS_ACTORS:                     "actors",
-    },
-
-    uiTexts: {
-      TO_FIRST_STEP_TITLE:            "First Step",
-      TO_PREVIOUS_STEP_TITLE:         "Previous Step",
-      TO_NEXT_STEP_TITLE:             "Next Step",
-      TO_LAST_STEP_TITLE:             "Last Step",
-    },
-  };
-
-  // Create a convenience constant that contains all event keys.
-  const names = CSMesVis.config.eventNames;
-  let allEvents = "";
-  for (let n in names) {
-    if (names.hasOwnProperty(n)) {
-      allEvents = allEvents + " " + names[n];
-    }
-  }
-  names.ALL_EVENTS = allEvents.substring(0, allEvents.length);
-}());
-
+import * as Config from "./Config.js";
 
 
 
@@ -188,7 +85,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisModel.prototype.emitModelChangedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.MODEL_CHANGED, [this.name,]);
+    this.emitEvent(Config.eventNames.MODEL_CHANGED, [this.name,]);
   };
 
   CSMesVisModel.prototype.emitEvent = function(id, params) {
@@ -230,7 +127,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
 
     // The UI listens change events from the model to update itself
     $(this.model).bind(
-            CSMesVis.config.eventNames.MODEL_CHANGED,
+            Config.eventNames.MODEL_CHANGED,
             $.proxy(this.update, this));
 
     this.update();
@@ -240,33 +137,28 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisUI.prototype.createControlFrame = function() {
-    const conf = CSMesVis.config;
-    const cssClasses = conf.cssClasses;
-    const uiTexts = conf.uiTexts;
-    const sdKeys = conf.setupDataKeys;
-
-    const frame = this.helper.createHtmlDiv(cssClasses.CSMV_CONTROL_FRAME);
+    const frame = this.helper.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
     this.createButton("toFirstStep",
-          uiTexts.TO_FIRST_STEP_TITLE, sdKeys.TO_FIRST_STEP_TITLE,
-          cssClasses.CSMV_BUTTON_TO_FIRST_STEP,
+          Config.uiTexts.TO_FIRST_STEP_TITLE, Config.setupDataKeys.TO_FIRST_STEP_TITLE,
+          Config.cssClasses.CSMV_BUTTON_TO_FIRST_STEP,
           this.handleToFirstStepClick, frame);
 
     this.createButton("toPreviousStep",
-          uiTexts.TO_PREVIOUS_STEP_TITLE, sdKeys.TO_PREVIOUS_STEP_TITLE,
-          cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP,
+          Config.uiTexts.TO_PREVIOUS_STEP_TITLE, Config.setupDataKeys.TO_PREVIOUS_STEP_TITLE,
+          Config.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP,
           this.handleToPreviousStepClick, frame);
 
     this.createButton("toNextStep",
-          uiTexts.TO_NEXT_STEP_TITLE, sdKeys.TO_NEXT_STEP_TITLE,
-          cssClasses.CSMV_BUTTON_TO_NEXT_STEP,
+          Config.uiTexts.TO_NEXT_STEP_TITLE, Config.setupDataKeys.TO_NEXT_STEP_TITLE,
+          Config.cssClasses.CSMV_BUTTON_TO_NEXT_STEP,
           this.handleToNextStepClick, frame);
 
     this.createButton("toLastStep",
-          uiTexts.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
-          cssClasses.CSMV_BUTTON_TO_LAST_STEP,
+          Config.uiTexts.TO_LAST_STEP_TITLE, Config.setupDataKeys.TO_LAST_STEP_TITLE,
+          Config.cssClasses.CSMV_BUTTON_TO_LAST_STEP,
           this.handleToLastStepClick, frame);
   };
 
@@ -275,14 +167,13 @@ import {CSMesVisError} from "./CSMesVisError.js";
                 cssClass, clickHandler, parent) {
 
     const conf = CSMesVis.config;
-    const sdKeys = conf.setupDataKeys;
 
     let title = defaultTitle;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
-      const env = this.setupData[sdKeys.VIS_ENV];
+    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
+      const env = this.setupData[Config.setupDataKeys.VIS_ENV];
 
-      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
-        const btns = env[sdKeys.BUTTONS];
+      if (env.hasOwnProperty(Config.setupDataKeys.BUTTONS)) {
+        const btns = env[Config.setupDataKeys.BUTTONS];
 
         if (btns.hasOwnProperty(setupDataKeyForTitle)) {
           title = btns[setupDataKeyForTitle];
@@ -291,7 +182,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
     }
 
     const b = this.helper.createHtmlButton(
-                conf.cssClasses.CSMV_BUTTON);
+                Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
     if (this.helper.isNonEmptyString(cssClass)) {
@@ -319,18 +210,16 @@ import {CSMesVisError} from "./CSMesVisError.js";
 
   CSMesVisUI.prototype.updateButtonState = function(button, isEnabled) {
     const b = $(button);
-    const conf = CSMesVis.config;
-    const cssClasses = conf.cssClasses;
 
-    b.attr(conf.htmlAttributes.DISABLED, !isEnabled);
+    b.attr(Config.htmlAttributes.DISABLED, !isEnabled);
 
     if (isEnabled) {
-      b.addClass(cssClasses.CSMV_ENABLED);
-      b.removeClass(cssClasses.CSMV_DISABLED);
+      b.addClass(Config.cssClasses.CSMV_ENABLED);
+      b.removeClass(Config.cssClasses.CSMV_DISABLED);
     }
     else {
-      b.removeClass(cssClasses.CSMV_ENABLED);
-      b.addClass(cssClasses.CSMV_DISABLED);
+      b.removeClass(Config.cssClasses.CSMV_ENABLED);
+      b.addClass(Config.cssClasses.CSMV_DISABLED);
       b.blur();
     }
   };
@@ -377,22 +266,20 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisUI.prototype.createAnimationFrame = function() {
-    const conf = CSMesVis.config;
     const frameDiv = this.helper.createHtmlDiv(
-              conf.cssClasses.CSMV_ANIMATION_FRAME);
+              Config.cssClasses.CSMV_ANIMATION_FRAME);
 
-    const sdKeys = conf.setupDataKeys;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
-      const e = this.setupData[sdKeys.VIS_ENV];
+    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
+      const e = this.setupData[Config.setupDataKeys.VIS_ENV];
 
-      if (e.hasOwnProperty(sdKeys.VIS_ANIMATION_FRAME)) {
-        const f = e[sdKeys.VIS_ANIMATION_FRAME];
+      if (e.hasOwnProperty(Config.setupDataKeys.VIS_ANIMATION_FRAME)) {
+        const f = e[Config.setupDataKeys.VIS_ANIMATION_FRAME];
 
-        if (f.hasOwnProperty(sdKeys.WIDTH)) {
-          frameDiv.css(conf.cssProperties.WIDTH, f[sdKeys.WIDTH]);
+        if (f.hasOwnProperty(Config.setupDataKeys.WIDTH)) {
+          frameDiv.css(Config.cssProperties.WIDTH, f[Config.setupDataKeys.WIDTH]);
         }
-        if (f.hasOwnProperty(conf.setupDataKeys.HEIGHT)) {
-          frameDiv.css(conf.cssProperties.HEIGHT, f[sdKeys.HEIGHT]);
+        if (f.hasOwnProperty(Config.setupDataKeys.HEIGHT)) {
+          frameDiv.css(Config.cssProperties.HEIGHT, f[Config.setupDataKeys.HEIGHT]);
         }
       }
     }
@@ -403,16 +290,15 @@ import {CSMesVisError} from "./CSMesVisError.js";
 
   CSMesVisUI.prototype.createOuterFrame = function() {
     const conf = CSMesVis.config;
-    const frameDiv = this.helper.createHtmlDiv(conf.cssClasses.CSMV_OUTER_FRAME);
+    const frameDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
-    const sdKeys = conf.setupDataKeys;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_TITLE)) {
-      const t = this.setupData[sdKeys.VIS_TITLE];
+    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_TITLE)) {
+      const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
       if (this.helper.isNonEmptyString(t)) {
         const title = $.trim(t);
-        const titleDiv = this.helper.createHtmlDiv(conf.cssClasses.CSMV_VIS_TITLE);
+        const titleDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
         titleDiv.text(title);
         titleDiv.appendTo(frameDiv);
         this.title = title;
@@ -425,11 +311,11 @@ import {CSMesVisError} from "./CSMesVisError.js";
       }
     }
 
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_DESCRIPTION)) {
-      const d = this.setupData[sdKeys.VIS_DESCRIPTION];
+    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_DESCRIPTION)) {
+      const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
       if (this.helper.isNonEmptyString(d)) {
         const desc = $.trim(d);
-        const descDiv = this.helper.createHtmlDiv(conf.cssClasses.CSMV_VIS_DESCRIPTION);
+        const descDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
         descDiv.appendTo(frameDiv);
         this.description = desc;
@@ -444,27 +330,27 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisUI.prototype.emitInitializationBeginsEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
+    this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitInitializationFinishedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.INITIALIZATION_FINISHED, [this.name,]);
+    this.emitEvent(Config.eventNames.INITIALIZATION_FINISHED, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitToFirstStepButtonClickedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.TO_FIRST_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_FIRST_STEP_CLICKED, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitToPreviousStepButtonClickedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitToNextStepButtonClickedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.TO_NEXT_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_NEXT_STEP_CLICKED, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitToLastStepButtonClickedEvent = function() {
-    this.emitEvent(CSMesVis.config.eventNames.TO_LAST_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_LAST_STEP_CLICKED, [this.name,]);
   };
 
   CSMesVisUI.prototype.emitEvent = function(id, params) {
@@ -489,7 +375,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
     this.helper = helper;
     this.log = [];
 
-    this.add(CSMesVis.config.loggingKeys.METADATA, {
+    this.add(Config.loggingKeys.METADATA, {
       webPage: {
         location: {
           url:            helper.documentURL,
@@ -526,27 +412,27 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisLogger.prototype.addInitializationBeginsEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.INITIALIZATION_BEGINS);
+    this.add(Config.loggingKeys.INITIALIZATION_BEGINS);
   };
 
   CSMesVisLogger.prototype.addInitializationFinishedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.INITIALIZATION_FINISHED);
+    this.add(Config.loggingKeys.INITIALIZATION_FINISHED);
   };
 
   CSMesVisLogger.prototype.addToFirstClickedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.TO_FIRST_STEP_CLICKED);
+    this.add(Config.loggingKeys.TO_FIRST_STEP_CLICKED);
   };
 
   CSMesVisLogger.prototype.addToPreviousClickedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.TO_PREVIOUS_STEP_CLICKED);
+    this.add(Config.loggingKeys.TO_PREVIOUS_STEP_CLICKED);
   };
 
   CSMesVisLogger.prototype.addToNextClickedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.TO_NEXT_STEP_CLICKED);
+    this.add(Config.loggingKeys.TO_NEXT_STEP_CLICKED);
   };
 
   CSMesVisLogger.prototype.addToLastClickedEvent = function() {
-    this.add(CSMesVis.config.loggingKeys.TO_LAST_STEP_CLICKED);
+    this.add(Config.loggingKeys.TO_LAST_STEP_CLICKED);
   };
 
   CSMesVisLogger.prototype.add = function(type, data) {
@@ -608,18 +494,17 @@ import {CSMesVisError} from "./CSMesVisError.js";
   };
 
   CSMesVisHelpers.prototype.createHtmlDiv = function(cssClass) {
-    return this.createHtmlTag(CSMesVis.config.htmlTags.DIV, cssClass);
+    return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
   };
 
   CSMesVisHelpers.prototype.createHtmlButton = function(cssClass) {
-    return this.createHtmlTag(CSMesVis.config.htmlTags.BUTTON, cssClass);
+    return this.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
   };
 
   CSMesVisHelpers.prototype.createHtmlTag = function(tagName, cssClass) {
-    const conf = CSMesVis.config;
-    const tag = conf.htmlTags.TAG_START + tagName + conf.htmlTags.SINGLE_TAG_END;
+    const tag = Config.htmlTags.TAG_START + tagName + Config.htmlTags.SINGLE_TAG_END;
     const attributes = {};
-    attributes[conf.htmlAttributes.CLASS] = cssClass;
+    attributes[Config.htmlAttributes.CLASS] = cssClass;
     return $(tag, attributes);
   };
 
@@ -660,7 +545,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
 
   CSMesVisError.prototype.formatErrorMessage = function(message) {
     return this.ensureThatEndsWithPeriod(
-            CSMesVis.config.application.NAME + ": " + message);
+            Config.application.NAME + ": " + message);
   };
 
   CSMesVisError.prototype.ensureThatEndsWithPeriod = function(s) {
@@ -695,7 +580,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
       throw helper.incorrectSetupDataError(msg);
     }
 
-    const allVisualizationElements = $("." + CSMesVis.config.cssClasses.CSMV_VISUALIZATION);
+    const allVisualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION);
     if (allVisualizationElements.length != CSMesVis.setupData.length) {
       const msg = "There are " + allVisualizationElements.length +
                   " visualization(s) in the HTML file but setup data is given for " +
@@ -707,7 +592,7 @@ import {CSMesVisError} from "./CSMesVisError.js";
     }
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
-      if (!visualizationSetup.hasOwnProperty(CSMesVis.config.setupDataKeys.VIS_NAME)) {
+      if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         const msg = idx + 1 + ". visualization does not have a name.";
         throw helper.incorrectSetupDataError(msg);
       }
@@ -717,8 +602,8 @@ import {CSMesVisError} from "./CSMesVisError.js";
       // console.log(visualizationSetup.name);
 
       const visualizationElements =
-              $("." + CSMesVis.config.cssClasses.CSMV_VISUALIZATION +
-              "[" + CSMesVis.config.htmlAttributes.VISUALIZATION_NAME + "='" +
+              $("." + Config.cssClasses.CSMV_VISUALIZATION +
+              "[" + Config.htmlAttributes.VISUALIZATION_NAME + "='" +
               visualizationSetup.name + "']");
 
       if (visualizationElements.length === 0) {
