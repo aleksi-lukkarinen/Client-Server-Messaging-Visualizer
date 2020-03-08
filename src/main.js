@@ -303,8 +303,8 @@ import * as Config from "./Config.js";
         this.titleDiv = titleDiv;
       }
       else {
-        const msg = "Visualization '" + this.name + "' has an invalid title; " +
-                    "it must be a string that contains not only whitespace.";
+        const msg = `Visualization '${this.name}' has an invalid title; ` +
+                    `it must be a string that contains not only whitespace.`;
         throw Helpers.incorrectSetupDataError(msg);
       }
     }
@@ -320,8 +320,8 @@ import * as Config from "./Config.js";
         this.descriptionDiv = descDiv;
       }
       else {
-        const msg = "Visualization '" + this.name + "' has an invalid description; " +
-                    "it must be a string that contains not only whitespace.";
+        const msg = `Visualization '${this.name}' has an invalid description; ` +
+                    `it must be a string that contains not only whitespace.`;
         throw Helpers.incorrectSetupDataError(msg);
       }
     }
@@ -505,11 +505,11 @@ class Helpers {
   }
 
   static incorrectSetupDataError(message) {
-    return this.newCSMVError("Incorrect setup data: " + message);
+    return this.newCSMVError(`Incorrect setup data: ${message}`);
   }
 
   static incorrectSetupError(message) {
-    return this.newCSMVError("Incorrect setup: " + message);
+    return this.newCSMVError(`Incorrect setup: ${message}`);
   }
 
   static newCSMVError(message) {
@@ -569,11 +569,11 @@ class Helpers {
       throw Helpers.incorrectSetupDataError(msg);
     }
 
-    const allVisualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION);
+    const allVisualizationElements = $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
     if (allVisualizationElements.length != CSMesVis.setupData.length) {
-      const msg = "There are " + allVisualizationElements.length +
-                  " visualization(s) in the HTML file but setup data is given for " +
-                  CSMesVis.setupData.length + " visualiation(s).";
+      const msg = `There are ${allVisualizationElements.length} ` +
+                  `visualization(s) in the HTML file but setup data is given for ` +
+                  `${CSMesVis.setupData.length} visualiation(s).`;
 
       // TODO: Print lists of names of both the existing divs and setups
 
@@ -582,7 +582,7 @@ class Helpers {
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
-        const msg = idx + 1 + ". visualization does not have a name.";
+        const msg = `${idx + 1}. visualization does not have a name.`;
         throw Helpers.incorrectSetupDataError(msg);
       }
 
@@ -591,18 +591,18 @@ class Helpers {
       // console.log(visualizationSetup.name);
 
       const visualizationElements =
-              $("." + Config.cssClasses.CSMV_VISUALIZATION +
-              "[" + Config.htmlAttributes.VISUALIZATION_NAME + "='" +
-              visualizationSetup.name + "']");
+              $(`.${Config.cssClasses.CSMV_VISUALIZATION}` +
+              `[${Config.htmlAttributes.VISUALIZATION_NAME}=` +
+              `'${visualizationSetup.name}']`);
 
       if (visualizationElements.length === 0) {
-        const msg = "Setup data is given for visualization '" +  visualizationSetup.name +
-                    "', but the HTML file does not contain a container element for it.";
+        const msg = `Setup data is given for visualization '${visualizationSetup.name}', `+
+                    `but the HTML file does not contain a container element for it.`;
         throw Helpers.incorrectSetupError(msg);
       }
       if (visualizationElements.length > 1) {
-        const msg = "The HTML file contains multiple container element for visualization '" +
-                    visualizationSetup.name + "'.";
+        const msg = `The HTML file contains multiple container elements for visualization ` +
+                    `'${visualizationSetup.name}'.`;
         throw Helpers.incorrectSetupError(msg);
       }
       const visualizationContainer = visualizationElements[0];
