@@ -183,7 +183,7 @@ import * as Config from "./Config.js";
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
-    if (Helpers.isNonEmptyString(cssClass)) {
+    if (StringUtils.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
 
@@ -294,7 +294,7 @@ import * as Config from "./Config.js";
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_TITLE)) {
       const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
-      if (Helpers.isNonEmptyString(t)) {
+      if (StringUtils.isNonEmptyString(t)) {
         const title = $.trim(t);
         const titleDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
         titleDiv.text(title);
@@ -311,7 +311,7 @@ import * as Config from "./Config.js";
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_DESCRIPTION)) {
       const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
-      if (Helpers.isNonEmptyString(d)) {
+      if (StringUtils.isNonEmptyString(d)) {
         const desc = $.trim(d);
         const descDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
@@ -516,6 +516,13 @@ class Helpers {
     return new CSMesVis.Error(message);
   }
 
+}
+
+
+
+
+class StringUtils {
+
   static isNonEmptyString(s) {
     return $.type(s) === "string" && $.trim(s).length > 0;
   }
@@ -586,7 +593,7 @@ class Helpers {
         throw Helpers.incorrectSetupDataError(msg);
       }
 
-      // TODO: Is the name a non-empty string? if (Helpers.isNonEmptyString(t)) {
+      // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
 
       // console.log(visualizationSetup.name);
 
