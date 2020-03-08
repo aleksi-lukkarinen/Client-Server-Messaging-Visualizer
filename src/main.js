@@ -469,11 +469,11 @@ import * as EnvInfo from "./EnvironmentInfo.js";
 class DOMFactory {
 
   static createHtmlDiv(cssClass) {
-    return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
+    return DOMFactory.createHtmlTag(Config.htmlTags.DIV, cssClass);
   }
 
   static createHtmlButton(cssClass) {
-    return this.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
+    return DOMFactory.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
   }
 
   static createHtmlTag(tagName, cssClass) {
