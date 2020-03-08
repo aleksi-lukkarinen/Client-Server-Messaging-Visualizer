@@ -6,11 +6,10 @@ import * as Config from "./Config.js";
 (function($) {
   'use strict';
 
-  const CSMesVisModel = function(ui, setupData, log, helper) {
+  const CSMesVisModel = function(ui, setupData, log) {
     this.ui = ui;
     this.name = setupData.name;
     this.log = log;
-    this.helper = helper;
     this.actors = {};
     this.steps = [];
     this.currentStep = 1;
@@ -31,7 +30,7 @@ import * as Config from "./Config.js";
   CSMesVisModel.prototype.moveToFirstStep = function() {
     if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
-      throw this.helper.newCSMVError(msg);
+      throw Helpers.newCSMVError(msg);
     }
 
     this.currentStep = 1;
@@ -45,7 +44,7 @@ import * as Config from "./Config.js";
   CSMesVisModel.prototype.moveToPreviousStep = function() {
     if (!this.canMoveToPreviousStep()) {
       const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
-      throw this.helper.newCSMVError(msg);
+      throw Helpers.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep - 1;
@@ -59,7 +58,7 @@ import * as Config from "./Config.js";
   CSMesVisModel.prototype.moveToNextStep = function() {
     if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
-      throw this.helper.newCSMVError(msg);
+      throw Helpers.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep + 1;
@@ -73,7 +72,7 @@ import * as Config from "./Config.js";
   CSMesVisModel.prototype.moveToLastStep = function() {
     if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
-      throw this.helper.newCSMVError(msg);
+      throw Helpers.newCSMVError(msg);
     }
 
     this.currentStep = this.steps.length;
@@ -106,15 +105,14 @@ import * as Config from "./Config.js";
 (function($) {
   'use strict';
 
-  const CSMesVisUI = function(container, setupData, helper) {
+  const CSMesVisUI = function(container, setupData) {
     this.container = container;
     this.setupData = setupData;
     this.name = setupData.name;
-    this.helper = helper;
     this.frames = {};
     this.buttons = {};
-    this.log = new CSMesVis.Logger(this.name, helper);
-    this.model = new CSMesVis.Model(this, setupData, this.log, helper);
+    this.log = new CSMesVis.Logger(this.name);
+    this.model = new CSMesVis.Model(this, setupData, this.log);
   };
 
   CSMesVisUI.prototype.init = function() {
@@ -137,7 +135,7 @@ import * as Config from "./Config.js";
   };
 
   CSMesVisUI.prototype.createControlFrame = function() {
-    const frame = this.helper.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
+    const frame = Helpers.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
@@ -181,11 +179,11 @@ import * as Config from "./Config.js";
       }
     }
 
-    const b = this.helper.createHtmlButton(
+    const b = Helpers.createHtmlButton(
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
-    if (this.helper.isNonEmptyString(cssClass)) {
+    if (Helpers.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
 
@@ -266,7 +264,7 @@ import * as Config from "./Config.js";
   };
 
   CSMesVisUI.prototype.createAnimationFrame = function() {
-    const frameDiv = this.helper.createHtmlDiv(
+    const frameDiv = Helpers.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
@@ -290,15 +288,15 @@ import * as Config from "./Config.js";
 
   CSMesVisUI.prototype.createOuterFrame = function() {
     const conf = CSMesVis.config;
-    const frameDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
+    const frameDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_TITLE)) {
       const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
-      if (this.helper.isNonEmptyString(t)) {
+      if (Helpers.isNonEmptyString(t)) {
         const title = $.trim(t);
-        const titleDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
+        const titleDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
         titleDiv.text(title);
         titleDiv.appendTo(frameDiv);
         this.title = title;
@@ -307,15 +305,15 @@ import * as Config from "./Config.js";
       else {
         const msg = "Visualization '" + this.name + "' has an invalid title; " +
                     "it must be a string that contains not only whitespace.";
-        throw this.helper.incorrectSetupDataError(msg);
+        throw Helpers.incorrectSetupDataError(msg);
       }
     }
 
     if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_DESCRIPTION)) {
       const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
-      if (this.helper.isNonEmptyString(d)) {
+      if (Helpers.isNonEmptyString(d)) {
         const desc = $.trim(d);
-        const descDiv = this.helper.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
+        const descDiv = Helpers.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
         descDiv.appendTo(frameDiv);
         this.description = desc;
@@ -324,7 +322,7 @@ import * as Config from "./Config.js";
       else {
         const msg = "Visualization '" + this.name + "' has an invalid description; " +
                     "it must be a string that contains not only whitespace.";
-        throw this.helper.incorrectSetupDataError(msg);
+        throw Helpers.incorrectSetupDataError(msg);
       }
     }
   };
@@ -371,39 +369,38 @@ import * as Config from "./Config.js";
 (function($) {
   'use strict';
 
-  const CSMesVisLogger = function(visualizationName, helper) {
-    this.helper = helper;
+  const CSMesVisLogger = function(visualizationName) {
     this.log = [];
 
     this.add(Config.loggingKeys.METADATA, {
       webPage: {
         location: {
-          url:            helper.documentURL,
+          url:            Helpers.documentURL,
           /*
-          protocol:       helper.locationProtocol,
-          host:           helper.locationHost,
-          hostname:       helper.locationHostname,
-          port:           helper.locationPort,
-          pathname:       helper.locationPathname,
-          hash:           helper.locationHash,
-          query:          helper.locationQuery,
+          protocol:       Helpers.locationProtocol,
+          host:           Helpers.locationHost,
+          hostname:       Helpers.locationHostname,
+          port:           Helpers.locationPort,
+          pathname:       Helpers.locationPathname,
+          hash:           Helpers.locationHash,
+          query:          Helpers.locationQuery,
           */
         },
-        referrer:         helper.documentReferrer,
-        title:            helper.documentTitle,
-        charSet:          helper.documentCharacterSet,
+        referrer:         Helpers.documentReferrer,
+        title:            Helpers.documentTitle,
+        charSet:          Helpers.documentCharacterSet,
       },
       navigator: {
-        userAgent:        helper.userAgent,
-        platform:         helper.platform,
-        appName:          helper.appName,
-        appVersion:       helper.appVersion,
-        product:          helper.product,
+        userAgent:        Helpers.userAgent,
+        platform:         Helpers.platform,
+        appName:          Helpers.appName,
+        appVersion:       Helpers.appVersion,
+        product:          Helpers.product,
       },
       screen: {
-        totalHeight:      helper.totalScreenHeight,
-        totalWidth:       helper.totalScreenWidth,
-        colorDepth:       helper.colorDepth,
+        totalHeight:      Helpers.totalScreenHeight,
+        totalWidth:       Helpers.totalScreenWidth,
+        colorDepth:       Helpers.colorDepth,
       },
       visualization: {
         name:             visualizationName,
@@ -468,68 +465,62 @@ import * as Config from "./Config.js";
 
 
 
-(function($) {
-  'use strict';
+class Helpers {
 
-  const CSMesVisHelpers = function() {
-    this.totalScreenHeight = screen.height;
-    this.totalScreenWidth = screen.width;
-    this.colorDepth = screen.colorDepth;
-    this.userAgent = navigator.userAgent;
-    this.platform = navigator.platform;
-    this.appName = navigator.appName;
-    this.appVersion = navigator.appVersion;
-    this.product = navigator.product;
-    this.documentTitle = document.title;
-    this.documentReferrer = document.referrer;
-    this.documentCharacterSet = document.characterSet;
-    this.documentURL = document.URL;
-    this.locationProtocol = window.location.protocol;
-    this.locationHost = window.location.host;
-    this.locationHostname = window.location.hostname;
-    this.locationPort = window.location.port;
-    this.locationPathname = window.location.pathname;
-    this.locationHash = window.location.hash;
-    this.locationQuery = window.location.search;
-  };
+  constructor() {
+    this.totalScreenHeight      = screen.height;
+    this.totalScreenWidth       = screen.width;
+    this.colorDepth             = screen.colorDepth;
+    this.userAgent              = navigator.userAgent;
+    this.platform               = navigator.platform;
+    this.appName                = navigator.appName;
+    this.appVersion             = navigator.appVersion;
+    this.product                = navigator.product;
+    this.documentTitle          = document.title;
+    this.documentReferrer       = document.referrer;
+    this.documentCharacterSet   = document.characterSet;
+    this.documentURL            = document.URL;
+    this.locationProtocol       = window.location.protocol;
+    this.locationHost           = window.location.host;
+    this.locationHostname       = window.location.hostname;
+    this.locationPort           = window.location.port;
+    this.locationPathname       = window.location.pathname;
+    this.locationHash           = window.location.hash;
+    this.locationQuery          = window.location.search;
+  }
 
-  CSMesVisHelpers.prototype.createHtmlDiv = function(cssClass) {
+  static createHtmlDiv(cssClass) {
     return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
-  };
+  }
 
-  CSMesVisHelpers.prototype.createHtmlButton = function(cssClass) {
+  static createHtmlButton(cssClass) {
     return this.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
-  };
+  }
 
-  CSMesVisHelpers.prototype.createHtmlTag = function(tagName, cssClass) {
+  static createHtmlTag(tagName, cssClass) {
     const tag = Config.htmlTags.TAG_START + tagName + Config.htmlTags.SINGLE_TAG_END;
     const attributes = {};
     attributes[Config.htmlAttributes.CLASS] = cssClass;
     return $(tag, attributes);
-  };
-
-  CSMesVisHelpers.prototype.incorrectSetupDataError = function(message) {
-    return this.newCSMVError("Incorrect setup data: " + message);
-  };
-
-  CSMesVisHelpers.prototype.incorrectSetupError = function(message) {
-    return this.newCSMVError("Incorrect setup: " + message);
-  };
-
-  CSMesVisHelpers.prototype.newCSMVError = function(message) {
-    return new CSMesVis.Error(message);
-  };
-
-  CSMesVisHelpers.prototype.isNonEmptyString = function(s) {
-    return $.type(s) === "string" && $.trim(s).length > 0;
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
   }
 
-  CSMesVis.Helper = CSMesVisHelpers;
-}(jQuery));
+  static incorrectSetupDataError(message) {
+    return this.newCSMVError("Incorrect setup data: " + message);
+  }
+
+  static incorrectSetupError(message) {
+    return this.newCSMVError("Incorrect setup: " + message);
+  }
+
+  static newCSMVError(message) {
+    return new CSMesVis.Error(message);
+  }
+
+  static isNonEmptyString(s) {
+    return $.type(s) === "string" && $.trim(s).length > 0;
+  }
+
+}
 
 
 
@@ -570,14 +561,12 @@ import * as Config from "./Config.js";
   };
 
   CSMesVisBootstrapper.prototype.execute = function() {
-    const helper = new CSMesVis.Helper();
-
     if (CSMesVis.setupData == null) {
-      throw helper.newCSMVError("Configuration using CSMesVis.setupData is missing.");
+      throw Helpers.newCSMVError("Configuration using CSMesVis.setupData is missing.");
     }
     if (!Array.isArray(CSMesVis.setupData)) {
       const msg = "The root element must be an array.";
-      throw helper.incorrectSetupDataError(msg);
+      throw Helpers.incorrectSetupDataError(msg);
     }
 
     const allVisualizationElements = $("." + Config.cssClasses.CSMV_VISUALIZATION);
@@ -588,16 +577,16 @@ import * as Config from "./Config.js";
 
       // TODO: Print lists of names of both the existing divs and setups
 
-      throw helper.incorrectSetupDataError(msg);
+      throw Helpers.incorrectSetupDataError(msg);
     }
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         const msg = idx + 1 + ". visualization does not have a name.";
-        throw helper.incorrectSetupDataError(msg);
+        throw Helpers.incorrectSetupDataError(msg);
       }
 
-      // TODO: Is the name a non-empty string? if (helper.isNonEmptyString(t)) {
+      // TODO: Is the name a non-empty string? if (Helpers.isNonEmptyString(t)) {
 
       // console.log(visualizationSetup.name);
 
@@ -609,17 +598,17 @@ import * as Config from "./Config.js";
       if (visualizationElements.length === 0) {
         const msg = "Setup data is given for visualization '" +  visualizationSetup.name +
                     "', but the HTML file does not contain a container element for it.";
-        throw helper.incorrectSetupError(msg);
+        throw Helpers.incorrectSetupError(msg);
       }
       if (visualizationElements.length > 1) {
         const msg = "The HTML file contains multiple container element for visualization '" +
                     visualizationSetup.name + "'.";
-        throw helper.incorrectSetupError(msg);
+        throw Helpers.incorrectSetupError(msg);
       }
       const visualizationContainer = visualizationElements[0];
       //console.log(visualizationContainer);
 
-      const V = new CSMesVis.UI(visualizationContainer, visualizationSetup, helper);
+      const V = new CSMesVis.UI(visualizationContainer, visualizationSetup);
       V.init();
     }, this);
   };
