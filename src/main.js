@@ -305,7 +305,7 @@ import * as Config from "./Config.js";
       else {
         const msg = `Visualization '${this.name}' has an invalid title; ` +
                     `it must be a string that contains not only whitespace.`;
-        throw Helpers.incorrectSetupDataError(msg);
+        throw ErrorFactory.incorrectSetupDataError(msg);
       }
     }
 
@@ -322,7 +322,7 @@ import * as Config from "./Config.js";
       else {
         const msg = `Visualization '${this.name}' has an invalid description; ` +
                     `it must be a string that contains not only whitespace.`;
-        throw Helpers.incorrectSetupDataError(msg);
+        throw ErrorFactory.incorrectSetupDataError(msg);
       }
     }
   };
@@ -504,6 +504,24 @@ class Helpers {
     return $(tag, attributes);
   }
 
+}
+
+
+
+
+class StringUtils {
+
+  static isNonEmptyString(s) {
+    return $.type(s) === "string" && $.trim(s).length > 0;
+  }
+
+}
+
+
+
+
+class ErrorFactory {
+
   static incorrectSetupDataError(message) {
     return this.newCSMVError(`Incorrect setup data: ${message}`);
   }
@@ -514,17 +532,6 @@ class Helpers {
 
   static newCSMVError(message) {
     return new CSMesVis.Error(message);
-  }
-
-}
-
-
-
-
-class StringUtils {
-
-  static isNonEmptyString(s) {
-    return $.type(s) === "string" && $.trim(s).length > 0;
   }
 
 }
@@ -573,7 +580,7 @@ class StringUtils {
     }
     if (!Array.isArray(CSMesVis.setupData)) {
       const msg = "The root element must be an array.";
-      throw Helpers.incorrectSetupDataError(msg);
+      throw ErrorFactory.incorrectSetupDataError(msg);
     }
 
     const allVisualizationElements = $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
@@ -584,13 +591,13 @@ class StringUtils {
 
       // TODO: Print lists of names of both the existing divs and setups
 
-      throw Helpers.incorrectSetupDataError(msg);
+      throw ErrorFactory.incorrectSetupDataError(msg);
     }
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         const msg = `${idx + 1}. visualization does not have a name.`;
-        throw Helpers.incorrectSetupDataError(msg);
+        throw ErrorFactory.incorrectSetupDataError(msg);
       }
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
@@ -605,12 +612,12 @@ class StringUtils {
       if (visualizationElements.length === 0) {
         const msg = `Setup data is given for visualization '${visualizationSetup.name}', `+
                     `but the HTML file does not contain a container element for it.`;
-        throw Helpers.incorrectSetupError(msg);
+        throw ErrorFactory.incorrectSetupError(msg);
       }
       if (visualizationElements.length > 1) {
         const msg = `The HTML file contains multiple container elements for visualization ` +
                     `'${visualizationSetup.name}'.`;
-        throw Helpers.incorrectSetupError(msg);
+        throw ErrorFactory.incorrectSetupError(msg);
       }
       const visualizationContainer = visualizationElements[0];
       //console.log(visualizationContainer);
