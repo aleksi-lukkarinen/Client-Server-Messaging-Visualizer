@@ -1,4 +1,5 @@
 import * as Config from "./Config.js";
+import * as EnvInfo from "./EnvironmentInfo.js";
 
 
 
@@ -375,32 +376,32 @@ import * as Config from "./Config.js";
     this.add(Config.loggingKeys.METADATA, {
       webPage: {
         location: {
-          url:            Helpers.documentURL,
+          url:            EnvInfo.documentURL,
           /*
-          protocol:       Helpers.locationProtocol,
-          host:           Helpers.locationHost,
-          hostname:       Helpers.locationHostname,
-          port:           Helpers.locationPort,
-          pathname:       Helpers.locationPathname,
-          hash:           Helpers.locationHash,
-          query:          Helpers.locationQuery,
+          protocol:       EnvInfo.locationProtocol,
+          host:           EnvInfo.locationHost,
+          hostname:       EnvInfo.locationHostname,
+          port:           EnvInfo.locationPort,
+          pathname:       EnvInfo.locationPathname,
+          hash:           EnvInfo.locationHash,
+          query:          EnvInfo.locationQuery,
           */
         },
-        referrer:         Helpers.documentReferrer,
-        title:            Helpers.documentTitle,
-        charSet:          Helpers.documentCharacterSet,
+        referrer:         EnvInfo.documentReferrer,
+        title:            EnvInfo.documentTitle,
+        charSet:          EnvInfo.documentCharacterSet,
       },
       navigator: {
-        userAgent:        Helpers.userAgent,
-        platform:         Helpers.platform,
-        appName:          Helpers.appName,
-        appVersion:       Helpers.appVersion,
-        product:          Helpers.product,
+        userAgent:        EnvInfo.userAgent,
+        platform:         EnvInfo.platform,
+        appName:          EnvInfo.appName,
+        appVersion:       EnvInfo.appVersion,
+        product:          EnvInfo.product,
       },
       screen: {
-        totalHeight:      Helpers.totalScreenHeight,
-        totalWidth:       Helpers.totalScreenWidth,
-        colorDepth:       Helpers.colorDepth,
+        totalHeight:      EnvInfo.totalScreenHeight,
+        totalWidth:       EnvInfo.totalScreenWidth,
+        colorDepth:       EnvInfo.colorDepth,
       },
       visualization: {
         name:             visualizationName,
@@ -461,35 +462,6 @@ import * as Config from "./Config.js";
 
   CSMesVis.Logger = CSMesVisLogger;
 }(jQuery));
-
-
-
-
-class Helpers {
-
-  constructor() {
-    this.totalScreenHeight      = screen.height;
-    this.totalScreenWidth       = screen.width;
-    this.colorDepth             = screen.colorDepth;
-    this.userAgent              = navigator.userAgent;
-    this.platform               = navigator.platform;
-    this.appName                = navigator.appName;
-    this.appVersion             = navigator.appVersion;
-    this.product                = navigator.product;
-    this.documentTitle          = document.title;
-    this.documentReferrer       = document.referrer;
-    this.documentCharacterSet   = document.characterSet;
-    this.documentURL            = document.URL;
-    this.locationProtocol       = window.location.protocol;
-    this.locationHost           = window.location.host;
-    this.locationHostname       = window.location.hostname;
-    this.locationPort           = window.location.port;
-    this.locationPathname       = window.location.pathname;
-    this.locationHash           = window.location.hash;
-    this.locationQuery          = window.location.search;
-  }
-
-}
 
 
 
