@@ -31,7 +31,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToFirstStep = function() {
     if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
-      throw Helpers.newCSMVError(msg);
+      throw ErrorFactory.newCSMVError(msg);
     }
 
     this.currentStep = 1;
@@ -45,7 +45,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToPreviousStep = function() {
     if (!this.canMoveToPreviousStep()) {
       const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
-      throw Helpers.newCSMVError(msg);
+      throw ErrorFactory.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep - 1;
@@ -59,7 +59,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToNextStep = function() {
     if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
-      throw Helpers.newCSMVError(msg);
+      throw ErrorFactory.newCSMVError(msg);
     }
 
     this.currentStep = this.currentStep + 1;
@@ -73,7 +73,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToLastStep = function() {
     if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
-      throw Helpers.newCSMVError(msg);
+      throw ErrorFactory.newCSMVError(msg);
     }
 
     this.currentStep = this.steps.length;
@@ -555,7 +555,7 @@ class ErrorFactory {
 
   CSMesVisBootstrapper.prototype.execute = function() {
     if (CSMesVis.setupData == null) {
-      throw Helpers.newCSMVError("Configuration using CSMesVis.setupData is missing.");
+      throw ErrorFactory.newCSMVError("Configuration using CSMesVis.setupData is missing.");
     }
     if (!Array.isArray(CSMesVis.setupData)) {
       const msg = "The root element must be an array.";
