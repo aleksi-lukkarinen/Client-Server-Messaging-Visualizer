@@ -31,7 +31,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToFirstStep = function() {
     if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
-      throw ErrorFactory.newCSMVError(msg);
+      throw ErrorFactory.createBaseErrorFor(msg);
     }
 
     this.currentStep = 1;
@@ -45,7 +45,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToPreviousStep = function() {
     if (!this.canMoveToPreviousStep()) {
       const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
-      throw ErrorFactory.newCSMVError(msg);
+      throw ErrorFactory.createBaseErrorFor(msg);
     }
 
     this.currentStep = this.currentStep - 1;
@@ -59,7 +59,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToNextStep = function() {
     if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
-      throw ErrorFactory.newCSMVError(msg);
+      throw ErrorFactory.createBaseErrorFor(msg);
     }
 
     this.currentStep = this.currentStep + 1;
@@ -73,7 +73,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
   CSMesVisModel.prototype.moveToLastStep = function() {
     if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
-      throw ErrorFactory.newCSMVError(msg);
+      throw ErrorFactory.createBaseErrorFor(msg);
     }
 
     this.currentStep = this.steps.length;
@@ -306,7 +306,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
       else {
         const msg = `Visualization '${this.name}' has an invalid title; ` +
                     `it must be a string that contains not only whitespace.`;
-        throw ErrorFactory.incorrectSetupDataError(msg);
+        throw ErrorFactory.forIncorrectSetupData(msg);
       }
     }
 
@@ -323,7 +323,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
       else {
         const msg = `Visualization '${this.name}' has an invalid description; ` +
                     `it must be a string that contains not only whitespace.`;
-        throw ErrorFactory.incorrectSetupDataError(msg);
+        throw ErrorFactory.forIncorrectSetupData(msg);
       }
     }
   };
@@ -501,15 +501,15 @@ class StringUtils {
 
 class ErrorFactory {
 
-  static incorrectSetupDataError(message) {
-    return this.newCSMVError(`Incorrect setup data: ${message}`);
+  static forIncorrectSetupData(message) {
+    return ErrorFactory.createBaseErrorFor(`Incorrect setup data: ${message}`);
   }
 
-  static incorrectSetupError(message) {
-    return this.newCSMVError(`Incorrect setup: ${message}`);
+  static forIncorrectSetup(message) {
+    return ErrorFactory.createBaseErrorFor(`Incorrect setup: ${message}`);
   }
 
-  static newCSMVError(message) {
+  static createBaseErrorFor(message) {
     return new CSMesVis.Error(message);
   }
 
@@ -555,11 +555,12 @@ class ErrorFactory {
 
   CSMesVisBootstrapper.prototype.execute = function() {
     if (CSMesVis.setupData == null) {
-      throw ErrorFactory.newCSMVError("Configuration using CSMesVis.setupData is missing.");
+      throw ErrorFactory.createBaseErrorFor(
+              "Configuration using CSMesVis.setupData is missing.");
     }
     if (!Array.isArray(CSMesVis.setupData)) {
       const msg = "The root element must be an array.";
-      throw ErrorFactory.incorrectSetupDataError(msg);
+      throw ErrorFactory.forIncorrectSetupData(msg);
     }
 
     const allVisualizationElements = $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
@@ -570,13 +571,13 @@ class ErrorFactory {
 
       // TODO: Print lists of names of both the existing divs and setups
 
-      throw ErrorFactory.incorrectSetupDataError(msg);
+      throw ErrorFactory.forIncorrectSetupData(msg);
     }
 
     CSMesVis.setupData.forEach(function(visualizationSetup, idx) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         const msg = `${idx + 1}. visualization does not have a name.`;
-        throw ErrorFactory.incorrectSetupDataError(msg);
+        throw ErrorFactory.forIncorrectSetupData(msg);
       }
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
@@ -591,12 +592,12 @@ class ErrorFactory {
       if (visualizationElements.length === 0) {
         const msg = `Setup data is given for visualization '${visualizationSetup.name}', `+
                     `but the HTML file does not contain a container element for it.`;
-        throw ErrorFactory.incorrectSetupError(msg);
+        throw ErrorFactory.forIncorrectSetup(msg);
       }
       if (visualizationElements.length > 1) {
         const msg = `The HTML file contains multiple container elements for visualization ` +
                     `'${visualizationSetup.name}'.`;
-        throw ErrorFactory.incorrectSetupError(msg);
+        throw ErrorFactory.forIncorrectSetup(msg);
       }
       const visualizationContainer = visualizationElements[0];
       //console.log(visualizationContainer);
