@@ -112,7 +112,7 @@ import * as EnvInfo from "./EnvironmentInfo.js";
     this.name = setupData.name;
     this.frames = {};
     this.buttons = {};
-    this.log = new CSMesVis.Logger(this.name);
+    this.log = new Logger(this.name);
     this.model = new CSMesVis.Model(this, setupData, this.log);
   };
 
@@ -367,10 +367,9 @@ import * as EnvInfo from "./EnvironmentInfo.js";
 
 
 
-(function($) {
-  'use strict';
-
-  const CSMesVisLogger = function(visualizationName) {
+class Logger {
+  
+  constructor(visualizationName) {
     this.log = [];
 
     this.add(Config.loggingKeys.METADATA, {
@@ -407,33 +406,33 @@ import * as EnvInfo from "./EnvironmentInfo.js";
         name:             visualizationName,
       },
     });
-  };
+  }
 
-  CSMesVisLogger.prototype.addInitializationBeginsEvent = function() {
+  addInitializationBeginsEvent() {
     this.add(Config.loggingKeys.INITIALIZATION_BEGINS);
-  };
+  }
 
-  CSMesVisLogger.prototype.addInitializationFinishedEvent = function() {
+  addInitializationFinishedEvent() {
     this.add(Config.loggingKeys.INITIALIZATION_FINISHED);
-  };
+  }
 
-  CSMesVisLogger.prototype.addToFirstClickedEvent = function() {
+  addToFirstClickedEvent() {
     this.add(Config.loggingKeys.TO_FIRST_STEP_CLICKED);
-  };
+  }
 
-  CSMesVisLogger.prototype.addToPreviousClickedEvent = function() {
+  addToPreviousClickedEvent() {
     this.add(Config.loggingKeys.TO_PREVIOUS_STEP_CLICKED);
-  };
+  }
 
-  CSMesVisLogger.prototype.addToNextClickedEvent = function() {
+  addToNextClickedEvent() {
     this.add(Config.loggingKeys.TO_NEXT_STEP_CLICKED);
-  };
+  }
 
-  CSMesVisLogger.prototype.addToLastClickedEvent = function() {
+  addToLastClickedEvent() {
     this.add(Config.loggingKeys.TO_LAST_STEP_CLICKED);
-  };
+  }
 
-  CSMesVisLogger.prototype.add = function(type, data) {
+  add(type, data) {
     const timestamp = Date.now();
     const timezoneOffset = new Date(timestamp).getTimezoneOffset();
     const logEntry = [timestamp, timezoneOffset, type,];
@@ -450,18 +449,13 @@ import * as EnvInfo from "./EnvironmentInfo.js";
     }
 
     this.log.push(logEntry);
-  };
-
-  CSMesVisLogger.prototype.get = function() {
-    return this.log;
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
   }
 
-  CSMesVis.Logger = CSMesVisLogger;
-}(jQuery));
+  get() {
+    return this.log;
+  }
+
+}
 
 
 
