@@ -137,28 +137,32 @@ import * as StringUtils from "./StringUtils.js";
   };
 
   CSMesVisUI.prototype.createControlFrame = function() {
-    const frame = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_CONTROL_FRAME);
+    const cls = Config.cssClasses;
+    const sdKeys = Config.setupDataKeys;
+    const uiTxt = Config.uiTexts;
+
+    const frame = DOMFactory.createHtmlDiv(cls.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
     this.createButton("toFirstStep",
-          Config.uiTexts.TO_FIRST_STEP_TITLE, Config.setupDataKeys.TO_FIRST_STEP_TITLE,
-          Config.cssClasses.CSMV_BUTTON_TO_FIRST_STEP,
+          uiTxt.TO_FIRST_STEP_TITLE, sdKeys.TO_FIRST_STEP_TITLE,
+          cls.CSMV_BUTTON_TO_FIRST_STEP,
           this.handleToFirstStepClick, frame);
 
     this.createButton("toPreviousStep",
-          Config.uiTexts.TO_PREVIOUS_STEP_TITLE, Config.setupDataKeys.TO_PREVIOUS_STEP_TITLE,
-          Config.cssClasses.CSMV_BUTTON_TO_PREVIOUS_STEP,
+          uiTxt.TO_PREVIOUS_STEP_TITLE, sdKeys.TO_PREVIOUS_STEP_TITLE,
+          cls.CSMV_BUTTON_TO_PREVIOUS_STEP,
           this.handleToPreviousStepClick, frame);
 
     this.createButton("toNextStep",
-          Config.uiTexts.TO_NEXT_STEP_TITLE, Config.setupDataKeys.TO_NEXT_STEP_TITLE,
-          Config.cssClasses.CSMV_BUTTON_TO_NEXT_STEP,
+          uiTxt.TO_NEXT_STEP_TITLE, sdKeys.TO_NEXT_STEP_TITLE,
+          cls.CSMV_BUTTON_TO_NEXT_STEP,
           this.handleToNextStepClick, frame);
 
     this.createButton("toLastStep",
-          Config.uiTexts.TO_LAST_STEP_TITLE, Config.setupDataKeys.TO_LAST_STEP_TITLE,
-          Config.cssClasses.CSMV_BUTTON_TO_LAST_STEP,
+          uiTxt.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
+          cls.CSMV_BUTTON_TO_LAST_STEP,
           this.handleToLastStepClick, frame);
   };
 
@@ -166,14 +170,14 @@ import * as StringUtils from "./StringUtils.js";
                 collectionName, defaultTitle, setupDataKeyForTitle,
                 cssClass, clickHandler, parent) {
 
-    const conf = CSMesVis.config;
+    const sdKeys = Config.setupDataKeys;
 
     let title = defaultTitle;
-    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
-      const env = this.setupData[Config.setupDataKeys.VIS_ENV];
+    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
+      const env = this.setupData[sdKeys.VIS_ENV];
 
-      if (env.hasOwnProperty(Config.setupDataKeys.BUTTONS)) {
-        const btns = env[Config.setupDataKeys.BUTTONS];
+      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
+        const btns = env[sdKeys.BUTTONS];
 
         if (btns.hasOwnProperty(setupDataKeyForTitle)) {
           title = btns[setupDataKeyForTitle];
@@ -209,17 +213,18 @@ import * as StringUtils from "./StringUtils.js";
   };
 
   CSMesVisUI.prototype.updateButtonState = function(button, isEnabled) {
+    const cls = Config.cssClasses;
     const b = $(button);
 
     b.attr(Config.htmlAttributes.DISABLED, !isEnabled);
 
     if (isEnabled) {
-      b.addClass(Config.cssClasses.CSMV_ENABLED);
-      b.removeClass(Config.cssClasses.CSMV_DISABLED);
+      b.addClass(cls.CSMV_ENABLED);
+      b.removeClass(cls.CSMV_DISABLED);
     }
     else {
-      b.removeClass(Config.cssClasses.CSMV_ENABLED);
-      b.addClass(Config.cssClasses.CSMV_DISABLED);
+      b.removeClass(cls.CSMV_ENABLED);
+      b.addClass(cls.CSMV_DISABLED);
       b.blur();
     }
   };
@@ -269,17 +274,18 @@ import * as StringUtils from "./StringUtils.js";
     const frameDiv = DOMFactory.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
-    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_ENV)) {
-      const e = this.setupData[Config.setupDataKeys.VIS_ENV];
+    const sdKeys = Config.setupDataKeys;
+    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
+      const e = this.setupData[sdKeys.VIS_ENV];
 
-      if (e.hasOwnProperty(Config.setupDataKeys.VIS_ANIMATION_FRAME)) {
-        const f = e[Config.setupDataKeys.VIS_ANIMATION_FRAME];
+      if (e.hasOwnProperty(sdKeys.VIS_ANIMATION_FRAME)) {
+        const f = e[sdKeys.VIS_ANIMATION_FRAME];
 
-        if (f.hasOwnProperty(Config.setupDataKeys.WIDTH)) {
-          frameDiv.css(Config.cssProperties.WIDTH, f[Config.setupDataKeys.WIDTH]);
+        if (f.hasOwnProperty(sdKeys.WIDTH)) {
+          frameDiv.css(Config.cssProperties.WIDTH, f[sdKeys.WIDTH]);
         }
-        if (f.hasOwnProperty(Config.setupDataKeys.HEIGHT)) {
-          frameDiv.css(Config.cssProperties.HEIGHT, f[Config.setupDataKeys.HEIGHT]);
+        if (f.hasOwnProperty(sdKeys.HEIGHT)) {
+          frameDiv.css(Config.cssProperties.HEIGHT, f[sdKeys.HEIGHT]);
         }
       }
     }
@@ -289,16 +295,18 @@ import * as StringUtils from "./StringUtils.js";
   };
 
   CSMesVisUI.prototype.createOuterFrame = function() {
-    const conf = CSMesVis.config;
-    const frameDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_OUTER_FRAME);
+    const cls = Config.cssClasses;
+    const sdKeys = Config.setupDataKeys;
+
+    const frameDiv = DOMFactory.createHtmlDiv(cls.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
-    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_TITLE)) {
-      const t = this.setupData[Config.setupDataKeys.VIS_TITLE];
+    if (this.setupData.hasOwnProperty(sdKeys.VIS_TITLE)) {
+      const t = this.setupData[sdKeys.VIS_TITLE];
       if (StringUtils.isNonEmptyString(t)) {
         const title = $.trim(t);
-        const titleDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_VIS_TITLE);
+        const titleDiv = DOMFactory.createHtmlDiv(cls.CSMV_VIS_TITLE);
         titleDiv.text(title);
         titleDiv.appendTo(frameDiv);
         this.title = title;
@@ -311,11 +319,11 @@ import * as StringUtils from "./StringUtils.js";
       }
     }
 
-    if (this.setupData.hasOwnProperty(Config.setupDataKeys.VIS_DESCRIPTION)) {
-      const d = this.setupData[Config.setupDataKeys.VIS_DESCRIPTION];
+    if (this.setupData.hasOwnProperty(sdKeys.VIS_DESCRIPTION)) {
+      const d = this.setupData[sdKeys.VIS_DESCRIPTION];
       if (StringUtils.isNonEmptyString(d)) {
         const desc = $.trim(d);
-        const descDiv = DOMFactory.createHtmlDiv(Config.cssClasses.CSMV_VIS_DESCRIPTION);
+        const descDiv = DOMFactory.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
         descDiv.appendTo(frameDiv);
         this.description = desc;
@@ -369,7 +377,7 @@ import * as StringUtils from "./StringUtils.js";
 
 
 class Logger {
-  
+
   constructor(visualizationName) {
     this.log = [];
 
@@ -593,11 +601,11 @@ class Bootstrapper {
   allVisualizationElements() {
     return $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
   }
-  
+
   visualizationElementsFor(visualizationName) {
     const clazz = Config.cssClasses.CSMV_VISUALIZATION;
     const nameAttr = Config.htmlAttributes.VISUALIZATION_NAME;
-    
+
     return $(`.${clazz}[${nameAttr}='${visualizationName}']`);
   }
 
