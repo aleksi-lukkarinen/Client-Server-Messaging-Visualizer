@@ -115,6 +115,7 @@ import * as StringUtils from "./StringUtils.js";
     this.buttons = {};
     this.log = new Logger(this.name);
     this.model = new CSMesVis.Model(this, setupData, this.log);
+    this.domFactory = new DOMFactory();
   };
 
   CSMesVisUI.prototype.init = function() {
@@ -136,12 +137,14 @@ import * as StringUtils from "./StringUtils.js";
     this.log.addInitializationFinishedEvent();
   };
 
-  CSMesVisUI.prototype.createControlFrame = function() {
+  CSMesVisUI.prototype.createControlFrame =
+                          function(DF = this.domFactory) {
+
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
     const uiTxt = Config.uiTexts;
 
-    const frame = DOMFactory.createHtmlDiv(cls.CSMV_CONTROL_FRAME);
+    const frame = DF.createHtmlDiv(cls.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
@@ -168,7 +171,7 @@ import * as StringUtils from "./StringUtils.js";
 
   CSMesVisUI.prototype.createButton = function(
                 collectionName, defaultTitle, setupDataKeyForTitle,
-                cssClass, clickHandler, parent) {
+                cssClass, clickHandler, parent, DF = this.domFactory) {
 
     const sdKeys = Config.setupDataKeys;
 
@@ -185,7 +188,7 @@ import * as StringUtils from "./StringUtils.js";
       }
     }
 
-    const b = DOMFactory.createHtmlButton(
+    const b = DF.createHtmlButton(
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
@@ -270,8 +273,10 @@ import * as StringUtils from "./StringUtils.js";
     console.log(this.log.get());
   };
 
-  CSMesVisUI.prototype.createAnimationFrame = function() {
-    const frameDiv = DOMFactory.createHtmlDiv(
+  CSMesVisUI.prototype.createAnimationFrame =
+                          function(DF = this.domFactory) {
+
+    const frameDiv = DF.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     const sdKeys = Config.setupDataKeys;
@@ -294,11 +299,13 @@ import * as StringUtils from "./StringUtils.js";
     this.frames.animation = frameDiv;
   };
 
-  CSMesVisUI.prototype.createOuterFrame = function() {
+  CSMesVisUI.prototype.createOuterFrame =
+                        function(DF = this.domFactory) {
+
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
 
-    const frameDiv = DOMFactory.createHtmlDiv(cls.CSMV_OUTER_FRAME);
+    const frameDiv = DF.createHtmlDiv(cls.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
@@ -306,7 +313,7 @@ import * as StringUtils from "./StringUtils.js";
       const t = this.setupData[sdKeys.VIS_TITLE];
       if (StringUtils.isNonEmptyString(t)) {
         const title = $.trim(t);
-        const titleDiv = DOMFactory.createHtmlDiv(cls.CSMV_VIS_TITLE);
+        const titleDiv = DF.createHtmlDiv(cls.CSMV_VIS_TITLE);
         titleDiv.text(title);
         titleDiv.appendTo(frameDiv);
         this.title = title;
@@ -323,7 +330,7 @@ import * as StringUtils from "./StringUtils.js";
       const d = this.setupData[sdKeys.VIS_DESCRIPTION];
       if (StringUtils.isNonEmptyString(d)) {
         const desc = $.trim(d);
-        const descDiv = DOMFactory.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
+        const descDiv = DF.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
         descDiv.text(desc);
         descDiv.appendTo(frameDiv);
         this.description = desc;
@@ -471,15 +478,15 @@ class Logger {
 
 class DOMFactory {
 
-  static createHtmlDiv(cssClass) {
-    return DOMFactory.createHtmlTag(Config.htmlTags.DIV, cssClass);
+  createHtmlDiv(cssClass) {
+    return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
   }
 
-  static createHtmlButton(cssClass) {
-    return DOMFactory.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
+  createHtmlButton(cssClass) {
+    return this.createHtmlTag(Config.htmlTags.BUTTON, cssClass);
   }
 
-  static createHtmlTag(tagName, cssClass) {
+  createHtmlTag(tagName, cssClass) {
     const tag = Config.htmlTags.TAG_START + tagName + Config.htmlTags.SINGLE_TAG_END;
     const attributes = {};
     attributes[Config.htmlAttributes.CLASS] = cssClass;
