@@ -1,7 +1,11 @@
+/**
+ * Constants for internal configuration.
+ *
+ * @module Config
+ */
 
 
-
-
+/** Constants related to the application as a whole. */
 export const application = {
   NAME:                           "Client-Server Messaging Visualizer",
 }
@@ -9,6 +13,7 @@ export const application = {
 
 
 
+/** Constants representing CSS classes used by the application. */
 export const cssClasses = {
   CSMV_VISUALIZATION:             "csmv-visualization",
   CSMV_OUTER_FRAME:               "csmv-outer-frame",
@@ -28,6 +33,7 @@ export const cssClasses = {
 
 
 
+/** Constants representing CSS properties used by the application. */
 export const cssProperties = {
   WIDTH:                          "width",
   HEIGHT:                         "height",
@@ -36,6 +42,7 @@ export const cssProperties = {
 
 
 
+/** Constants representing event names used by the application. */
 export const eventNames = {
   INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
   INITIALIZATION_FINISHED:        "CSMesVis-initialization-finished",
@@ -58,6 +65,7 @@ eventNames.ALL_EVENTS = allEvents.substring(0, allEvents.length);
 
 
 
+/** Constants representing HTML attributes used by the application. */
 export const htmlAttributes = {
   VISUALIZATION_NAME:             "cmsv-name",
   CLASS:                          "class",
@@ -67,6 +75,7 @@ export const htmlAttributes = {
 
 
 
+/** Constants representing HTML tags used by the application. */
 export const htmlTags = {
   TAG_START:                      "<",
   SINGLE_TAG_END:                 "/>",
@@ -77,6 +86,7 @@ export const htmlTags = {
 
 
 
+/** Constants representing the strings that identify log events. */
 export const loggingKeys = {
   METADATA:                       "Metadata",
   INITIALIZATION_BEGINS:          "Initialization begins",
@@ -90,8 +100,16 @@ export const loggingKeys = {
 
 
 
+/**
+ * Constant representing the name of the document object property
+ * that must contain the setup data array for the visualizations.
+ */
 export const SETUP_DATA_ROOT_KEY = "CSMesVisSetupData";
 
+/**
+ * Constants representing keys used in the setup data array
+ * for the visualizations.
+ */
 export const setupDataKeys = {
   VIS_NAME:                       "name",
   VIS_TITLE:                      "title",
@@ -111,6 +129,10 @@ export const setupDataKeys = {
 
 
 
+/**
+ * Constants representing texts visible in
+ * the user interface of the application.
+ */
 export const uiTexts = {
   TO_FIRST_STEP_TITLE:            "First Step",
   TO_PREVIOUS_STEP_TITLE:         "Previous Step",

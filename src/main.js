@@ -1,10 +1,16 @@
+/**
+ * The main module.
+ *
+ * @module main
+ */
+
 import * as Config from "./Config.js";
 import * as EnvInfo from "./EnvironmentInfo.js";
 import * as StringUtils from "./StringUtils.js";
 
 
 
-
+/** The data model. */
 class Model {
 
   constructor(ui, setupData, log) {
@@ -104,6 +110,7 @@ class Model {
 
 
 
+/** The user interface. */
 class UI {
 
   constructor(container, setupData, domFactory) {
@@ -368,6 +375,7 @@ class UI {
 
 
 
+/** To be used for creating a log of user's actions. */
 class Logger {
 
   constructor(visualizationName) {
@@ -461,6 +469,7 @@ class Logger {
 
 
 
+/** Creates resources related to the document object model. */
 class DOMFactory {
 
   createHtmlDiv(cssClass) {
@@ -483,6 +492,7 @@ class DOMFactory {
 
 
 
+/** Creates errors to be thrown in the application. */
 class ErrorFactory {
 
   static forIncorrectSetupData(message) {
@@ -506,6 +516,7 @@ class ErrorFactory {
 
 
 
+/** Represents the root of the error class hierarchy. */
 const BaseError = function(message) {
   this.message = this.formatErrorMessage(message);
 };
@@ -520,6 +531,11 @@ BaseError.prototype.formatErrorMessage = function(message) {
 
 
 
+/**
+ * Finds both the visualizations given on the HTML page as well as
+ * the related setup data, and starts the initialization of each
+ * detected visualization.
+ */
 class Bootstrapper {
 
   execute() {

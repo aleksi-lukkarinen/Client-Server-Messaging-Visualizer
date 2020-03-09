@@ -4,6 +4,7 @@ const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const csso = require('gulp-csso');
 const del = require('del');
+const jsdoc = require('gulp-jsdoc3');
 const jshint = require('gulp-jshint');
 const log = require('gulplog');
 const rename = require('gulp-rename');
@@ -26,13 +27,20 @@ const extCSS = ".css"
 const extMinCSS = ".min" + extCSS;
 const extJS = ".js"
 const extMinJS = ".min" + extJS;
+const extJSON = ".json";
+const extMD = ".md";
 
+const globAllFiles = "*.*";
 const globAllCSS = "*" + extCSS;
 const globAllMinCSS = "*" + extMinCSS;
 const globAllJS = "*" + extJS;
 const globAllMinJS = "*" + extMinJS;
 const primaryJSFile = "main" + extJS;
 const esFiveDistroJSFile = "cs-mes-vis" + extMinJS;
+
+const readmeMD = "README" + extMD;
+const jsDocConf = "jsdoc" + extJSON;
+const packageJson = "package" + extJSON;
 
 
 function clean() {
@@ -51,7 +59,14 @@ function cssMinify(cb) {
 function jsHint() {
   return src([srcDir + globAllJS, srcDir + "**/" + globAllJS])
     .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(jshint.reporter("default"));
+}
+
+function jsDoc(cb) {
+  var config = require("./" + jsDocConf);
+
+  return src([packageJson, readmeMD, srcDir + globAllJS], {read: false})
+    .pipe(jsdoc(config, cb));
 }
 
 function jsBabel() {
@@ -82,8 +97,8 @@ function images(cb) {
 
 function stage(cb) {
   const sourceFiles = [
-    esFiveDistributionDir + "*.*",
-    examplesDir + "*.*",
+    esFiveDistributionDir + globAllFiles,
+    examplesDir + globAllFiles,
   ];
 
   return src(sourceFiles)
@@ -99,17 +114,18 @@ function publish(cb) {
 }
 
 function watchSources(cb) {
-  watch(srcDir + globAllJS,     series(jsBabel, jsBundle, stage));
-  watch(srcDir + globAllCSS,    series(cssMinify, stage));
-  watch(examplesDir + "*.*",    series(stage));
+  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, jsDoc));
+  watch(srcDir + globAllCSS,            series(cssMinify, stage));
+  watch(examplesDir + globAllFiles,     series(stage));
 }
 
 exports.clean = clean;
 exports.jshint = jsHint;
+exports.jsdoc = jsDoc;
 exports.js = series(jsHint, jsBabel, jsBundle)
 exports.css = series(cssMinify)
 exports.images = images
-exports.compile = parallel(exports.js, exports.css, images);
+exports.compile = parallel(exports.js, exports.css, images, jsDoc);
 exports.stage = stage;
 exports.unittest = unitTest;
 exports.test = series(unitTest);
