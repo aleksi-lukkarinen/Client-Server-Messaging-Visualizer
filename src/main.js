@@ -95,7 +95,7 @@ class Model {
   }
 
   emitEvent(id, params) {
-    const e = jQuery.Event(id);
+    const e = $.Event(id);
     $(this).trigger(e, params);
   }
 
@@ -104,21 +104,20 @@ class Model {
 
 
 
-(function($) {
-  'use strict';
+class UI {
 
-  const CSMesVisUI = function(container, setupData) {
+  constructor(container, setupData, domFactory) {
     this.container = container;
     this.setupData = setupData;
     this.name = setupData.name;
     this.frames = {};
     this.buttons = {};
+    this.domFactory = domFactory;
     this.log = new Logger(this.name);
     this.model = new Model(this, setupData, this.log);
-    this.domFactory = new DOMFactory();
-  };
+  }
 
-  CSMesVisUI.prototype.init = function() {
+  init() {
     this.emitInitializationBeginsEvent();
     this.log.addInitializationBeginsEvent();
 
@@ -135,11 +134,9 @@ class Model {
 
     this.emitInitializationFinishedEvent();
     this.log.addInitializationFinishedEvent();
-  };
+  }
 
-  CSMesVisUI.prototype.createControlFrame =
-                          function(DF = this.domFactory) {
-
+  createControlFrame(DF = this.domFactory) {
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
     const uiTxt = Config.uiTexts;
@@ -167,11 +164,11 @@ class Model {
           uiTxt.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
           cls.CSMV_BUTTON_TO_LAST_STEP,
           this.handleToLastStepClick, frame);
-  };
+  }
 
-  CSMesVisUI.prototype.createButton = function(
-                collectionName, defaultTitle, setupDataKeyForTitle,
-                cssClass, clickHandler, parent, DF = this.domFactory) {
+  createButton(
+        collectionName, defaultTitle, setupDataKeyForTitle,
+        cssClass, clickHandler, parent, DF = this.domFactory) {
 
     const sdKeys = Config.setupDataKeys;
 
@@ -199,13 +196,13 @@ class Model {
     b.click($.proxy(clickHandler, this));
     b.appendTo(parent);
     this.buttons[collectionName] = b;
-  };
+  }
 
-  CSMesVisUI.prototype.update = function() {
+  update() {
     this.updateButtonStates();
-  };
+  }
 
-  CSMesVisUI.prototype.updateButtonStates = function() {
+  updateButtonStates() {
     const btns = this.buttons;
     const mdl = this.model;
 
@@ -213,9 +210,9 @@ class Model {
     this.updateButtonState(btns.toPreviousStep, mdl.canMoveToPreviousStep());
     this.updateButtonState(btns.toNextStep, mdl.canMoveToNextStep());
     this.updateButtonState(btns.toLastStep, mdl.canMoveToLastStep());
-  };
+  }
 
-  CSMesVisUI.prototype.updateButtonState = function(button, isEnabled) {
+  updateButtonState(button, isEnabled) {
     const cls = Config.cssClasses;
     const b = $(button);
 
@@ -230,9 +227,9 @@ class Model {
       b.addClass(cls.CSMV_DISABLED);
       b.blur();
     }
-  };
+  }
 
-  CSMesVisUI.prototype.handleToFirstStepClick = function(event) {
+  handleToFirstStepClick(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -240,9 +237,9 @@ class Model {
 
     this.emitToFirstStepButtonClickedEvent();
     this.log.addToFirstClickedEvent();
-  };
+  }
 
-  CSMesVisUI.prototype.handleToPreviousStepClick = function(event) {
+  handleToPreviousStepClick(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -250,9 +247,9 @@ class Model {
 
     this.emitToPreviousStepButtonClickedEvent();
     this.log.addToPreviousClickedEvent();
-  };
+  }
 
-  CSMesVisUI.prototype.handleToNextStepClick = function(event) {
+  handleToNextStepClick(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -260,9 +257,9 @@ class Model {
 
     this.emitToNextStepButtonClickedEvent();
     this.log.addToNextClickedEvent();
-  };
+  }
 
-  CSMesVisUI.prototype.handleToLastStepClick = function(event) {
+  handleToLastStepClick(event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -271,11 +268,9 @@ class Model {
     this.emitToLastStepButtonClickedEvent();
     this.log.addToLastClickedEvent();
     console.log(this.log.get());
-  };
+  }
 
-  CSMesVisUI.prototype.createAnimationFrame =
-                          function(DF = this.domFactory) {
-
+  createAnimationFrame(DF = this.domFactory) {
     const frameDiv = DF.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
@@ -297,11 +292,9 @@ class Model {
 
     frameDiv.appendTo(this.frames.outer);
     this.frames.animation = frameDiv;
-  };
+  }
 
-  CSMesVisUI.prototype.createOuterFrame =
-                        function(DF = this.domFactory) {
-
+  createOuterFrame(DF = this.domFactory) {
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
 
@@ -342,43 +335,38 @@ class Model {
       this.description = desc;
       this.descriptionDiv = descDiv;
     }
-  };
-
-  CSMesVisUI.prototype.emitInitializationBeginsEvent = function() {
-    this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitInitializationFinishedEvent = function() {
-    this.emitEvent(Config.eventNames.INITIALIZATION_FINISHED, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitToFirstStepButtonClickedEvent = function() {
-    this.emitEvent(Config.eventNames.TO_FIRST_STEP_CLICKED, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitToPreviousStepButtonClickedEvent = function() {
-    this.emitEvent(Config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitToNextStepButtonClickedEvent = function() {
-    this.emitEvent(Config.eventNames.TO_NEXT_STEP_CLICKED, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitToLastStepButtonClickedEvent = function() {
-    this.emitEvent(Config.eventNames.TO_LAST_STEP_CLICKED, [this.name,]);
-  };
-
-  CSMesVisUI.prototype.emitEvent = function(id, params) {
-    const e = jQuery.Event(id);
-    $(this.container).trigger(e, params);
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
   }
 
-  CSMesVis.UI = CSMesVisUI;
-}(jQuery));
+  emitInitializationBeginsEvent() {
+    this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
+  }
+
+  emitInitializationFinishedEvent() {
+    this.emitEvent(Config.eventNames.INITIALIZATION_FINISHED, [this.name,]);
+  }
+
+  emitToFirstStepButtonClickedEvent() {
+    this.emitEvent(Config.eventNames.TO_FIRST_STEP_CLICKED, [this.name,]);
+  }
+
+  emitToPreviousStepButtonClickedEvent() {
+    this.emitEvent(Config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name,]);
+  }
+
+  emitToNextStepButtonClickedEvent() {
+    this.emitEvent(Config.eventNames.TO_NEXT_STEP_CLICKED, [this.name,]);
+  }
+
+  emitToLastStepButtonClickedEvent() {
+    this.emitEvent(Config.eventNames.TO_LAST_STEP_CLICKED, [this.name,]);
+  }
+
+  emitEvent(id, params) {
+    const e = jQuery.Event(id);
+    $(this.container).trigger(e, params);
+  }
+
+}
 
 
 
@@ -578,6 +566,8 @@ class Bootstrapper {
   }
 
   instantiateVisualizations() {
+    const domFactory = new DOMFactory();
+    
     for (const [idx, visualizationSetup] of CSMesVis.setupData.entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         throw ErrorFactory.forIncorrectSetupData(
@@ -586,11 +576,11 @@ class Bootstrapper {
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
 
-      this.instantiateVisualizationBasedOn(visualizationSetup);
+      this.instantiateVisualizationBasedOn(visualizationSetup, domFactory);
     }
   }
 
-  instantiateVisualizationBasedOn(setupDataEntry) {
+  instantiateVisualizationBasedOn(setupDataEntry, domFactory) {
     const elems = this.visualizationElementsFor(setupDataEntry.name);
 
     if (elems.length === 0) {
@@ -605,8 +595,8 @@ class Bootstrapper {
     }
 
     const containerElement = elems[0];
-    const V = new CSMesVis.UI(containerElement, setupDataEntry);
-    V.init();
+    const ui = new UI(containerElement, setupDataEntry, domFactory);
+    ui.init();
   }
 
   allVisualizationElements() {
