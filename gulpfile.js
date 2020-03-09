@@ -137,5 +137,5 @@ exports.build = series(
   exports.publish
 );
 exports.cleanBuild = series(exports.clean, exports.build);
-exports.watch = watchSources;
+exports.watch = series(exports.build, watchSources);
 exports.default = exports.build;
