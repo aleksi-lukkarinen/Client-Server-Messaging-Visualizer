@@ -311,36 +311,36 @@ class Model {
 
     if (this.setupData.hasOwnProperty(sdKeys.VIS_TITLE)) {
       const t = this.setupData[sdKeys.VIS_TITLE];
-      if (StringUtils.isNonEmptyString(t)) {
-        const title = $.trim(t);
-        const titleDiv = DF.createHtmlDiv(cls.CSMV_VIS_TITLE);
-        titleDiv.text(title);
-        titleDiv.appendTo(frameDiv);
-        this.title = title;
-        this.titleDiv = titleDiv;
+
+      if (!StringUtils.isNonEmptyString(t)) {
+        throw ErrorFactory.forIncorrectSetupData(
+                  `Visualization '${this.name}' has an invalid title; ` +
+                  `it must be a string that contains not only whitespace.`);
       }
-      else {
-        const msg = `Visualization '${this.name}' has an invalid title; ` +
-                    `it must be a string that contains not only whitespace.`;
-        throw ErrorFactory.forIncorrectSetupData(msg);
-      }
+
+      const title = $.trim(t);
+      const titleDiv = DF.createHtmlDiv(cls.CSMV_VIS_TITLE);
+      titleDiv.text(title);
+      titleDiv.appendTo(frameDiv);
+      this.title = title;
+      this.titleDiv = titleDiv;
     }
 
     if (this.setupData.hasOwnProperty(sdKeys.VIS_DESCRIPTION)) {
       const d = this.setupData[sdKeys.VIS_DESCRIPTION];
-      if (StringUtils.isNonEmptyString(d)) {
-        const desc = $.trim(d);
-        const descDiv = DF.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
-        descDiv.text(desc);
-        descDiv.appendTo(frameDiv);
-        this.description = desc;
-        this.descriptionDiv = descDiv;
+
+      if (!StringUtils.isNonEmptyString(d)) {
+        throw ErrorFactory.forIncorrectSetupData(
+                  `Visualization '${this.name}' has an invalid description; ` +
+                  `it must be a string that contains not only whitespace.`);
       }
-      else {
-        const msg = `Visualization '${this.name}' has an invalid description; ` +
-                    `it must be a string that contains not only whitespace.`;
-        throw ErrorFactory.forIncorrectSetupData(msg);
-      }
+
+      const desc = $.trim(d);
+      const descDiv = DF.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
+      descDiv.text(desc);
+      descDiv.appendTo(frameDiv);
+      this.description = desc;
+      this.descriptionDiv = descDiv;
     }
   };
 
