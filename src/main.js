@@ -1,5 +1,6 @@
 import * as Config from "./Config.js";
 import * as EnvInfo from "./EnvironmentInfo.js";
+import * as StringUtils from "./StringUtils.js";
 
 
 
@@ -475,21 +476,6 @@ class DOMFactory {
     const attributes = {};
     attributes[Config.htmlAttributes.CLASS] = cssClass;
     return $(tag, attributes);
-  }
-
-}
-
-
-
-
-class StringUtils {
-
-  static ensureThatEndsWithPeriod(s) {
-    return !s.endsWith(".") ? s + "." : s;
-  }
-
-  static isNonEmptyString(s) {
-    return $.type(s) === "string" && $.trim(s).length > 0;
   }
 
 }
