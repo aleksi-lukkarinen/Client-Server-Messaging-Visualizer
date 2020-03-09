@@ -28,6 +28,8 @@ export const cssClasses = {
   CSMV_BUTTON_TO_LAST_STEP:       "csmv-button-last-step",
   CSMV_ENABLED:                   "csmv-enabled",
   CSMV_DISABLED:                  "csmv-disabled",
+  CSMV_ACTOR:                     "csmv-actor",
+  CSMV_ACTOR_TITLE:               "csmv-actor-title",
 }
 
 
@@ -67,7 +69,7 @@ eventNames.ALL_EVENTS = allEvents.substring(0, allEvents.length);
 
 /** Constants representing HTML attributes used by the application. */
 export const htmlAttributes = {
-  VISUALIZATION_NAME:             "cmsv-name",
+  CSMV_NAME:                      "cmsv-name",
   CLASS:                          "class",
   DISABLED:                       "disabled",
 }
@@ -111,11 +113,11 @@ export const SETUP_DATA_ROOT_KEY = "CSMesVisSetupData";
  * for the visualizations.
  */
 export const setupDataKeys = {
-  VIS_NAME:                       "name",
-  VIS_TITLE:                      "title",
-  VIS_DESCRIPTION:                "description",
-  VIS_ENV:                        "environment",
-  VIS_ANIMATION_FRAME:            "animationFrame",
+  NAME:                           "name",
+  TITLE:                          "title",
+  DESCRIPTION:                    "description",
+  ENV:                            "environment",
+  ANIMATION_FRAME:                "animationFrame",
   WIDTH:                          "width",
   HEIGHT:                         "height",
   BUTTONS:                        "buttons",
@@ -123,7 +125,10 @@ export const setupDataKeys = {
   TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
   TO_NEXT_STEP_TITLE:             "toNextStepTitle",
   TO_LAST_STEP_TITLE:             "toLastStepTitle",
-  VIS_ACTORS:                     "actors",
+  ACTORS:                         "actors",
+  ID:                             "id",
+  CSS_CLASSES:                    "cssClasses",
+  CONTENT_HTML:                   "contentHTML",
 }
 
 

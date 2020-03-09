@@ -34,6 +34,7 @@ export default class UI {
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
+    this.createActors();
 
     // The UI listens change events from the model to update itself
     $(this.model).bind(
@@ -44,6 +45,85 @@ export default class UI {
 
     this.emitInitializationFinishedEvent();
     this.log.addInitializationFinishedEvent();
+  }
+  
+  createActors() {
+    const sdKeys = Config.setupDataKeys;
+
+    if (!this.setupData.hasOwnProperty(sdKeys.ACTORS)) {
+      console.log(`Warning: Visualization '${this.name}' does not have any actors defined.`);
+      return;
+    }
+
+    const actors = this.setupData[sdKeys.ACTORS];
+
+    if (!Array.isArray(actors)) {
+      throw ErrorFactory.forIncorrectSetupData(
+              `Visualization '${this.name}': The 'actors' key ` +
+              `in the setup data has to be an array.`);
+    }
+
+    if (actors.length < 1) {
+      console.log(`Warning: Visualization '${this.name}' does not have any actors defined.`);
+      return;
+    }
+
+    for (const [idx, actorSetup] of actors.entries()) {
+      if (!actorSetup.hasOwnProperty(sdKeys.ID)) {
+        throw ErrorFactory.forIncorrectSetupData(
+                `The ${idx + 1}. actor of visualization '${this.name}' does not have an ID.`);
+      }
+
+      this.createSingleActor(actorSetup);
+    }
+  }
+
+  createSingleActor(actorSetup, DF = this.domFactory) {
+    const sdKeys = Config.setupDataKeys;
+
+    const actorDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR);
+
+    if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
+      const title = actorSetup[sdKeys.TITLE];
+      if (StringUtils.isNonEmptyString(title)) {
+        const titleDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
+        titleDiv.text(title);
+        titleDiv.appendTo(actorDiv);
+      }
+    }
+
+    let width = "100px";
+    if (actorSetup.hasOwnProperty(sdKeys.WIDTH)) {
+      width = actorSetup[sdKeys.WIDTH];
+    }
+    actorDiv.css(Config.cssProperties.WIDTH, width);
+
+    let height = "100px";
+    if (actorSetup.hasOwnProperty(sdKeys.HEIGHT)) {
+      height = actorSetup[sdKeys.HEIGHT];
+    }
+    actorDiv.css(Config.cssProperties.HEIGHT, height);
+
+    if (actorSetup.hasOwnProperty(sdKeys.CSS_CLASSES)) {
+      let cssClasses = actorSetup[sdKeys.CSS_CLASSES];
+
+      if ($.type(cssClasses) === "string") {
+        cssClasses = [cssClasses];
+      }
+      if (Array.isArray(cssClasses)) {
+        for (const c of cssClasses) {
+          if (StringUtils.isNonEmptyString(c)) {
+            actorDiv.addClass(c);
+          }
+        }
+      }
+    }
+    
+    if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
+      actorDiv.html(actorSetup[sdKeys.CONTENT_HTML]);
+    }
+    
+    actorDiv.appendTo(this.frames.animation);
   }
 
   createControlFrame(DF = this.domFactory) {
@@ -185,11 +265,11 @@ export default class UI {
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     const sdKeys = Config.setupDataKeys;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
-      const e = this.setupData[sdKeys.VIS_ENV];
+    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+      const e = this.setupData[sdKeys.ENV];
 
-      if (e.hasOwnProperty(sdKeys.VIS_ANIMATION_FRAME)) {
-        const f = e[sdKeys.VIS_ANIMATION_FRAME];
+      if (e.hasOwnProperty(sdKeys.ANIMATION_FRAME)) {
+        const f = e[sdKeys.ANIMATION_FRAME];
 
         if (f.hasOwnProperty(sdKeys.WIDTH)) {
           frameDiv.css(Config.cssProperties.WIDTH, f[sdKeys.WIDTH]);
@@ -213,11 +293,11 @@ export default class UI {
     this.frames.outer = frameDiv;
 
     this.createHeadingDiv(
-          sdKeys.VIS_TITLE, cls.CSMV_VIS_TITLE,
+          sdKeys.TITLE, cls.CSMV_VIS_TITLE,
           frameDiv, "title", "titleDiv", "title");
 
     this.createHeadingDiv(
-          sdKeys.VIS_DESCRIPTION, cls.CSMV_VIS_DESCRIPTION,
+          sdKeys.DESCRIPTION, cls.CSMV_VIS_DESCRIPTION,
           frameDiv, "description", "descriptionDiv", "description");
   }
 

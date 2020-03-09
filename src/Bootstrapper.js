@@ -58,9 +58,9 @@ export default class Bootstrapper {
     const domFactory = new DOMFactory();
 
     for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
-      if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
+      if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.NAME)) {
         throw ErrorFactory.forIncorrectSetupData(
-                `${idx + 1}. visualization does not have a name.`);
+                `The ${idx + 1}. visualization does not have a name.`);
       }
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
@@ -94,7 +94,7 @@ export default class Bootstrapper {
 
   visualizationElementsFor(visualizationName) {
     const clazz = Config.cssClasses.CSMV_VISUALIZATION;
-    const nameAttr = Config.htmlAttributes.VISUALIZATION_NAME;
+    const nameAttr = Config.htmlAttributes.CSMV_NAME;
 
     return $(`.${clazz}[${nameAttr}='${visualizationName}']`);
   }

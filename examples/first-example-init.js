@@ -7,7 +7,7 @@ document.CSMesVisSetupData = [
     environment: {
       animationFrame: {
         width:  "800px",
-        height: "500px"
+        height: "300px"
       },
       buttons: {
         toFirstStepTitle: "Beginning",
@@ -23,14 +23,14 @@ document.CSMesVisSetupData = [
         title: "Browser",
         cssClasses: ["csmv-browser"],
         width: "100px",
-        height: "200px",
+        height: "150px",
       },
       {
         id: "s",   
         title: "Web Server",
         cssClasses: ["csmv-server"],
         width: "100px",
-        height: "200px",
+        height: "150px",
       },
       {
         id: "req", 
@@ -76,7 +76,7 @@ document.CSMesVisSetupData = [
     
     environment: {
     },
-      
+/*      
     actors: [
       {
         class: "c",
@@ -87,7 +87,7 @@ document.CSMesVisSetupData = [
         name: "Server",
       }
     ],
-
+*/
     setup: [
     
     ],
