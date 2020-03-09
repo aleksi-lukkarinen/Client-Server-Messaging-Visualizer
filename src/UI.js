@@ -269,7 +269,7 @@ export default class UI {
   }
 
   emitEvent(id, params) {
-    const e = jQuery.Event(id);
+    const e = $.Event(id);
     $(this.container).trigger(e, params);
   }
 
