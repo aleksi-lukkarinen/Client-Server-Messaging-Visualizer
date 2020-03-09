@@ -438,11 +438,11 @@ class Logger {
     const timezoneOffset = new Date(timestamp).getTimezoneOffset();
     const logEntry = [timestamp, timezoneOffset, type,];
 
-    if (arguments.length == 2) {
+    if (arguments.length === 2) {
       if ($.isArray(data)) {
-        data.forEach(function(item) {
+        for (let item of data) {
           logEntry.push(item);
-        });
+        }
       }
       else {
         logEntry.push(data);
