@@ -5,10 +5,9 @@ import * as StringUtils from "./StringUtils.js";
 
 
 
-(function($) {
-  'use strict';
+class Model {
 
-  const CSMesVisModel = function(ui, setupData, log) {
+  constructor(ui, setupData, log) {
     this.ui = ui;
     this.name = setupData.name;
     this.log = log;
@@ -17,19 +16,19 @@ import * as StringUtils from "./StringUtils.js";
     this.currentStep = 1;
 
     this.setupModel(setupData);
-  };
+  }
 
-  CSMesVisModel.prototype.setupModel = function(setupData) {
-    setupData.steps.forEach(function(step) {
+  setupModel(setupData) {
+    for (let step of setupData.steps) {
       this.steps.push(step);
-    }, this);
+    }
 
     this.currentStep = 1;
     console.log(this.steps);
     this.emitModelChangedEvent();
-  };
+  }
 
-  CSMesVisModel.prototype.moveToFirstStep = function() {
+  moveToFirstStep() {
     if (!this.canMoveToFirstStep()) {
       const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
       throw ErrorFactory.createBaseErrorFor(msg);
@@ -37,13 +36,14 @@ import * as StringUtils from "./StringUtils.js";
 
     this.currentStep = 1;
     this.emitModelChangedEvent();
-  };
+  }
 
-  CSMesVisModel.prototype.canMoveToFirstStep = function() {
-    return this.steps.length > 1 & this.currentStep > 1;
-  };
+  canMoveToFirstStep() {
+    return this.steps.length > 1 
+            && this.currentStep > 1;
+  }
 
-  CSMesVisModel.prototype.moveToPreviousStep = function() {
+  moveToPreviousStep() {
     if (!this.canMoveToPreviousStep()) {
       const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
       throw ErrorFactory.createBaseErrorFor(msg);
@@ -51,13 +51,14 @@ import * as StringUtils from "./StringUtils.js";
 
     this.currentStep = this.currentStep - 1;
     this.emitModelChangedEvent();
-  };
+  }
 
-  CSMesVisModel.prototype.canMoveToPreviousStep = function() {
-    return this.steps.length > 1 & this.currentStep > 1;
-  };
+  canMoveToPreviousStep() {
+    return this.steps.length > 1 
+            && this.currentStep > 1;
+  }
 
-  CSMesVisModel.prototype.moveToNextStep = function() {
+  moveToNextStep() {
     if (!this.canMoveToNextStep()) {
       const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
       throw ErrorFactory.createBaseErrorFor(msg);
@@ -65,13 +66,14 @@ import * as StringUtils from "./StringUtils.js";
 
     this.currentStep = this.currentStep + 1;
     this.emitModelChangedEvent();
-  };
+  }
 
-  CSMesVisModel.prototype.canMoveToNextStep = function() {
-    return this.steps.length > 1 & this.currentStep < this.steps.length;
-  };
+  canMoveToNextStep() {
+    return this.steps.length > 1 
+            && this.currentStep < this.steps.length;
+  }
 
-  CSMesVisModel.prototype.moveToLastStep = function() {
+  moveToLastStep() {
     if (!this.canMoveToLastStep()) {
       const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
       throw ErrorFactory.createBaseErrorFor(msg);
@@ -79,27 +81,25 @@ import * as StringUtils from "./StringUtils.js";
 
     this.currentStep = this.steps.length;
     this.emitModelChangedEvent();
-  };
-
-  CSMesVisModel.prototype.canMoveToLastStep = function() {
-    return this.steps.length > 1 & this.currentStep < this.steps.length;
-  };
-
-  CSMesVisModel.prototype.emitModelChangedEvent = function() {
-    this.emitEvent(Config.eventNames.MODEL_CHANGED, [this.name,]);
-  };
-
-  CSMesVisModel.prototype.emitEvent = function(id, params) {
-    const e = jQuery.Event(id);
-    $(this).trigger(e, params);
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
   }
 
-  CSMesVis.Model = CSMesVisModel;
-}(jQuery));
+  canMoveToLastStep() {
+    return this.steps.length > 1 
+            && this.currentStep < this.steps.length;
+  }
+
+  emitModelChangedEvent() {
+    this.emitEvent(
+          Config.eventNames.MODEL_CHANGED,
+          [this.name,]);
+  }
+
+  emitEvent(id, params) {
+    const e = jQuery.Event(id);
+    $(this).trigger(e, params);
+  }
+
+}
 
 
 
@@ -114,7 +114,7 @@ import * as StringUtils from "./StringUtils.js";
     this.frames = {};
     this.buttons = {};
     this.log = new Logger(this.name);
-    this.model = new CSMesVis.Model(this, setupData, this.log);
+    this.model = new Model(this, setupData, this.log);
     this.domFactory = new DOMFactory();
   };
 
