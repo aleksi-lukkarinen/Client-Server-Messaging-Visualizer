@@ -30,8 +30,8 @@ class Model {
 
   moveToFirstStep() {
     if (!this.canMoveToFirstStep()) {
-      const msg = "CSMesVis Model: Cannot move to the first step while already being there.";
-      throw ErrorFactory.createBaseErrorFor(msg);
+      throw ErrorFactory.forModelViolation(
+              "Cannot move to the first step while already being there.");
     }
 
     this.currentStep = 1;
@@ -45,8 +45,8 @@ class Model {
 
   moveToPreviousStep() {
     if (!this.canMoveToPreviousStep()) {
-      const msg = "CSMesVis Model: Cannot move to the previous step while already being in the first one.";
-      throw ErrorFactory.createBaseErrorFor(msg);
+      throw ErrorFactory.forModelViolation(
+              "Cannot move to the previous step while already being in the first one.");
     }
 
     this.currentStep = this.currentStep - 1;
@@ -60,8 +60,8 @@ class Model {
 
   moveToNextStep() {
     if (!this.canMoveToNextStep()) {
-      const msg = "CSMesVis Model: Cannot move to the next step while already being in the last one.";
-      throw ErrorFactory.createBaseErrorFor(msg);
+      throw ErrorFactory.forModelViolation(
+              "Cannot move to the next step while already being in the last one.");
     }
 
     this.currentStep = this.currentStep + 1;
@@ -75,8 +75,8 @@ class Model {
 
   moveToLastStep() {
     if (!this.canMoveToLastStep()) {
-      const msg = "CSMesVis Model: Cannot move to the last step while already being there.";
-      throw ErrorFactory.createBaseErrorFor(msg);
+      throw ErrorFactory.forModelViolation(
+              "Cannot move to the last step while already being there.");
     }
 
     this.currentStep = this.steps.length;
@@ -506,6 +506,10 @@ class ErrorFactory {
 
   static forIncorrectSetup(message) {
     return ErrorFactory.createBaseErrorFor(`Incorrect setup: ${message}`);
+  }
+
+  static forModelViolation(message) {
+    return ErrorFactory.createBaseErrorFor(`Model violation: ${message}`);
   }
 
   static createBaseErrorFor(message) {
