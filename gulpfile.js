@@ -35,7 +35,7 @@ const globAllCSS = "*" + extCSS;
 const globAllMinCSS = "*" + extMinCSS;
 const globAllJS = "*" + extJS;
 const globAllMinJS = "*" + extMinJS;
-const primaryJSFile = "main" + extJS;
+const primaryJSFile = "Main" + extJS;
 const esFiveDistroJSFile = "cs-mes-vis" + extMinJS;
 
 const readmeMD = "README" + extMD;
