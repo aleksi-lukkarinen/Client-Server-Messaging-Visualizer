@@ -90,6 +90,8 @@ export const loggingKeys = {
 
 
 
+export const SETUP_DATA_ROOT_KEY = "CSMesVisSetupData";
+
 export const setupDataKeys = {
   VIS_NAME:                       "name",
   VIS_TITLE:                      "title",

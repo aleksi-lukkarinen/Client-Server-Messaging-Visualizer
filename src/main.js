@@ -501,7 +501,7 @@ class ErrorFactory {
   }
 
   static createBaseErrorFor(message) {
-    return new CSMesVis.Error(message);
+    return new BaseError(message);
   }
 
 }
@@ -509,26 +509,16 @@ class ErrorFactory {
 
 
 
-(function() {
-  'use strict';
+const BaseError = function(message) {
+  this.message = this.formatErrorMessage(message);
+};
 
-  const CSMesVisError = function(message) {
-    this.message = this.formatErrorMessage(message);
-  };
+BaseError.prototype = new Error();
 
-  CSMesVisError.prototype = new Error();
-
-  CSMesVisError.prototype.formatErrorMessage = function(message) {
-    return StringUtils.ensureThatEndsWithPeriod(
-            Config.application.NAME + ": " + message);
-  };
-
-  if (!window.hasOwnProperty("CSMesVis")) {
-    window.CSMesVis = {};
-  }
-
-  CSMesVis.Error = CSMesVisError;
-}());
+BaseError.prototype.formatErrorMessage = function(message) {
+  return StringUtils.ensureThatEndsWithPeriod(
+            `${Config.application.NAME}: ${message}`);
+};
 
 
 
@@ -536,28 +526,30 @@ class ErrorFactory {
 class Bootstrapper {
 
   execute() {
-    this.ensureThatSetupDataArrayIsGiven();
-    this.ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations();
+    const setupDataRoot = document[Config.SETUP_DATA_ROOT_KEY];
+    
+    this.ensureThatSetupDataArrayIsGiven(setupDataRoot);
+    this.ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations(setupDataRoot);
     this.instantiateVisualizations();
   }
 
-  ensureThatSetupDataArrayIsGiven() {
-    if (CSMesVis.setupData == null) {
+  ensureThatSetupDataArrayIsGiven(setupDataRoot) {
+    if (setupDataRoot == null) {
       throw ErrorFactory.createBaseErrorFor(
-              "Configuration using CSMesVis.setupData is missing.");
+              `Configuration using document.${Config.SETUP_DATA_ROOT_KEY} is missing.`);
     }
 
-    if (!Array.isArray(CSMesVis.setupData)) {
+    if (!Array.isArray(setupDataRoot)) {
       throw ErrorFactory.forIncorrectSetupData(
               "The root element must be an array.");
     }
   }
 
-  ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations() {
+  ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations(setupDataRoot) {
     const elems = this.allVisualizationElements();
-    if (elems.length != CSMesVis.setupData.length) {
+    if (elems.length != setupDataRoot.length) {
       const msg = `There are ${elems.length} visualization(s) in the HTML file ` +
-                  `but setup data is given for ${CSMesVis.setupData.length} visualiation(s).`;
+                  `but setup data is given for ${setupDataRoot.length} visualiation(s).`;
 
       // TODO: Print lists of names of both the existing divs and setups
 
@@ -568,7 +560,7 @@ class Bootstrapper {
   instantiateVisualizations() {
     const domFactory = new DOMFactory();
     
-    for (const [idx, visualizationSetup] of CSMesVis.setupData.entries()) {
+    for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         throw ErrorFactory.forIncorrectSetupData(
                 `${idx + 1}. visualization does not have a name.`);

@@ -1,4 +1,4 @@
-CSMesVis.setupData = [
+document.CSMesVisSetupData = [
   {
     name: "CSMV Example 1.1",
     title: "Example 1.1: Getting an HTML File from a Web Server",
