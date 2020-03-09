@@ -39,7 +39,7 @@ class Model {
   }
 
   canMoveToFirstStep() {
-    return this.steps.length > 1 
+    return this.steps.length > 1
             && this.currentStep > 1;
   }
 
@@ -54,7 +54,7 @@ class Model {
   }
 
   canMoveToPreviousStep() {
-    return this.steps.length > 1 
+    return this.steps.length > 1
             && this.currentStep > 1;
   }
 
@@ -69,7 +69,7 @@ class Model {
   }
 
   canMoveToNextStep() {
-    return this.steps.length > 1 
+    return this.steps.length > 1
             && this.currentStep < this.steps.length;
   }
 
@@ -84,7 +84,7 @@ class Model {
   }
 
   canMoveToLastStep() {
-    return this.steps.length > 1 
+    return this.steps.length > 1
             && this.currentStep < this.steps.length;
   }
 
@@ -302,38 +302,35 @@ class UI {
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_TITLE)) {
-      const t = this.setupData[sdKeys.VIS_TITLE];
+    this.createHeadingDiv(
+          sdKeys.VIS_TITLE, cls.CSMV_VIS_TITLE,
+          frameDiv, "title", "titleDiv", "title");
 
-      if (!StringUtils.isNonEmptyString(t)) {
-        throw ErrorFactory.forIncorrectSetupData(
-                  `Visualization '${this.name}' has an invalid title; ` +
-                  `it must be a string that contains not only whitespace.`);
-      }
+    this.createHeadingDiv(
+          sdKeys.VIS_DESCRIPTION, cls.CSMV_VIS_DESCRIPTION,
+          frameDiv, "description", "descriptionDiv", "description");
+  }
 
-      const title = $.trim(t);
-      const titleDiv = DF.createHtmlDiv(cls.CSMV_VIS_TITLE);
-      titleDiv.text(title);
-      titleDiv.appendTo(frameDiv);
-      this.title = title;
-      this.titleDiv = titleDiv;
-    }
+  createHeadingDiv(
+          setupDataKey, cssClass, parent,
+          dataKeyForThis, divKeyForThis,
+          verboseTypeForError, DF = this.domFactory) {
 
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_DESCRIPTION)) {
-      const d = this.setupData[sdKeys.VIS_DESCRIPTION];
+    if (this.setupData.hasOwnProperty(setupDataKey)) {
+      const d = this.setupData[setupDataKey];
 
       if (!StringUtils.isNonEmptyString(d)) {
         throw ErrorFactory.forIncorrectSetupData(
-                  `Visualization '${this.name}' has an invalid description; ` +
+                  `Visualization '${this.name}' has an invalid ${verboseTypeForError}; ` +
                   `it must be a string that contains not only whitespace.`);
       }
 
-      const desc = $.trim(d);
-      const descDiv = DF.createHtmlDiv(cls.CSMV_VIS_DESCRIPTION);
-      descDiv.text(desc);
-      descDiv.appendTo(frameDiv);
-      this.description = desc;
-      this.descriptionDiv = descDiv;
+      const content = $.trim(d);
+      const contentDiv = DF.createHtmlDiv(cssClass);
+      contentDiv.text(content);
+      contentDiv.appendTo(parent);
+      this[dataKeyForThis] = content;
+      this[divKeyForThis] = contentDiv;
     }
   }
 
@@ -527,7 +524,7 @@ class Bootstrapper {
 
   execute() {
     const setupDataRoot = document[Config.SETUP_DATA_ROOT_KEY];
-    
+
     this.ensureThatSetupDataArrayIsGiven(setupDataRoot);
     this.ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations(setupDataRoot);
     this.instantiateVisualizations();
@@ -559,7 +556,7 @@ class Bootstrapper {
 
   instantiateVisualizations() {
     const domFactory = new DOMFactory();
-    
+
     for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.VIS_NAME)) {
         throw ErrorFactory.forIncorrectSetupData(
