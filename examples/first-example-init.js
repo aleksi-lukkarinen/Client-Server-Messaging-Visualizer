@@ -19,6 +19,7 @@ document.CSMesVisSetupData = [
         toPreviousStepTitle: "Back",
         toNextStepTitle: "Forward",
         toLastStepTitle: "End",
+        showToLastStepButton: false,
       }
     },
 
@@ -32,7 +33,7 @@ document.CSMesVisSetupData = [
         height: "150px",
       },
       {
-        id: "s",   
+        id: "s",
         preset: "server",
         stereotype: "node",
         title: "Web Server",
@@ -48,7 +49,7 @@ document.CSMesVisSetupData = [
         height: "4em",
       },
       {
-        id: "a", 
+        id: "a",
         cssClasses: ["ex1-textblock"],
         contentHTML: "<div class='ex1-textblock-title'>Sure! Here it is:</div><div class='ex1-textblock-content'><tt>HTTP/1.1 200 OK</tt><br/><tt>Date: Tue, 10 Mar 2020 16:29:22 GMT</tt><br/><tt>...</tt><br/><br/><tt>&lt;html&gt;</tt><br/><tt>&nbsp;&nbsp;&lt;head&gt;ACME Factories: Gags for Everyone!&lt;/head&gt;</tt><br/><tt>...</tt></div>",
         width: "18em",
@@ -91,17 +92,17 @@ document.CSMesVisSetupData = [
       },
     ]
   },
-  
+
   {
     name: "CSMV Example 1.2",
-    
+
     environment: {
       animationFrame: {
         width:  "500px",
         height: "100px"
       },
     },
-/*      
+/*
     actors: [
       {
         class: "c",
@@ -114,9 +115,9 @@ document.CSMesVisSetupData = [
     ],
 */
     setup: [
-    
+
     ],
-      
+
     steps: [
 
     ]

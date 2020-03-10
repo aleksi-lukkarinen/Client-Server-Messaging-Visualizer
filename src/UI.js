@@ -44,9 +44,9 @@ export default class UI {
 
   init() {
     this.emitUIInitializationBeginsEvent();
-    
+
     this.parseOptions();
-    
+
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
@@ -73,12 +73,12 @@ export default class UI {
 
     if (this.setupData.hasOwnProperty(sdKeys.DEBUG)) {
       const debugOptions = this.setupData[sdKeys.DEBUG];
-      
+
       this.parseBooleanOption(debugOptions, this.options, sdKeys.IGNORE_VISIBILITY);
       this.parseBooleanOption(debugOptions, this.options, sdKeys.HIGHLIGHT_ACTOR_BORDERS);
     }
   }
-  
+
   parseBooleanOption(sourceObject, targetObject, dataKey) {
     if (sourceObject.hasOwnProperty(dataKey)) {
       const val = sourceObject[dataKey];
@@ -219,7 +219,7 @@ export default class UI {
     }
     else {
       actorDiv.addClass(Config.cssClasses.CSMV_CUSTOM_ACTOR);
-      
+
       if (actorSetup.hasOwnProperty(sdKeys.CSS_CLASSES)) {
         const classes = actorSetup[sdKeys.CSS_CLASSES];
         if (Array.isArray(classes)) {
@@ -242,11 +242,11 @@ export default class UI {
     if (!this.options.ignoreVisibility) {
       actorDiv.hide();    // Hide actors by default
     }
-    
+
     if (this.options.highlightActorBorders) {
       actorDiv.addClass(Config.cssClasses.CSMV_DEBUG_BORDER);
     }
-    
+
     actorDiv.appendTo(this.frames.animation);
   }
 
@@ -274,10 +274,27 @@ export default class UI {
           cls.CSMV_BUTTON_TO_NEXT_STEP,
           this.handleToNextStepClick, frame);
 
-    this.createButton("toLastStep",
-          uiTxt.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
-          cls.CSMV_BUTTON_TO_LAST_STEP,
-          this.handleToLastStepClick, frame);
+    let shouldBeVisible = true;
+    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+      const env = this.setupData[sdKeys.ENV];
+
+      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
+        const btns = env[sdKeys.BUTTONS];
+
+        if (btns.hasOwnProperty(sdKeys.SHOW_TO_LAST_STEP_BUTTON)) {
+          const val = btns[sdKeys.SHOW_TO_LAST_STEP_BUTTON];
+          if (typeof(val) === "boolean") {
+            shouldBeVisible = val;
+          }
+        }
+      }
+    }
+    if (shouldBeVisible) {
+      this.createButton("toLastStep",
+            uiTxt.TO_LAST_STEP_TITLE, sdKeys.TO_LAST_STEP_TITLE,
+            cls.CSMV_BUTTON_TO_LAST_STEP,
+            this.handleToLastStepClick, frame);
+    }
   }
 
   createButton(
@@ -287,8 +304,8 @@ export default class UI {
     const sdKeys = Config.setupDataKeys;
 
     let title = defaultTitle;
-    if (this.setupData.hasOwnProperty(sdKeys.VIS_ENV)) {
-      const env = this.setupData[sdKeys.VIS_ENV];
+    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+      const env = this.setupData[sdKeys.ENV];
 
       if (env.hasOwnProperty(sdKeys.BUTTONS)) {
         const btns = env[sdKeys.BUTTONS];
@@ -330,7 +347,7 @@ export default class UI {
 
   updateActors() {
     const setup = this.model.currentStepSetup;
-    
+
     for (const instruction of setup) {
       const [op, ...params] = instruction;
       switch (op) {
@@ -341,7 +358,7 @@ export default class UI {
           e.css("top", topPos);
           }
           break;
-          
+
         case "show":
           if (!this.options.ignoreVisibility) {
             for (const actorId of params) {
@@ -349,7 +366,7 @@ export default class UI {
             }
           }
           break;
-          
+
         case "hide":
           if (!this.options.ignoreVisibility) {
             for (const actorId of params) {
@@ -357,7 +374,7 @@ export default class UI {
             }
           }
           break;
-          
+
         default:
           // TODO: ERROR: Unknown actor opcode!
       }

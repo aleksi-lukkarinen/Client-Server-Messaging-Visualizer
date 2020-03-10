@@ -57,34 +57,34 @@ export const cssProperties = {
 export const eventNames = {
   /** Emitted before initialization of a visualization begins. */
   INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
-  
+
   /** Emitted when initialization of the data model of a visualization is finished. */
   MODEL_INITIALIZED:              "CSMesVis-model-initialization-finished",
-  
+
   /** Emitted before initialization of the GUI of a visualization begins. */
   UI_INITIALIZATION_BEGINS:       "CSMesVis-ui-initialization-begins",
-  
+
   /** Emitted after initialization of the GUI of a visualization is finished. */
   UI_INITIALIZATION_FINISHED:     "CSMesVis-ui-initialization-finished",
-  
+
   /** Emitted after initialization of a visualization is finished. */
   INITIALIZATION_FINISHED:        "CSMesVis-initialization-finished",
 
   /** Emitted when the "First Step" button in the GUI is clicked. */
   TO_FIRST_STEP_CLICKED:          "CSMesVis-ui-to-first-step-button-clicked",
-  
+
   /** Emitted when the "Previous Step" button in the GUI is clicked. */
   TO_PREVIOUS_STEP_CLICKED:       "CSMesVis-ui-to-previous-step-button-clicked",
-  
+
   /** Emitted when the "Next Step" button in the GUI is clicked. */
   TO_NEXT_STEP_CLICKED:           "CSMesVis-ui-to-next-step-button-clicked",
-  
+
   /** Emitted when the "Last Step" button in the GUI is clicked. */
   TO_LAST_STEP_CLICKED:           "CSMesVis-ui-to-last-step-button-clicked",
-  
+
   /** Emitted after the state of the data model of a visualization has changed. */
   MODEL_CHANGED:                  "CSMesVis-model-changed",
-  
+
   /** A convenience string that contains the names of all the events used in this application. */
   ALL_EVENTS:                     "",   // The string is created programmatically below
 }
@@ -163,6 +163,7 @@ export const setupDataKeys = {
   NAME:                           "name",
   PRESET:                         "preset",
   SETUP:                          "setup",
+  SHOW_TO_LAST_STEP_BUTTON:       "showToLastStepButton",
   STEPS:                          "steps",
   STEREOTYPE:                     "stereotype",
   TITLE:                          "title",
