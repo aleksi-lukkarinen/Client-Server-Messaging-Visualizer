@@ -31,6 +31,8 @@ body {
   border:                   1px inset gray;
   border-top-left-radius:   0.2em;
   border-top-right-radius:  0.2em;
+  overflow:                 hidden;
+  position:                 relative;
 }
 
 .csmv-control-frame {
@@ -41,39 +43,66 @@ body {
 
 .csmv-button {
   margin:                   0em 0.25em 0em 0em;
+  font-size:                0.75em;
 }
 
 .csmv-actor {
-  display:                  inline-block;
+  display:                  block;
+  overflow:                 hidden;
   position:                 absolute;
+  padding:                  0.5em 0em 0em 0em;
   font-family:              Arial, Helvetica, sans-serif;
 }
 
-.csmv-browser {
-  background:               #ddeedd;
+.csmv-custom-actor {
+  padding:                  0em;
 }
 
-.csmv-server {
-  background:               #bbccee;
-  border:                   1px solid #667799;
+.csmv-actor-stereotype {
+  margin:                   0em 0em 0.25em 0em;
+  font-size:                0.75em;
+  text-align:               center;
 }
 
 .csmv-actor-title {
-  padding:                  0.1em 0em 0em 0em;
-  font-size:                0.9em;
+  margin:                   0em 0em 0.2em 0em;
+  font-size:                0.8em;
   font-weight:              bold;
   text-align:               center;
 }
 
-.csmv-textblock {
+.csmv-preset-browser {
+  background:               #aaeecc;
+  border:                   1px solid #669977;
+}
+
+.csmv-preset-browser .csmv-actor-title {
+  color:                    #114422;
+}
+
+.csmv-preset-server {
+  background:               #aaccee;
+  border:                   1px solid #667799;
+}
+
+.csmv-preset-server .csmv-actor-title {
+  color:                    #112244;
+}
+
+.csmv-preset-textblock {
+  padding:                  0em;
   font-family:              Arial, Helvetica, sans-serif;
 }
 
-.csmv-textblock-title {
-  font-size:                0.9em;
+.csmv-preset-textblock-title {
+  font-size:                0.76em;
+  text-align:               left;
 }
 
-.csmv-textblock-body {
-  font-size:                0.85em;
+.csmv-preset-textblock-content {
+  font-size:                0.7em;
 }
 
+.csmv-debug-border {
+  border:                   1px solid red;
+}

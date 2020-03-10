@@ -17,36 +17,77 @@ import Model from "./Model.js";
 export default class UI {
 
   constructor(container, setupData, domFactory) {
+    this.name = setupData.name;
+    this.log = new Logger(this.name);
+
+    this.log.addInitializationBeginsEvent();
+    this.emitInitializationBeginsEvent();
+
     this.container = container;
     this.setupData = setupData;
-    this.name = setupData.name;
     this.frames = {};
     this.buttons = {};
+    this.options = {
+      ignoreVisibility: false,
+      highlightActorBorders: false,
+    };
     this.domFactory = domFactory;
-    this.log = new Logger(this.name);
-    this.model = new Model(this, setupData, this.log);
+    this.model = new Model();
+
+    // The UI listens events from the model to update itself
+    $(this.model).bind(
+            Config.eventNames.MODEL_INITIALIZED,
+            $.proxy(this.init, this));
+
+    this.model.init(setupData, this.log);
   }
 
   init() {
-    this.emitInitializationBeginsEvent();
-    this.log.addInitializationBeginsEvent();
-
+    this.emitUIInitializationBeginsEvent();
+    
+    this.parseOptions();
+    
     this.createOuterFrame();
     this.createAnimationFrame();
     this.createControlFrame();
     this.createActors();
 
-    // The UI listens change events from the model to update itself
+    this.update();
+
+    // The UI listens events from the model to update itself
     $(this.model).bind(
             Config.eventNames.MODEL_CHANGED,
             $.proxy(this.update, this));
 
-    this.update();
-
+    this.emitUIInitializationFinishedEvent();
     this.emitInitializationFinishedEvent();
     this.log.addInitializationFinishedEvent();
   }
+
+  parseOptions() {
+    this.parseDebugOptions();
+  }
+
+  parseDebugOptions() {
+    const sdKeys = Config.setupDataKeys;
+
+    if (this.setupData.hasOwnProperty(sdKeys.DEBUG)) {
+      const debugOptions = this.setupData[sdKeys.DEBUG];
+      
+      this.parseBooleanOption(debugOptions, this.options, sdKeys.IGNORE_VISIBILITY);
+      this.parseBooleanOption(debugOptions, this.options, sdKeys.HIGHLIGHT_ACTOR_BORDERS);
+    }
+  }
   
+  parseBooleanOption(sourceObject, targetObject, dataKey) {
+    if (sourceObject.hasOwnProperty(dataKey)) {
+      const val = sourceObject[dataKey];
+      if ($.type(val) === "boolean") {
+        targetObject[dataKey] = val;
+      }
+    }
+  }
+
   createActors() {
     const sdKeys = Config.setupDataKeys;
 
@@ -82,15 +123,7 @@ export default class UI {
     const sdKeys = Config.setupDataKeys;
 
     const actorDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR);
-
-    if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
-      const title = actorSetup[sdKeys.TITLE];
-      if (StringUtils.isNonEmptyString(title)) {
-        const titleDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
-        titleDiv.text(title);
-        titleDiv.appendTo(actorDiv);
-      }
-    }
+    actorDiv.attr(Config.htmlAttributes.CSMV_NAME, actorSetup[sdKeys.ID]);
 
     let width = "100px";
     if (actorSetup.hasOwnProperty(sdKeys.WIDTH)) {
@@ -104,23 +137,114 @@ export default class UI {
     }
     actorDiv.css(Config.cssProperties.HEIGHT, height);
 
-    if (actorSetup.hasOwnProperty(sdKeys.CSS_CLASSES)) {
-      let cssClasses = actorSetup[sdKeys.CSS_CLASSES];
+    if (actorSetup.hasOwnProperty(sdKeys.PRESET)) {
+      const preset = actorSetup[sdKeys.PRESET];
 
-      if ($.type(cssClasses) === "string") {
-        cssClasses = [cssClasses];
-      }
-      if (Array.isArray(cssClasses)) {
-        for (const c of cssClasses) {
-          if (StringUtils.isNonEmptyString(c)) {
-            actorDiv.addClass(c);
-          }
+      let stereotypeDiv;
+      if (actorSetup.hasOwnProperty(sdKeys.STEREOTYPE)) {
+        const stereotype = actorSetup[sdKeys.STEREOTYPE];
+        if (StringUtils.isNonEmptyString(stereotype)) {
+          stereotypeDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
+          stereotypeDiv.text(`«${stereotype}»`);
+          stereotypeDiv.appendTo(actorDiv);
         }
       }
+
+      let titleDiv;
+      if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
+        const title = actorSetup[sdKeys.TITLE];
+        if (StringUtils.isNonEmptyString(title)) {
+          titleDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
+          titleDiv.text(title);
+          titleDiv.appendTo(actorDiv);
+        }
+      }
+
+      let content;
+      let isHtmlContent = false;
+      if (actorSetup.hasOwnProperty(sdKeys.CONTENT)) {
+        content = actorSetup[sdKeys.CONTENT];
+        if (!StringUtils.isNonEmptyString(content)) {
+          content = undefined;
+        }
+      }
+      else if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
+        content = actorSetup[sdKeys.CONTENT_HTML];
+        if (!StringUtils.isNonEmptyString(content)) {
+          content = undefined;
+        }
+        else {
+          isHtmlContent = true;
+        }
+      }
+
+      let contentDiv;
+      if (content != null) {
+        contentDiv = DF.createHtmlDiv(
+            Config.cssClasses.CSMV_ACTOR_CONTENT);
+        if (isHtmlContent) {
+          contentDiv.html(content);
+        }
+        else {
+          contentDiv.text(content);
+        }
+        contentDiv.appendTo(actorDiv);
+      }
+
+      switch (preset.toLowerCase()) {
+        case "browser":
+          actorDiv.addClass(Config.cssClasses.CSMV_PRESET_BROWSER);
+          break;
+
+        case "server":
+          actorDiv.addClass(Config.cssClasses.CSMV_PRESET_SERVER);
+          break;
+
+        case "textblock":
+          actorDiv.addClass(Config.cssClasses.CSMV_PRESET_TEXTBLOCK);
+
+          if (titleDiv != null) {
+            titleDiv.addClass(
+                Config.cssClasses.CSMV_PRESET_TEXTBLOCK_TITLE);
+          }
+          if (contentDiv != null) {
+            contentDiv.addClass(
+                Config.cssClasses.CSMV_PRESET_TEXTBLOCK_CONTENT);
+          }
+          break;
+
+        default:
+          // TODO: ERROR: Unknown preset!
+      }
+    }
+    else {
+      actorDiv.addClass(Config.cssClasses.CSMV_CUSTOM_ACTOR);
+      
+      if (actorSetup.hasOwnProperty(sdKeys.CSS_CLASSES)) {
+        const classes = actorSetup[sdKeys.CSS_CLASSES];
+        if (Array.isArray(classes)) {
+          for (const c of classes) {
+            if (StringUtils.isNonEmptyString(c)) {
+              actorDiv.addClass(c);
+            }
+          }
+        }
+        else if (typeof(classes) === "string") {
+          actorDiv.addClass(classes);
+        }
+      }
+
+      if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
+        actorDiv.html(actorSetup[sdKeys.CONTENT_HTML]);
+      }
+    }
+
+    if (!this.options.ignoreVisibility) {
+      actorDiv.hide();    // Hide actors by default
     }
     
-    if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
-      actorDiv.html(actorSetup[sdKeys.CONTENT_HTML]);
+    if (this.options.highlightActorBorders) {
+      actorDiv.addClass(Config.cssClasses.CSMV_DEBUG_BORDER);
     }
     
     actorDiv.appendTo(this.frames.animation);
@@ -189,17 +313,72 @@ export default class UI {
   }
 
   update() {
+    // TODO: Save button focus and restore, if possible
+    this.disableButtons();
+    this.updateActors();
     this.updateButtonStates();
+  }
+
+  disableButtons() {
+    const btns = this.buttons;
+
+    this.updateButtonState(btns.toFirstStep, false);
+    this.updateButtonState(btns.toPreviousStep, false);
+    this.updateButtonState(btns.toNextStep, false);
+    this.updateButtonState(btns.toLastStep, false);
+  }
+
+  updateActors() {
+    const setup = this.model.currentStepSetup;
+    
+    for (const instruction of setup) {
+      const [op, ...params] = instruction;
+      switch (op) {
+        case "set-pos": {
+          const [actorId, leftPos, topPos] = params;
+          const e = this.actorDivFor(actorId);
+          e.css("left", leftPos);
+          e.css("top", topPos);
+          }
+          break;
+          
+        case "show":
+          if (!this.options.ignoreVisibility) {
+            for (const actorId of params) {
+              this.actorDivFor(actorId).show();
+            }
+          }
+          break;
+          
+        case "hide":
+          if (!this.options.ignoreVisibility) {
+            for (const actorId of params) {
+              this.actorDivFor(actorId).hide();
+            }
+          }
+          break;
+          
+        default:
+          // TODO: ERROR: Unknown actor opcode!
+      }
+    }
+  }
+
+  actorDivFor(actorId) {
+    const clazz = Config.cssClasses.CSMV_ACTOR;
+    const nameAttr = Config.htmlAttributes.CSMV_NAME;
+
+    return $(`.${clazz}[${nameAttr}='${actorId}']`);
   }
 
   updateButtonStates() {
     const btns = this.buttons;
     const mdl = this.model;
 
-    this.updateButtonState(btns.toFirstStep, mdl.canMoveToFirstStep());
-    this.updateButtonState(btns.toPreviousStep, mdl.canMoveToPreviousStep());
-    this.updateButtonState(btns.toNextStep, mdl.canMoveToNextStep());
-    this.updateButtonState(btns.toLastStep, mdl.canMoveToLastStep());
+    this.updateButtonState(btns.toFirstStep, mdl.canMoveToFirstStep);
+    this.updateButtonState(btns.toPreviousStep, mdl.canMoveToPreviousStep);
+    this.updateButtonState(btns.toNextStep, mdl.canMoveToNextStep);
+    this.updateButtonState(btns.toLastStep, mdl.canMoveToLastStep);
   }
 
   updateButtonState(button, isEnabled) {
@@ -326,6 +505,14 @@ export default class UI {
 
   emitInitializationBeginsEvent() {
     this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
+  }
+
+  emitUIInitializationBeginsEvent() {
+    this.emitEvent(Config.eventNames.UI_INITIALIZATION_BEGINS, [this.name,]);
+  }
+
+  emitUIInitializationFinishedEvent() {
+    this.emitEvent(Config.eventNames.UI_INITIALIZATION_FINISHED, [this.name,]);
   }
 
   emitInitializationFinishedEvent() {

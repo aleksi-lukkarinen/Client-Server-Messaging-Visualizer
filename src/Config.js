@@ -15,21 +15,30 @@ export const application = {
 
 /** Constants representing CSS classes used by the application. */
 export const cssClasses = {
-  CSMV_VISUALIZATION:             "csmv-visualization",
-  CSMV_OUTER_FRAME:               "csmv-outer-frame",
-  CSMV_VIS_TITLE:                 "csmv-visualization-title",
-  CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
+  CSMV_ACTOR:                     "csmv-actor",
+  CSMV_ACTOR_CONTENT:             "csmv-actor-content",
+  CSMV_ACTOR_STEREOTYPE:          "csmv-actor-stereotype",
+  CSMV_ACTOR_TITLE:               "csmv-actor-title",
   CSMV_ANIMATION_FRAME:           "csmv-animation-frame",
-  CSMV_CONTROL_FRAME:             "csmv-control-frame",
   CSMV_BUTTON:                    "csmv-button",
   CSMV_BUTTON_TO_FIRST_STEP:      "csmv-button-first-step",
-  CSMV_BUTTON_TO_PREVIOUS_STEP:   "csmv-button-previous-step",
-  CSMV_BUTTON_TO_NEXT_STEP:       "csmv-button-next-step",
   CSMV_BUTTON_TO_LAST_STEP:       "csmv-button-last-step",
-  CSMV_ENABLED:                   "csmv-enabled",
+  CSMV_BUTTON_TO_NEXT_STEP:       "csmv-button-next-step",
+  CSMV_BUTTON_TO_PREVIOUS_STEP:   "csmv-button-previous-step",
+  CSMV_CONTROL_FRAME:             "csmv-control-frame",
+  CSMV_CUSTOM_ACTOR:              "csmv-custom-actor",
+  CSMV_DEBUG_BORDER:              "csmv-debug-border",
   CSMV_DISABLED:                  "csmv-disabled",
-  CSMV_ACTOR:                     "csmv-actor",
-  CSMV_ACTOR_TITLE:               "csmv-actor-title",
+  CSMV_ENABLED:                   "csmv-enabled",
+  CSMV_OUTER_FRAME:               "csmv-outer-frame",
+  CSMV_PRESET_BROWSER:            "csmv-preset-browser",
+  CSMV_PRESET_SERVER:             "csmv-preset-server",
+  CSMV_PRESET_TEXTBLOCK:          "csmv-preset-textblock",
+  CSMV_PRESET_TEXTBLOCK_CONTENT:  "csmv-preset-textblock-content",
+  CSMV_PRESET_TEXTBLOCK_TITLE:    "csmv-preset-textblock-title",
+  CSMV_VISUALIZATION:             "csmv-visualization",
+  CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
+  CSMV_VIS_TITLE:                 "csmv-visualization-title",
 }
 
 
@@ -46,13 +55,38 @@ export const cssProperties = {
 
 /** Constants representing event names used by the application. */
 export const eventNames = {
+  /** Emitted before initialization of a visualization begins. */
   INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
+  
+  /** Emitted when initialization of the data model of a visualization is finished. */
+  MODEL_INITIALIZED:              "CSMesVis-model-initialization-finished",
+  
+  /** Emitted before initialization of the GUI of a visualization begins. */
+  UI_INITIALIZATION_BEGINS:       "CSMesVis-ui-initialization-begins",
+  
+  /** Emitted after initialization of the GUI of a visualization is finished. */
+  UI_INITIALIZATION_FINISHED:     "CSMesVis-ui-initialization-finished",
+  
+  /** Emitted after initialization of a visualization is finished. */
   INITIALIZATION_FINISHED:        "CSMesVis-initialization-finished",
-  TO_FIRST_STEP_CLICKED:          "CSMesVis-to-first-step-button-clicked",
-  TO_PREVIOUS_STEP_CLICKED:       "CSMesVis-to-previous-step-button-clicked",
-  TO_NEXT_STEP_CLICKED:           "CSMesVis-to-next-step-button-clicked",
-  TO_LAST_STEP_CLICKED:           "CSMesVis-to-last-step-button-clicked",
+
+  /** Emitted when the "First Step" button in the GUI is clicked. */
+  TO_FIRST_STEP_CLICKED:          "CSMesVis-ui-to-first-step-button-clicked",
+  
+  /** Emitted when the "Previous Step" button in the GUI is clicked. */
+  TO_PREVIOUS_STEP_CLICKED:       "CSMesVis-ui-to-previous-step-button-clicked",
+  
+  /** Emitted when the "Next Step" button in the GUI is clicked. */
+  TO_NEXT_STEP_CLICKED:           "CSMesVis-ui-to-next-step-button-clicked",
+  
+  /** Emitted when the "Last Step" button in the GUI is clicked. */
+  TO_LAST_STEP_CLICKED:           "CSMesVis-ui-to-last-step-button-clicked",
+  
+  /** Emitted after the state of the data model of a visualization has changed. */
   MODEL_CHANGED:                  "CSMesVis-model-changed",
+  
+  /** A convenience string that contains the names of all the events used in this application. */
+  ALL_EVENTS:                     "",   // The string is created programmatically below
 }
 
 // Create a convenience constant that contains all event names.
@@ -113,22 +147,32 @@ export const SETUP_DATA_ROOT_KEY = "CSMesVisSetupData";
  * for the visualizations.
  */
 export const setupDataKeys = {
-  NAME:                           "name",
-  TITLE:                          "title",
+  ACTORS:                         "actors",
+  ANIMATION_FRAME:                "animationFrame",
+  BUTTONS:                        "buttons",
+  CONTENT:                        "content",
+  CONTENT_HTML:                   "contentHTML",
+  CSS_CLASSES:                    "cssClasses",
+  DEBUG:                          "debug",
   DESCRIPTION:                    "description",
   ENV:                            "environment",
-  ANIMATION_FRAME:                "animationFrame",
-  WIDTH:                          "width",
   HEIGHT:                         "height",
-  BUTTONS:                        "buttons",
-  TO_FIRST_STEP_TITLE:            "toFirstStepTitle",
-  TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
-  TO_NEXT_STEP_TITLE:             "toNextStepTitle",
-  TO_LAST_STEP_TITLE:             "toLastStepTitle",
-  ACTORS:                         "actors",
+  HIGHLIGHT_ACTOR_BORDERS:        "highlightActorBorders",
   ID:                             "id",
-  CSS_CLASSES:                    "cssClasses",
-  CONTENT_HTML:                   "contentHTML",
+  IGNORE_VISIBILITY:              "ignoreVisibility",
+  NAME:                           "name",
+  PRESET:                         "preset",
+  SETUP:                          "setup",
+  STEPS:                          "steps",
+  STEREOTYPE:                     "stereotype",
+  TITLE:                          "title",
+  TO_FIRST_STEP_TITLE:            "toFirstStepTitle",
+  TO_LAST_STEP_TITLE:             "toLastStepTitle",
+  TO_NEXT_STEP_TITLE:             "toNextStepTitle",
+  TO_PREVIOUS_STEP_TITLE:         "toPreviousStepTitle",
+  TRANSITION_BACKWARDS:           "transitionBackwards",
+  TRANSITION_FORWARDS:            "transitionForwards",
+  WIDTH:                          "width",
 }
 
 

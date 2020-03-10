@@ -85,7 +85,6 @@ export default class Bootstrapper {
 
     const containerElement = elems[0];
     const ui = new UI(containerElement, setupDataEntry, domFactory);
-    ui.init();
   }
 
   allVisualizationElements() {

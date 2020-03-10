@@ -6,6 +6,7 @@
 
 import * as Config from "./Config.js";
 import ErrorFactory from "./ErrorFactory.js";
+import Step from "./Step.js";
 
 
 
@@ -13,85 +14,93 @@ import ErrorFactory from "./ErrorFactory.js";
 /** The data model behind the user interface {@link UI}. */
 export default class Model {
 
-  constructor(ui, setupData, log) {
-    this.ui = ui;
-    this.name = setupData.name;
-    this.log = log;
-    this.actors = {};
-    this.steps = [];
-    this.currentStep = 1;
-
-    this.setupModel(setupData);
+  constructor() {
+    this._name = undefined;
+    this._log = undefined;
+    this._actors = new Map();
+    this._steps = new Map();
+    this._currentStepNumber = 1;
   }
 
-  setupModel(setupData) {
-    for (let step of setupData.steps) {
-      this.steps.push(step);
-    }
+  init(setupData, log) {
+    this._name = setupData.name;
+    this._log = log;
 
-    this.currentStep = 1;
-    console.log(this.steps);
-    this.emitModelChangedEvent();
+    for (const [idx, stepData] of setupData[Config.setupDataKeys.STEPS].entries()) {
+      const step = new Step(stepData, idx, this._name);
+      this._steps.set(idx, step);
+    }
+    this.emitModelInitializationFinishedEvent();
   }
 
   moveToFirstStep() {
-    if (!this.canMoveToFirstStep()) {
+    if (!this.canMoveToFirstStep) {
       throw ErrorFactory.forModelViolation(
               "Cannot move to the first step while already being there.");
     }
 
-    this.currentStep = 1;
+    this._currentStepNumber = 1;
     this.emitModelChangedEvent();
   }
 
-  canMoveToFirstStep() {
-    return this.steps.length > 1
-            && this.currentStep > 1;
+  get canMoveToFirstStep() {
+    return this.canMoveBackwards;
   }
 
   moveToPreviousStep() {
-    if (!this.canMoveToPreviousStep()) {
+    if (!this.canMoveToPreviousStep) {
       throw ErrorFactory.forModelViolation(
               "Cannot move to the previous step while already being in the first one.");
     }
 
-    this.currentStep = this.currentStep - 1;
+    this._currentStepNumber--;
     this.emitModelChangedEvent();
   }
 
-  canMoveToPreviousStep() {
-    return this.steps.length > 1
-            && this.currentStep > 1;
+  get canMoveToPreviousStep() {
+    return this.canMoveBackwards;
   }
 
   moveToNextStep() {
-    if (!this.canMoveToNextStep()) {
+    if (!this.canMoveToNextStep) {
       throw ErrorFactory.forModelViolation(
               "Cannot move to the next step while already being in the last one.");
     }
 
-    this.currentStep = this.currentStep + 1;
+    this._currentStepNumber++;
     this.emitModelChangedEvent();
   }
 
-  canMoveToNextStep() {
-    return this.steps.length > 1
-            && this.currentStep < this.steps.length;
+  get canMoveToNextStep() {
+    return this.canMoveForwards;
   }
 
   moveToLastStep() {
-    if (!this.canMoveToLastStep()) {
+    if (!this.canMoveToLastStep) {
       throw ErrorFactory.forModelViolation(
               "Cannot move to the last step while already being there.");
     }
 
-    this.currentStep = this.steps.length;
+    this._currentStepNumber = this.lastStepNumber;
     this.emitModelChangedEvent();
   }
 
-  canMoveToLastStep() {
-    return this.steps.length > 1
-            && this.currentStep < this.steps.length;
+  get canMoveToLastStep() {
+    return this.canMoveForwards;
+  }
+  
+  get canMoveBackwards() {
+    return this.hasMultipleSteps && this.isNotAtBeginning;
+  }
+
+  get canMoveForwards() {
+    return this.hasMultipleSteps && this.isNotAtEnd;
+  }
+  
+  emitModelInitializationFinishedEvent() {
+    this.emitEvent(
+          Config.eventNames.MODEL_INITIALIZED,
+          [this.name,]);
   }
 
   emitModelChangedEvent() {
@@ -103,6 +112,44 @@ export default class Model {
   emitEvent(id, params) {
     const e = $.Event(id);
     $(this).trigger(e, params);
+  }
+
+  get currentStepNumber() {
+    return this._currentStepNumber;
+  }
+
+  get currentStepSetup() {
+    const s = this._steps.get(this.currentStepNumber - 1);
+
+    return s ? s.setup : [];
+  }
+
+  get currentStepTransitionBackwards() {
+    const s = this._steps.get(this.currentStepNumber - 1);
+
+    return s ? s.transitionBackwards : [];
+  }
+
+  get currentStepTransitionForwards() {
+    const s = this._steps.get(this.currentStepNumber - 1);
+
+    return s ? s.transitionForwards : [];
+  }
+
+  get isNotAtBeginning() {
+    return this.currentStepNumber > 1;
+  }
+
+  get isNotAtEnd() {
+    return this.currentStepNumber < this._steps.size;
+  }
+
+  get hasMultipleSteps() {
+    return this.lastStepNumber > 1;
+  }
+
+  get lastStepNumber() {
+    return this._steps.size;
   }
 
 }
