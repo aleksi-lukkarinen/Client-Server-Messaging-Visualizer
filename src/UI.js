@@ -27,25 +27,10 @@ export default class UI {
     this.setupData = setupData;
     this.frames = {};
     this.buttons = {};
-    this.options = {
-      ignoreVisibility: false,
-      highlightActorBorders: false,
-    };
     this.domFactory = domFactory;
-    this.model = new Model();
+    this.model = new Model(setupData, this.log);
 
-    // The UI listens events from the model to update itself
-    $(this.model).bind(
-            Config.eventNames.MODEL_INITIALIZED,
-            $.proxy(this.init, this));
-
-    this.model.init(setupData, this.log);
-  }
-
-  init() {
     this.emitUIInitializationBeginsEvent();
-
-    this.parseOptions();
 
     this.createOuterFrame();
     this.createAnimationFrame();
@@ -62,30 +47,6 @@ export default class UI {
     this.emitUIInitializationFinishedEvent();
     this.emitInitializationFinishedEvent();
     this.log.addInitializationFinishedEvent();
-  }
-
-  parseOptions() {
-    this.parseDebugOptions();
-  }
-
-  parseDebugOptions() {
-    const sdKeys = Config.setupDataKeys;
-
-    if (this.setupData.hasOwnProperty(sdKeys.DEBUG)) {
-      const debugOptions = this.setupData[sdKeys.DEBUG];
-
-      this.parseBooleanOption(debugOptions, this.options, sdKeys.IGNORE_VISIBILITY);
-      this.parseBooleanOption(debugOptions, this.options, sdKeys.HIGHLIGHT_ACTOR_BORDERS);
-    }
-  }
-
-  parseBooleanOption(sourceObject, targetObject, dataKey) {
-    if (sourceObject.hasOwnProperty(dataKey)) {
-      const val = sourceObject[dataKey];
-      if ($.type(val) === "boolean") {
-        targetObject[dataKey] = val;
-      }
-    }
   }
 
   createActors() {
@@ -239,11 +200,11 @@ export default class UI {
       }
     }
 
-    if (!this.options.ignoreVisibility) {
+    if (!this.model.ignoreVisibility) {
       actorDiv.hide();    // Hide actors by default
     }
 
-    if (this.options.highlightActorBorders) {
+    if (this.model.highlightActorBorders) {
       actorDiv.addClass(Config.cssClasses.CSMV_DEBUG_BORDER);
     }
 
@@ -360,7 +321,7 @@ export default class UI {
           break;
 
         case "show":
-          if (!this.options.ignoreVisibility) {
+          if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
               this.actorDivFor(actorId).show();
             }
@@ -368,7 +329,7 @@ export default class UI {
           break;
 
         case "hide":
-          if (!this.options.ignoreVisibility) {
+          if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
               this.actorDivFor(actorId).hide();
             }
@@ -555,6 +516,10 @@ export default class UI {
   emitEvent(id, params) {
     const e = $.Event(id);
     $(this.container).trigger(e, params);
+  }
+
+  get options() {
+    return this.model.options;
   }
 
 }

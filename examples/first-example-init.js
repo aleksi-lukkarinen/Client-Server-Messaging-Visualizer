@@ -20,6 +20,11 @@ document.CSMesVisSetupData = [
         toNextStepTitle: "Forward",
         toLastStepTitle: "End",
         showToLastStepButton: false,
+      },
+      stepCounter: {
+        show: true,
+        showTotal: true,
+        title: "Step ",
       }
     },
 
@@ -90,7 +95,7 @@ document.CSMesVisSetupData = [
           ["hide", "q", "a"],
         ],
       },
-    ]
+    ],
   },
 
   {
@@ -120,6 +125,6 @@ document.CSMesVisSetupData = [
 
     steps: [
 
-    ]
-  }
+    ],
+  },
 ];

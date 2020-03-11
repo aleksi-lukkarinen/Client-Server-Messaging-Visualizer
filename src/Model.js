@@ -6,6 +6,7 @@
 
 import * as Config from "./Config.js";
 import ErrorFactory from "./ErrorFactory.js";
+import Options from "./Options.js";
 import Step from "./Step.js";
 
 
@@ -14,22 +15,19 @@ import Step from "./Step.js";
 /** The data model behind the user interface {@link UI}. */
 export default class Model {
 
-  constructor() {
-    this._name = undefined;
-    this._log = undefined;
+  constructor(setupData, log) {
+    this._name = setupData.name;
+    this._options = new Options(setupData);
     this._actors = new Map();
     this._steps = new Map();
     this._currentStepNumber = 1;
-  }
-
-  init(setupData, log) {
-    this._name = setupData.name;
     this._log = log;
 
     for (const [idx, stepData] of setupData[Config.setupDataKeys.STEPS].entries()) {
       const step = new Step(stepData, idx, this._name);
       this._steps.set(idx, step);
     }
+
     this.emitModelInitializationFinishedEvent();
   }
 
@@ -150,6 +148,26 @@ export default class Model {
 
   get lastStepNumber() {
     return this._steps.size;
+  }
+
+  get isStepCounterVisible() {
+    return this._options.isStepCounterVisible;
+  }
+  
+  get isStepCounterTotalVisible() {
+    return this._options.isStepCounterTotalVisible;
+  }
+
+  get stepCounterTitle() {
+    return this._options.stepCounterTitle;
+  }
+
+  get ignoreVisibility() {
+    return this._options.ignoreVisibility;
+  }
+
+  get highlightActorBorders() {
+    return this._options.highlightActorBorders;
   }
 
 }
