@@ -5,7 +5,6 @@
  */
 
 import * as Config from "./Config.js";
-import ErrorFactory from "./ErrorFactory.js";
 
 
 
@@ -15,7 +14,9 @@ export default class Step {
 
   // TODO: Deep copy and validate each accepted instruction
 
-  constructor(stepData, stepIndex, visualizationName) {
+  constructor(stepData, stepIndex, visualizationName, appContext) {
+    this._appCtx = appContext;
+
     this._setup = [];
     this.initArrayMember(
         stepData, stepIndex, Config.setupDataKeys.SETUP,
@@ -32,10 +33,13 @@ export default class Step {
         this._transitionBackwards, visualizationName);
   }
 
-  initArrayMember(stepData, stepIndex, stepDataKey, targetMember, visualizationName) {
+  initArrayMember(
+          stepData, stepIndex, stepDataKey, 
+          targetMember, visualizationName, AC = this._appCtx) {
+
     if (stepData.hasOwnProperty(stepDataKey)) {
       if (!Array.isArray(stepData[stepDataKey])) {
-        ErrorFactory.forIncorrectSetupData(
+        AC.errorFactory.forIncorrectSetupData(
           `${stepIndex}. step of '${visualizationName}' has ` +
           `a '${stepDataKey}' key that does not have an array as its value.`);
       }

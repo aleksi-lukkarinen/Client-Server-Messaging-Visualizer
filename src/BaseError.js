@@ -14,13 +14,14 @@ import * as StringUtils from "./StringUtils.js";
 
 
 /** Represents the root of the error class hierarchy. */
-export default function BaseError(message) {
+export default function BaseError(message, appContext) {
+  this._appCtx = appContext;
   this.message = this.formatErrorMessage(message);
 }
 
 BaseError.prototype = new Error();
 
-BaseError.prototype.formatErrorMessage = function(message) {
-  return StringUtils.ensureThatEndsWithPeriod(
+BaseError.prototype.formatErrorMessage = function(message, AC = this._appCtx) {
+  return AC.stringUtils.ensureThatEndsWithPeriod(
             `${Config.application.NAME}: ${message}`);
 };

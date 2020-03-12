@@ -5,7 +5,6 @@
  */
 
 import * as Config from "./Config.js";
-import ErrorFactory from "./ErrorFactory.js";
 import Options from "./Options.js";
 import Step from "./Step.js";
 
@@ -15,25 +14,26 @@ import Step from "./Step.js";
 /** The data model behind the user interface {@link UI}. */
 export default class Model {
 
-  constructor(setupData, log) {
+  constructor(setupData, appContext, log) {
     this._name = setupData.name;
-    this._options = new Options(setupData);
+    this._appCtx = appContext;
+    this._options = new Options(setupData, appContext);
     this._actors = new Map();
     this._steps = new Map();
     this._currentStepNumber = 1;
     this._log = log;
 
     for (const [idx, stepData] of setupData[Config.setupDataKeys.STEPS].entries()) {
-      const step = new Step(stepData, idx, this._name);
+      const step = new Step(stepData, idx, this._name, this._appCtx);
       this._steps.set(idx, step);
     }
 
     this.emitModelInitializationFinishedEvent();
   }
 
-  moveToFirstStep() {
+  moveToFirstStep(AC = this._appCtx) {
     if (!this.canMoveToFirstStep) {
-      throw ErrorFactory.forModelViolation(
+      throw AC.errorFactory.forModelViolation(
               "Cannot move to the first step while already being there.");
     }
 
@@ -45,9 +45,9 @@ export default class Model {
     return this.canMoveBackwards;
   }
 
-  moveToPreviousStep() {
+  moveToPreviousStep(AC = this._appCtx) {
     if (!this.canMoveToPreviousStep) {
-      throw ErrorFactory.forModelViolation(
+      throw AC.errorFactory.forModelViolation(
               "Cannot move to the previous step while already being in the first one.");
     }
 
@@ -59,9 +59,9 @@ export default class Model {
     return this.canMoveBackwards;
   }
 
-  moveToNextStep() {
+  moveToNextStep(AC = this._appCtx) {
     if (!this.canMoveToNextStep) {
-      throw ErrorFactory.forModelViolation(
+      throw AC.errorFactory.forModelViolation(
               "Cannot move to the next step while already being in the last one.");
     }
 
@@ -73,9 +73,9 @@ export default class Model {
     return this.canMoveForwards;
   }
 
-  moveToLastStep() {
+  moveToLastStep(AC = this._appCtx) {
     if (!this.canMoveToLastStep) {
-      throw ErrorFactory.forModelViolation(
+      throw AC.errorFactory.forModelViolation(
               "Cannot move to the last step while already being there.");
     }
 

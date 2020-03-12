@@ -5,9 +5,11 @@
  */
 
 import * as Config from "./Config.js";
-import StringUtils from "./StringUtils.js";
-import ErrorFactory from "./ErrorFactory.js";
 import DOMFactory from "./DOMFactory.js";
+import ErrorFactory from "./ErrorFactory.js";
+import ObjectUtils from "./ObjectUtils.js";
+import StringUtils from "./StringUtils.js";
+import ApplicationContext from "./ApplicationContext.js";
 import UI from "./UI.js";
 
 
@@ -21,7 +23,18 @@ import UI from "./UI.js";
 export default class Bootstrapper {
 
   constructor(setupDataArray) {
-    this.allSetupData = setupDataArray;
+    this._allSetupData = setupDataArray;
+
+    this.initApplicationContext();
+  }
+
+  initApplicationContext() {
+    const ac = new ApplicationContext();
+    ac.domFactory = new DOMFactory();
+    ac.errorFactory = new ErrorFactory(ac);
+    ac.objectUtils = new ObjectUtils();
+    ac.stringUtils = new StringUtils();
+    this._appCtx = ac;
   }
 
   execute() {
@@ -30,62 +43,59 @@ export default class Bootstrapper {
     this.instantiateVisualizations();
   }
 
-  ensureThatSetupDataArrayIsGiven() {
-    if (this.allSetupData == null) {
-      throw ErrorFactory.createBaseErrorFor(
+  ensureThatSetupDataArrayIsGiven(AC = this._appCtx) {
+    if (this._allSetupData == null) {
+      throw AC.errorFactory.createBaseErrorFor(
               `Configuration using document.${Config.SETUP_DATA_ROOT_KEY} is missing.`);
     }
 
-    if (!Array.isArray(this.allSetupData)) {
-      throw ErrorFactory.forIncorrectSetupData(
+    if (!Array.isArray(this._allSetupData)) {
+      throw AC.errorFactory.forIncorrectSetupData(
               "The root element must be an array.");
     }
   }
 
-  ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations() {
+  ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations(AC = this._appCtx) {
     const elems = this.allVisualizationElements();
-    if (elems.length != this.allSetupData.length) {
+    if (elems.length != this._allSetupData.length) {
       const msg = `There are ${elems.length} visualization(s) in the HTML file ` +
-                  `but setup data is given for ${this.allSetupData.length} visualiation(s).`;
+                  `but setup data is given for ${this._allSetupData.length} visualiation(s).`;
 
       // TODO: Print lists of names of both the existing divs and setups
 
-      throw ErrorFactory.forIncorrectSetupData(msg);
+      throw AC.errorFactory.forIncorrectSetupData(msg);
     }
   }
 
-  instantiateVisualizations() {
-    const domFactory = new DOMFactory();
-    const stringUtils = new StringUtils();
-
+  instantiateVisualizations(AC = this._appCtx) {
     for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.NAME)) {
-        throw ErrorFactory.forIncorrectSetupData(
+        throw AC.errorFactory.forIncorrectSetupData(
                 `The ${idx + 1}. visualization does not have a name.`);
       }
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
 
-      this.instantiateVisualizationBasedOn(visualizationSetup, domFactory, stringUtils);
+      this.instantiateVisualizationBasedOn(visualizationSetup);
     }
   }
 
-  instantiateVisualizationBasedOn(setupDataEntry, domFactory, stringUtils) {
+  instantiateVisualizationBasedOn(setupDataEntry, AC = this._appCtx) {
     const elems = this.visualizationElementsFor(setupDataEntry.name);
 
     if (elems.length === 0) {
-      throw ErrorFactory.forIncorrectSetup(
+      throw AC.errorFactory.forIncorrectSetup(
               `Setup data is given for visualization '${setupDataEntry.name}', `+
               `but the HTML file does not contain a container element for it.`);
     }
     if (elems.length > 1) {
-      throw ErrorFactory.forIncorrectSetup(
+      throw AC.errorFactory.forIncorrectSetup(
               `The HTML file contains multiple container elements ` +
               `for visualization '${setupDataEntry.name}'.`);
     }
 
     const containerElement = elems[0];
-    const ui = new UI(containerElement, setupDataEntry, domFactory, stringUtils);
+    const ui = new UI(containerElement, setupDataEntry, AC);
   }
 
   allVisualizationElements() {

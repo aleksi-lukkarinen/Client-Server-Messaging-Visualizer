@@ -5,7 +5,6 @@
  */
 
 import * as Config from "./Config.js";
-import ObjectUtils from "./ObjectUtils.js";
 
 
 
@@ -13,8 +12,12 @@ import ObjectUtils from "./ObjectUtils.js";
 /** Options values behing the data model {@link Model}. */
 export default class Options {
 
-  constructor(setupData) {
-    const sdKeys = Config.setupDataKeys;
+  constructor(
+        setupData, 
+        appContext, 
+        sdKeys = Config.setupDataKeys) {
+
+    this._appCtx = appContext;
 
     this._optionData = {};
 
@@ -45,8 +48,8 @@ export default class Options {
             Config.uiTexts.STEP_COUNTER_TITLE_NO_STEPS);
   }
 
-  parseBooleanOption(setupData, objectPath, defaultValue, OU = new ObjectUtils()) {
-    let val = OU.retrieveHierarchicalValue(setupData, objectPath);
+  parseBooleanOption(setupData, objectPath, defaultValue, AC = this._appCtx) {
+    let val = AC.objectUtils.retrieveHierarchicalValue(setupData, objectPath);
     if (!this.isBoolean(val)) {
       val = defaultValue;
     }
@@ -54,8 +57,8 @@ export default class Options {
     this._optionData[objectPath] = val;
   }
 
-  parseStringOption(setupData, objectPath, defaultValue, OU = new ObjectUtils()) {
-    let val = OU.retrieveHierarchicalValue(setupData, objectPath);
+  parseStringOption(setupData, objectPath, defaultValue, AC = this._appCtx) {
+    let val = AC.objectUtils.retrieveHierarchicalValue(setupData, objectPath);
     if (typeof val !== "string") {
       val = defaultValue;
     }

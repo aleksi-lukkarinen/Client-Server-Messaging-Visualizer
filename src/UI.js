@@ -5,7 +5,7 @@
  */
 
 import * as Config from "./Config.js";
-import ErrorFactory from "./ErrorFactory.js";
+import Logger from "./Logger.js";
 import Model from "./Model.js";
 
 
@@ -14,7 +14,7 @@ import Model from "./Model.js";
  /** The user interface. */
 export default class UI {
 
-  constructor(container, setupData, domFactory, stringUtils) {
+  constructor(container, setupData, appContext) {
     this.name = setupData.name;
     this.log = new Logger(this.name);
 
@@ -23,11 +23,12 @@ export default class UI {
 
     this.container = container;
     this.setupData = setupData;
+    this.appCtx = appContext;
+
+    this.model = new Model(setupData, appContext, this.log);
+
     this.frames = {};
     this.buttons = {};
-    this.domFactory = domFactory;
-    this.stringUtils = stringUtils;
-    this.model = new Model(setupData, this.log);
 
     this.emitUIInitializationBeginsEvent();
 
@@ -48,7 +49,7 @@ export default class UI {
     this.log.addInitializationFinishedEvent();
   }
 
-  createActors() {
+  createActors(AC = this.appCtx) {
     const sdKeys = Config.setupDataKeys;
 
     if (!this.setupData.hasOwnProperty(sdKeys.ACTORS)) {
@@ -59,7 +60,7 @@ export default class UI {
     const actors = this.setupData[sdKeys.ACTORS];
 
     if (!Array.isArray(actors)) {
-      throw ErrorFactory.forIncorrectSetupData(
+      throw AC.errorFactory.forIncorrectSetupData(
               `Visualization '${this.name}': The 'actors' key ` +
               `in the setup data has to be an array.`);
     }
@@ -71,7 +72,7 @@ export default class UI {
 
     for (const [idx, actorSetup] of actors.entries()) {
       if (!actorSetup.hasOwnProperty(sdKeys.ID)) {
-        throw ErrorFactory.forIncorrectSetupData(
+        throw AC.errorFactory.forIncorrectSetupData(
                 `The ${idx + 1}. actor of visualization '${this.name}' does not have an ID.`);
       }
 
@@ -79,12 +80,13 @@ export default class UI {
     }
   }
 
-  createSingleActor(actorSetup, DF = this.domFactory) {
+  createSingleActor(actorSetup, AC = this.appCtx) {
     const sdKeys = Config.setupDataKeys;
 
-    const actorDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR);
+    const actorDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR);
     actorDiv.attr(Config.htmlAttributes.CSMV_NAME, actorSetup[sdKeys.ID]);
 
+    // TODO: Defaults to Config
     let width = "100px";
     if (actorSetup.hasOwnProperty(sdKeys.WIDTH)) {
       width = actorSetup[sdKeys.WIDTH];
@@ -97,14 +99,15 @@ export default class UI {
     }
     actorDiv.css(Config.cssProperties.HEIGHT, height);
 
+    // TODO: REFACTOR!!!!
     if (actorSetup.hasOwnProperty(sdKeys.PRESET)) {
       const preset = actorSetup[sdKeys.PRESET];
 
       let stereotypeDiv;
       if (actorSetup.hasOwnProperty(sdKeys.STEREOTYPE)) {
         const stereotype = actorSetup[sdKeys.STEREOTYPE];
-        if (this.stringUtils.isNonEmptyString(stereotype)) {
-          stereotypeDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
+        if (AC.stringUtils.isNonEmptyString(stereotype)) {
+          stereotypeDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
           stereotypeDiv.text(`«${stereotype}»`);
           stereotypeDiv.appendTo(actorDiv);
         }
@@ -113,8 +116,8 @@ export default class UI {
       let titleDiv;
       if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
         const title = actorSetup[sdKeys.TITLE];
-        if (this.stringUtils.isNonEmptyString(title)) {
-          titleDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
+        if (AC.stringUtils.isNonEmptyString(title)) {
+          titleDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
           titleDiv.text(title);
           titleDiv.appendTo(actorDiv);
         }
@@ -124,13 +127,13 @@ export default class UI {
       let isHtmlContent = false;
       if (actorSetup.hasOwnProperty(sdKeys.CONTENT)) {
         content = actorSetup[sdKeys.CONTENT];
-        if (!this.stringUtils.isNonEmptyString(content)) {
+        if (!AC.stringUtils.isNonEmptyString(content)) {
           content = undefined;
         }
       }
       else if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
         content = actorSetup[sdKeys.CONTENT_HTML];
-        if (!this.stringUtils.isNonEmptyString(content)) {
+        if (!AC.stringUtils.isNonEmptyString(content)) {
           content = undefined;
         }
         else {
@@ -140,7 +143,7 @@ export default class UI {
 
       let contentDiv;
       if (content != null) {
-        contentDiv = DF.createHtmlDiv(
+        contentDiv = AC.domFactory.createHtmlDiv(
             Config.cssClasses.CSMV_ACTOR_CONTENT);
         if (isHtmlContent) {
           contentDiv.html(content);
@@ -184,7 +187,7 @@ export default class UI {
         const classes = actorSetup[sdKeys.CSS_CLASSES];
         if (Array.isArray(classes)) {
           for (const c of classes) {
-            if (this.stringUtils.isNonEmptyString(c)) {
+            if (AC.stringUtils.isNonEmptyString(c)) {
               actorDiv.addClass(c);
             }
           }
@@ -210,12 +213,12 @@ export default class UI {
     actorDiv.appendTo(this.frames.animation);
   }
 
-  createControlFrame(DF = this.domFactory) {
+  createControlFrame(AC = this.appCtx) {
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
     const uiTxt = Config.uiTexts;
 
-    const frame = DF.createHtmlDiv(cls.CSMV_CONTROL_FRAME);
+    const frame = AC.domFactory.createHtmlDiv(cls.CSMV_CONTROL_FRAME);
     frame.appendTo(this.frames.outer);
     this.frames.control = frame;
 
@@ -258,7 +261,7 @@ export default class UI {
     }
 
     if (this.model.isStepCounterVisible) {
-      const c = DF.createHtmlDiv(
+      const c = AC.domFactory.createHtmlDiv(
                   Config.cssClasses.CSMV_STEP_COUNTER);
 
       c.text(this.composeStepCounterText());
@@ -272,9 +275,9 @@ export default class UI {
     }
   }
 
-  composeStepCounterText() {
+  composeStepCounterText(AC = this.appCtx) {
     let counterText =
-          this.stringUtils.ensureThatEndsWithSpace(
+          AC.stringUtils.ensureThatEndsWithSpace(
                           this.model.stepCounterTitle);
 
     if (this.model.lastStepNumber === 0) {
@@ -291,7 +294,7 @@ export default class UI {
 
   createButton(
         collectionName, defaultTitle, setupDataKeyForTitle,
-        cssClass, clickHandler, parent, DF = this.domFactory) {
+        cssClass, clickHandler, parent, AC = this.appCtx) {
 
     const sdKeys = Config.setupDataKeys;
 
@@ -309,11 +312,11 @@ export default class UI {
       }
     }
 
-    const b = DF.createHtmlButton(
+    const b = AC.domFactory.createHtmlButton(
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
-    if (this.stringUtils.isNonEmptyString(cssClass)) {
+    if (AC.stringUtils.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
 
@@ -465,8 +468,8 @@ export default class UI {
     console.log(this.log.get());
   }
 
-  createAnimationFrame(DF = this.domFactory) {
-    const frameDiv = DF.createHtmlDiv(
+  createAnimationFrame(AC = this.appCtx) {
+    const frameDiv = AC.domFactory.createHtmlDiv(
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     const sdKeys = Config.setupDataKeys;
@@ -489,11 +492,11 @@ export default class UI {
     this.frames.animation = frameDiv;
   }
 
-  createOuterFrame(DF = this.domFactory) {
+  createOuterFrame(AC = this.appCtx) {
     const cls = Config.cssClasses;
     const sdKeys = Config.setupDataKeys;
 
-    const frameDiv = DF.createHtmlDiv(cls.CSMV_OUTER_FRAME);
+    const frameDiv = AC.domFactory.createHtmlDiv(cls.CSMV_OUTER_FRAME);
     frameDiv.appendTo(this.container);
     this.frames.outer = frameDiv;
 
@@ -509,19 +512,19 @@ export default class UI {
   createHeadingDiv(
           setupDataKey, cssClass, parent,
           dataKeyForThis, divKeyForThis,
-          verboseTypeForError, DF = this.domFactory) {
+          verboseTypeForError, AC = this.appCtx) {
 
     if (this.setupData.hasOwnProperty(setupDataKey)) {
       const d = this.setupData[setupDataKey];
 
-      if (!this.stringUtils.isNonEmptyString(d)) {
-        throw ErrorFactory.forIncorrectSetupData(
+      if (!AC.stringUtils.isNonEmptyString(d)) {
+        throw AC.errorFactory.forIncorrectSetupData(
                   `Visualization '${this.name}' has an invalid ${verboseTypeForError}; ` +
                   `it must be a string that contains not only whitespace.`);
       }
 
       const content = $.trim(d);
-      const contentDiv = DF.createHtmlDiv(cssClass);
+      const contentDiv = AC.domFactory.createHtmlDiv(cssClass);
       contentDiv.text(content);
       contentDiv.appendTo(parent);
       this[dataKeyForThis] = content;
