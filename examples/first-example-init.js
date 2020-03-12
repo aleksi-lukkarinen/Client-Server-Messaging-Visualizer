@@ -24,7 +24,7 @@ document.CSMesVisSetupData = [
       stepCounter: {
         show: true,
         showTotal: true,
-        title: "Step ",
+        title: "Step",
       }
     },
 

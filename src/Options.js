@@ -5,6 +5,7 @@
  */
 
 import * as Config from "./Config.js";
+import ObjectUtils from "./ObjectUtils.js";
 
 
 
@@ -44,8 +45,8 @@ export default class Options {
             Config.uiTexts.STEP_COUNTER_TITLE_NO_STEPS);
   }
 
-  parseBooleanOption(setupData, objectPath, defaultValue) {
-    let val = this.getValue(setupData, objectPath);
+  parseBooleanOption(setupData, objectPath, defaultValue, OU = new ObjectUtils()) {
+    let val = OU.retrieveHierarchicalValue(setupData, objectPath);
     if (!this.isBoolean(val)) {
       val = defaultValue;
     }
@@ -53,8 +54,8 @@ export default class Options {
     this._optionData[objectPath] = val;
   }
 
-  parseStringOption(setupData, objectPath, defaultValue) {
-    let val = this.getValue(setupData, objectPath);
+  parseStringOption(setupData, objectPath, defaultValue, OU = new ObjectUtils()) {
+    let val = OU.retrieveHierarchicalValue(setupData, objectPath);
     if (typeof val !== "string") {
       val = defaultValue;
     }
@@ -63,24 +64,6 @@ export default class Options {
   }
 
   getValue(setupData, objectPath) {
-    const pathParts = objectPath.split(".");
-
-    if (pathParts.length < 1) {
-      return undefined;
-    }
-
-    let currentObject = setupData;
-    for (let idx = 0; idx < pathParts.length - 1; idx++) {
-      const val = currentObject[pathParts[idx]];
-
-      if (val == null) {
-        return undefined;
-      }
-
-      currentObject = val;
-    }
-
-    const retVal = currentObject[pathParts[pathParts.length - 1]];
     return retVal;
   }
 
