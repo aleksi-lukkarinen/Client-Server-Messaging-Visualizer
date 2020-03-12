@@ -5,6 +5,7 @@
  */
 
 import * as Config from "./Config.js";
+import StringUtils from "./StringUtils.js";
 import ErrorFactory from "./ErrorFactory.js";
 import DOMFactory from "./DOMFactory.js";
 import UI from "./UI.js";
@@ -55,6 +56,7 @@ export default class Bootstrapper {
 
   instantiateVisualizations() {
     const domFactory = new DOMFactory();
+    const stringUtils = new StringUtils();
 
     for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
       if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.NAME)) {
@@ -64,11 +66,11 @@ export default class Bootstrapper {
 
       // TODO: Is the name a non-empty string? if (StringUtils.isNonEmptyString(t)) {
 
-      this.instantiateVisualizationBasedOn(visualizationSetup, domFactory);
+      this.instantiateVisualizationBasedOn(visualizationSetup, domFactory, stringUtils);
     }
   }
 
-  instantiateVisualizationBasedOn(setupDataEntry, domFactory) {
+  instantiateVisualizationBasedOn(setupDataEntry, domFactory, stringUtils) {
     const elems = this.visualizationElementsFor(setupDataEntry.name);
 
     if (elems.length === 0) {
@@ -83,7 +85,7 @@ export default class Bootstrapper {
     }
 
     const containerElement = elems[0];
-    const ui = new UI(containerElement, setupDataEntry, domFactory);
+    const ui = new UI(containerElement, setupDataEntry, domFactory, stringUtils);
   }
 
   allVisualizationElements() {

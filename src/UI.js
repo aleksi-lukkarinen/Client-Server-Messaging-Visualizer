@@ -5,9 +5,7 @@
  */
 
 import * as Config from "./Config.js";
-import * as StringUtils from "./StringUtils.js";
 import ErrorFactory from "./ErrorFactory.js";
-import Logger from "./Logger.js";
 import Model from "./Model.js";
 
 
@@ -16,7 +14,7 @@ import Model from "./Model.js";
  /** The user interface. */
 export default class UI {
 
-  constructor(container, setupData, domFactory) {
+  constructor(container, setupData, domFactory, stringUtils) {
     this.name = setupData.name;
     this.log = new Logger(this.name);
 
@@ -28,6 +26,7 @@ export default class UI {
     this.frames = {};
     this.buttons = {};
     this.domFactory = domFactory;
+    this.stringUtils = stringUtils;
     this.model = new Model(setupData, this.log);
 
     this.emitUIInitializationBeginsEvent();
@@ -104,7 +103,7 @@ export default class UI {
       let stereotypeDiv;
       if (actorSetup.hasOwnProperty(sdKeys.STEREOTYPE)) {
         const stereotype = actorSetup[sdKeys.STEREOTYPE];
-        if (StringUtils.isNonEmptyString(stereotype)) {
+        if (this.stringUtils.isNonEmptyString(stereotype)) {
           stereotypeDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
           stereotypeDiv.text(`«${stereotype}»`);
           stereotypeDiv.appendTo(actorDiv);
@@ -114,7 +113,7 @@ export default class UI {
       let titleDiv;
       if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
         const title = actorSetup[sdKeys.TITLE];
-        if (StringUtils.isNonEmptyString(title)) {
+        if (this.stringUtils.isNonEmptyString(title)) {
           titleDiv = DF.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
           titleDiv.text(title);
           titleDiv.appendTo(actorDiv);
@@ -125,13 +124,13 @@ export default class UI {
       let isHtmlContent = false;
       if (actorSetup.hasOwnProperty(sdKeys.CONTENT)) {
         content = actorSetup[sdKeys.CONTENT];
-        if (!StringUtils.isNonEmptyString(content)) {
+        if (!this.stringUtils.isNonEmptyString(content)) {
           content = undefined;
         }
       }
       else if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
         content = actorSetup[sdKeys.CONTENT_HTML];
-        if (!StringUtils.isNonEmptyString(content)) {
+        if (!this.stringUtils.isNonEmptyString(content)) {
           content = undefined;
         }
         else {
@@ -185,7 +184,7 @@ export default class UI {
         const classes = actorSetup[sdKeys.CSS_CLASSES];
         if (Array.isArray(classes)) {
           for (const c of classes) {
-            if (StringUtils.isNonEmptyString(c)) {
+            if (this.stringUtils.isNonEmptyString(c)) {
               actorDiv.addClass(c);
             }
           }
@@ -275,7 +274,7 @@ export default class UI {
 
   composeStepCounterText() {
     let counterText =
-          StringUtils.ensureThatEndsWithSpace(
+          this.stringUtils.ensureThatEndsWithSpace(
                           this.model.stepCounterTitle);
 
     if (this.model.lastStepNumber === 0) {
@@ -314,7 +313,7 @@ export default class UI {
                 Config.cssClasses.CSMV_BUTTON);
     b.text(title);
 
-    if (StringUtils.isNonEmptyString(cssClass)) {
+    if (this.stringUtils.isNonEmptyString(cssClass)) {
       b.addClass(cssClass);
     }
 
@@ -515,7 +514,7 @@ export default class UI {
     if (this.setupData.hasOwnProperty(setupDataKey)) {
       const d = this.setupData[setupDataKey];
 
-      if (!StringUtils.isNonEmptyString(d)) {
+      if (!this.stringUtils.isNonEmptyString(d)) {
         throw ErrorFactory.forIncorrectSetupData(
                   `Visualization '${this.name}' has an invalid ${verboseTypeForError}; ` +
                   `it must be a string that contains not only whitespace.`);
