@@ -6,7 +6,6 @@ const csso = require('gulp-csso');
 const del = require('del');
 const eslint = require('gulp-eslint');
 const jsdoc = require('gulp-jsdoc3');
-const jshint = require('gulp-jshint');
 const log = require('gulplog');
 const rename = require('gulp-rename');
 const source = require('vinyl-source-stream');
@@ -64,12 +63,6 @@ function esLint() {
         .pipe(eslint.failAfterError());
 }
 
-function jsHint() {
-  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS])
-    .pipe(jshint())
-    .pipe(jshint.reporter("default"));
-}
-
 function jsDoc(cb) {
   var config = require("./" + jsDocConf);
 
@@ -122,16 +115,15 @@ function publish(cb) {
 }
 
 function watchSources(cb) {
-  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, esLint, jsHint, jsDoc));
+  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, esLint, jsDoc));
   watch(srcDir + globAllCSS,            series(cssMinify, stage));
   watch(examplesDir + globAllFiles,     series(stage));
 }
 
 exports.clean = clean;
 exports.eslint = esLint;
-exports.jshint = jsHint;
 exports.jsdoc = jsDoc;
-exports.js = series(jsHint, esLint, jsBabel, jsBundle)
+exports.js = series(esLint, jsBabel, jsBundle)
 exports.css = series(cssMinify)
 exports.images = images
 exports.compile = parallel(exports.js, jsDoc, exports.css, images);
