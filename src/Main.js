@@ -14,6 +14,8 @@ import Bootstrapper from "./Bootstrapper.js";
  * to initialize the visualizations.
  */
 $(document).ready(function() {
+  "use strict";
+
   const setupData = document[Config.SETUP_DATA_ROOT_KEY];
   const bs = new Bootstrapper(setupData);
 

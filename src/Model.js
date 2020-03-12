@@ -86,7 +86,7 @@ export default class Model {
   get canMoveToLastStep() {
     return this.canMoveForwards;
   }
-  
+
   get canMoveBackwards() {
     return this.hasMultipleSteps && this.isNotAtBeginning;
   }
@@ -94,7 +94,7 @@ export default class Model {
   get canMoveForwards() {
     return this.hasMultipleSteps && this.isNotAtEnd;
   }
-  
+
   emitModelInitializationFinishedEvent() {
     this.emitEvent(
           Config.eventNames.MODEL_INITIALIZED,
@@ -153,7 +153,7 @@ export default class Model {
   get isStepCounterVisible() {
     return this._options.isStepCounterVisible;
   }
-  
+
   get isStepCounterTotalVisible() {
     return this._options.isStepCounterTotalVisible;
   }

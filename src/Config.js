@@ -8,7 +8,7 @@
 /** Constants related to the application as a whole. */
 export const application = {
   NAME:                           "Client-Server Messaging Visualizer",
-}
+};
 
 
 
@@ -41,7 +41,7 @@ export const cssClasses = {
   CSMV_VISUALIZATION:             "csmv-visualization",
   CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
   CSMV_VIS_TITLE:                 "csmv-visualization-title",
-}
+};
 
 
 
@@ -50,7 +50,7 @@ export const cssClasses = {
 export const cssProperties = {
   WIDTH:                          "width",
   HEIGHT:                         "height",
-}
+};
 
 
 
@@ -89,7 +89,7 @@ export const eventNames = {
 
   /** A convenience string that contains the names of all the events used in this application. */
   ALL_EVENTS:                     "",   // The string is created programmatically below
-}
+};
 
 // Create a convenience constant that contains all event names.
 let allEvents = "";
@@ -108,7 +108,7 @@ export const htmlAttributes = {
   CSMV_NAME:                      "cmsv-name",
   CLASS:                          "class",
   DISABLED:                       "disabled",
-}
+};
 
 
 
@@ -119,7 +119,7 @@ export const htmlTags = {
   SINGLE_TAG_END:                 "/>",
   DIV:                            "div",
   BUTTON:                         "button",
-}
+};
 
 
 
@@ -133,7 +133,7 @@ export const loggingKeys = {
   TO_PREVIOUS_STEP_CLICKED:       "'Previous' button clicked",
   TO_NEXT_STEP_CLICKED:           "'Next' button clicked",
   TO_LAST_STEP_CLICKED:           "'Last' button clicked",
-}
+};
 
 
 
@@ -180,7 +180,7 @@ export const setupDataKeys = {
   TRANSITION_BACKWARDS:           "transitionBackwards",
   TRANSITION_FORWARDS:            "transitionForwards",
   WIDTH:                          "width",
-}
+};
 
 
 
@@ -196,4 +196,4 @@ export const uiTexts = {
   TO_LAST_STEP_TITLE:             "Last Step",
   STEP_COUNTER_TITLE:             "Step",
   STEP_COUNTER_TITLE_NO_STEPS:    "No Steps",
-}
+};

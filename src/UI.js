@@ -190,7 +190,7 @@ export default class UI {
             }
           }
         }
-        else if (typeof(classes) === "string") {
+        else if (typeof classes === "string") {
           actorDiv.addClass(classes);
         }
       }
@@ -245,7 +245,7 @@ export default class UI {
 
         if (btns.hasOwnProperty(sdKeys.SHOW_TO_LAST_STEP_BUTTON)) {
           const val = btns[sdKeys.SHOW_TO_LAST_STEP_BUTTON];
-          if (typeof(val) === "boolean") {
+          if (typeof val === "boolean") {
             shouldBeVisible = val;
           }
         }
@@ -263,18 +263,18 @@ export default class UI {
                   Config.cssClasses.CSMV_STEP_COUNTER);
 
       c.text(this.composeStepCounterText());
-      
+
       if (this.model.lastStepNumber === 0) {
         c.addClass(Config.cssClasses.CSMV_STEP_COUNTER_NO_STEPS);
       }
-      
+
       c.appendTo(frame);
       this.stepCounter = c;
     }
   }
-  
+
   composeStepCounterText() {
-    let counterText = 
+    let counterText =
           StringUtils.ensureThatEndsWithSpace(
                           this.model.stepCounterTitle);
 
@@ -286,7 +286,7 @@ export default class UI {
     if (this.model.isStepCounterTotalVisible) {
       counterText += "/" + this.model.lastStepNumber;
     }
-    
+
     return counterText;
   }
 

@@ -18,12 +18,12 @@ export default class Step {
   constructor(stepData, stepIndex, visualizationName) {
     this._setup = [];
     this.initArrayMember(
-        stepData, stepIndex, Config.setupDataKeys.SETUP, 
+        stepData, stepIndex, Config.setupDataKeys.SETUP,
         this._setup, visualizationName);
 
     this._transitionForwards = [];
     this.initArrayMember(
-        stepData, stepIndex, Config.setupDataKeys.TRANSITION_FORWARDS, 
+        stepData, stepIndex, Config.setupDataKeys.TRANSITION_FORWARDS,
         this._transitionForwards, visualizationName);
 
     this._transitionBackwards = [];
@@ -52,11 +52,11 @@ export default class Step {
   get setup() {
     return this._setup;
   }
-  
+
   get transitionForwards() {
     return this._transitionForwards;
   }
-  
+
   get transitionBackwards() {
     return this._transitionBackwards;
   }

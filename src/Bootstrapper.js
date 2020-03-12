@@ -5,7 +5,6 @@
  */
 
 import * as Config from "./Config.js";
-import * as StringUtils from "./StringUtils.js";
 import ErrorFactory from "./ErrorFactory.js";
 import DOMFactory from "./DOMFactory.js";
 import UI from "./UI.js";
