@@ -4,12 +4,8 @@
 
 export const totalScreenHeight      = screen.height;
 export const totalScreenWidth       = screen.width;
-export const colorDepth             = screen.colorDepth;
-export const userAgent              = navigator.userAgent;
-export const platform               = navigator.platform;
-export const appName                = navigator.appName;
-export const appVersion             = navigator.appVersion;
-export const product                = navigator.product;
+export const {colorDepth}           = screen;
+export const {userAgent, platform, appName, appVersion, product} = navigator;
 export const documentTitle          = document.title;
 export const documentReferrer       = document.referrer;
 export const documentCharacterSet   = document.characterSet;

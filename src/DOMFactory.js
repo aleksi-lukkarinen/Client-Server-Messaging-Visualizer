@@ -12,6 +12,8 @@ import * as Config from "./Config.js";
 /** Creates resources related to the document object model. */
 export default class DOMFactory {
 
+  /* eslint class-methods-use-this: "off" */
+
   createHtmlDiv(cssClass) {
     return this.createHtmlTag(Config.htmlTags.DIV, cssClass);
   }

@@ -10,6 +10,12 @@
 /** Provides utility functions for handling objects. */
 export default class ObjectUtils {
 
+  isBoolean(val) {
+    return $.type(val) === "boolean";
+  }
+
+  /* eslint class-methods-use-this: "off", no-undefined: "off" */
+
   retrieveHierarchicalValue(setupData, objectPath) {
     const pathParts = objectPath.split(".");
 
@@ -21,7 +27,7 @@ export default class ObjectUtils {
     for (let idx = 0; idx < pathParts.length - 1; idx++) {
       const val = currentObject[pathParts[idx]];
 
-      if (val == null) {
+      if (typeof val === "undefined" || val === null) {
         return undefined;
       }
 

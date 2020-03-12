@@ -7,10 +7,17 @@
 import * as Config from "./Config.js";
 import DOMFactory from "./DOMFactory.js";
 import ErrorFactory from "./ErrorFactory.js";
+import HTMLElementFinder from "./HTMLElementFinder.js";
 import ObjectUtils from "./ObjectUtils.js";
 import StringUtils from "./StringUtils.js";
 import ApplicationContext from "./ApplicationContext.js";
 import UI from "./UI.js";
+
+
+
+
+const NO_ITEMS = 0;
+const ONE_ITEM = 1;
 
 
 
@@ -32,6 +39,7 @@ export default class Bootstrapper {
     const ac = new ApplicationContext();
     ac.domFactory = new DOMFactory();
     ac.errorFactory = new ErrorFactory(ac);
+    ac.htmlElementFinder = new HTMLElementFinder();
     ac.objectUtils = new ObjectUtils();
     ac.stringUtils = new StringUtils();
     this._appCtx = ac;
@@ -44,7 +52,9 @@ export default class Bootstrapper {
   }
 
   ensureThatSetupDataArrayIsGiven(AC = this._appCtx) {
-    if (this._allSetupData == null) {
+    if (typeof this._allSetupData === "undefined" ||
+          this._allSetupData === null) {
+
       throw AC.errorFactory.createBaseErrorFor(
               `Configuration using document.${Config.SETUP_DATA_ROOT_KEY} is missing.`);
     }
@@ -56,8 +66,8 @@ export default class Bootstrapper {
   }
 
   ensureThatSetupDataAndHTMLDocContainEqualNumberOfVisualizations(AC = this._appCtx) {
-    const elems = this.allVisualizationElements();
-    if (elems.length != this._allSetupData.length) {
+    const elems = AC.htmlElementFinder.allVisualizationElements();
+    if (elems.length !== this._allSetupData.length) {
       const msg = `There are ${elems.length} visualization(s) in the HTML file ` +
                   `but setup data is given for ${this._allSetupData.length} visualiation(s).`;
 
@@ -81,32 +91,22 @@ export default class Bootstrapper {
   }
 
   instantiateVisualizationBasedOn(setupDataEntry, AC = this._appCtx) {
-    const elems = this.visualizationElementsFor(setupDataEntry.name);
+    const elems = AC.htmlElementFinder.visualizationElementsFor(setupDataEntry.name);
 
-    if (elems.length === 0) {
+    if (elems.length === NO_ITEMS) {
       throw AC.errorFactory.forIncorrectSetup(
-              `Setup data is given for visualization '${setupDataEntry.name}', `+
+              `Setup data is given for visualization '${setupDataEntry.name}', ` +
               "but the HTML file does not contain a container element for it.");
     }
-    if (elems.length > 1) {
+    if (elems.length > ONE_ITEM) {
       throw AC.errorFactory.forIncorrectSetup(
               "The HTML file contains multiple container elements " +
               `for visualization '${setupDataEntry.name}'.`);
     }
 
-    const containerElement = elems[0];
-    new UI(containerElement, setupDataEntry, AC);
-  }
-
-  allVisualizationElements() {
-    return $(`.${Config.cssClasses.CSMV_VISUALIZATION}`);
-  }
-
-  visualizationElementsFor(visualizationName) {
-    const clazz = Config.cssClasses.CSMV_VISUALIZATION;
-    const nameAttr = Config.htmlAttributes.CSMV_NAME;
-
-    return $(`.${clazz}[${nameAttr}='${visualizationName}']`);
+    const [containerElement] = elems;
+    const ui = new UI(containerElement, setupDataEntry, AC);
+    ui.init();
   }
 
 }

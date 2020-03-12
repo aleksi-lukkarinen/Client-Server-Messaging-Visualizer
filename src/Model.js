@@ -15,13 +15,16 @@ import Step from "./Step.js";
 export default class Model {
 
   constructor(setupData, appContext, log) {
+    log.addModelInitializationBeginsEvent();
+    this.emitModelInitializationBeginsEvent();
+
     this._name = setupData.name;
     this._appCtx = appContext;
-    this._options = new Options(setupData, appContext);
     this._actors = new Map();
     this._steps = new Map();
     this._currentStepNumber = 1;
     this._log = log;
+    this._options = new Options(setupData, appContext);
 
     for (const [idx, stepData] of setupData[Config.setupDataKeys.STEPS].entries()) {
       const step = new Step(stepData, idx, this._name, this._appCtx);
@@ -29,6 +32,7 @@ export default class Model {
     }
 
     this.emitModelInitializationFinishedEvent();
+    log.addModelInitializationFinishedEvent();
   }
 
   moveToFirstStep(AC = this._appCtx) {
@@ -95,20 +99,26 @@ export default class Model {
     return this.hasMultipleSteps && this.isNotAtEnd;
   }
 
+  emitModelInitializationBeginsEvent() {
+    this.emitEvent(
+          Config.eventNames.MODEL_INITIALIZATION_BEGINS,
+          [this.name]);
+  }
+
   emitModelInitializationFinishedEvent() {
     this.emitEvent(
-          Config.eventNames.MODEL_INITIALIZED,
-          [this.name,]);
+          Config.eventNames.MODEL_INITIALIZATION_FINISHED,
+          [this.name]);
   }
 
   emitModelChangedEvent() {
     this.emitEvent(
           Config.eventNames.MODEL_CHANGED,
-          [this.name,]);
+          [this.name]);
   }
 
   emitEvent(id, params) {
-    const e = $.Event(id);
+    const e = new $.Event(id);
     $(this).trigger(e, params);
   }
 

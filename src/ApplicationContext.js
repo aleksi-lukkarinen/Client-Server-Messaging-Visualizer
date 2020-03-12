@@ -11,12 +11,13 @@
 export default class ApplicationContext {
 
   constructor() {
-    this._domFactoryInstance = undefined;
-    this._errorFactoryInstance = undefined;
-    this._objectUtilsInstance = undefined;
-    this._stringUtilsInstance = undefined;
+    this._domFactoryInstance = null;
+    this._errorFactoryInstance = null;
+    this._htmlElementFinder = null;
+    this._objectUtilsInstance = null;
+    this._stringUtilsInstance = null;
   }
-  
+
   get domFactory() {
     return this._domFactoryInstance;
   }
@@ -24,7 +25,7 @@ export default class ApplicationContext {
   set domFactory(instance) {
     this._domFactoryInstance = instance;
   }
-  
+
   get errorFactory() {
     return this._errorFactoryInstance;
   }
@@ -32,7 +33,15 @@ export default class ApplicationContext {
   set errorFactory(instance) {
     this._errorFactoryInstance = instance;
   }
-  
+
+  get htmlElementFinder() {
+    return this._htmlElementFinder;
+  }
+
+  set htmlElementFinder(instance) {
+    this._htmlElementFinder = instance;
+  }
+
   get objectUtils() {
     return this._objectUtilsInstance;
   }
@@ -40,7 +49,7 @@ export default class ApplicationContext {
   set objectUtils(instance) {
     this._objectUtilsInstance = instance;
   }
-  
+
   get stringUtils() {
     return this._stringUtilsInstance;
   }

@@ -13,8 +13,8 @@ import * as Config from "./Config.js";
 export default class Options {
 
   constructor(
-        setupData, 
-        appContext, 
+        setupData,
+        appContext,
         sdKeys = Config.setupDataKeys) {
 
     this._appCtx = appContext;
@@ -50,7 +50,7 @@ export default class Options {
 
   parseBooleanOption(setupData, objectPath, defaultValue, AC = this._appCtx) {
     let val = AC.objectUtils.retrieveHierarchicalValue(setupData, objectPath);
-    if (!this.isBoolean(val)) {
+    if (!AC.objectUtils.isBoolean(val)) {
       val = defaultValue;
     }
 
@@ -59,15 +59,11 @@ export default class Options {
 
   parseStringOption(setupData, objectPath, defaultValue, AC = this._appCtx) {
     let val = AC.objectUtils.retrieveHierarchicalValue(setupData, objectPath);
-    if (typeof val !== "string") {
+    if (!AC.stringUtils.isPrimitiveString(val)) {
       val = defaultValue;
     }
 
     this._optionData[objectPath] = val;
-  }
-
-  isBoolean(val) {
-    return $.type(val) === "boolean";
   }
 
   get isStepCounterVisible() {

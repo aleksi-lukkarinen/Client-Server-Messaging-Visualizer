@@ -34,7 +34,7 @@ export default class Step {
   }
 
   initArrayMember(
-          stepData, stepIndex, stepDataKey, 
+          stepData, stepIndex, stepDataKey,
           targetMember, visualizationName, AC = this._appCtx) {
 
     if (Object.prototype.hasOwnProperty.call(stepData, stepDataKey)) {
@@ -43,13 +43,7 @@ export default class Step {
           `${stepIndex}. step of '${visualizationName}' has ` +
           `a '${stepDataKey}' key that does not have an array as its value.`);
       }
-      this.copyInstructionsFromTo(stepData[stepDataKey], targetMember);
-    }
-  }
-
-  copyInstructionsFromTo(sourceArray, destinationArray) {
-    for (const instruction of sourceArray) {
-      destinationArray.push(Object.assign([], instruction));
+      Step.copyInstructionsFromTo(stepData[stepDataKey], targetMember);
     }
   }
 
@@ -63,6 +57,12 @@ export default class Step {
 
   get transitionBackwards() {
     return this._transitionBackwards;
+  }
+
+  static copyInstructionsFromTo(sourceArray, destinationArray) {
+    for (const instruction of sourceArray) {
+      destinationArray.push(Object.assign([], instruction));
+    }
   }
 
 }

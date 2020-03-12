@@ -18,9 +18,6 @@ export default class UI {
     this.name = setupData.name;
     this.log = new Logger(this.name);
 
-    this.log.addInitializationBeginsEvent();
-    this.emitInitializationBeginsEvent();
-
     this.container = container;
     this.setupData = setupData;
     this.appCtx = appContext;
@@ -29,7 +26,10 @@ export default class UI {
 
     this.frames = {};
     this.buttons = {};
+  }
 
+  init() {
+    this.log.addUIInitializationBeginsEvent();
     this.emitUIInitializationBeginsEvent();
 
     this.createOuterFrame();
@@ -45,14 +45,15 @@ export default class UI {
             $.proxy(this.update, this));
 
     this.emitUIInitializationFinishedEvent();
+    this.log.addUIInitializationFinishedEvent();
     this.emitInitializationFinishedEvent();
-    this.log.addInitializationFinishedEvent();
   }
 
   createActors(AC = this.appCtx) {
     const sdKeys = Config.setupDataKeys;
 
     if (!Object.prototype.hasOwnProperty.call(this.setupData, sdKeys.ACTORS)) {
+      // eslint-disable-next-line no-console
       console.log(`Warning: Visualization '${this.name}' does not have any actors defined.`);
       return;
     }
@@ -66,6 +67,7 @@ export default class UI {
     }
 
     if (actors.length < 1) {
+      // eslint-disable-next-line no-console
       console.log(`Warning: Visualization '${this.name}' does not have any actors defined.`);
       return;
     }
@@ -103,17 +105,19 @@ export default class UI {
     if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.PRESET)) {
       const preset = actorSetup[sdKeys.PRESET];
 
-      let stereotypeDiv;
       if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.STEREOTYPE)) {
         const stereotype = actorSetup[sdKeys.STEREOTYPE];
         if (AC.stringUtils.isNonEmptyString(stereotype)) {
-          stereotypeDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
+          const stereotypeDiv =
+                    AC.domFactory.createHtmlDiv(
+                          Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
+
           stereotypeDiv.text(`«${stereotype}»`);
           stereotypeDiv.appendTo(actorDiv);
         }
       }
 
-      let titleDiv;
+      let titleDiv = null;
       if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.TITLE)) {
         const title = actorSetup[sdKeys.TITLE];
         if (AC.stringUtils.isNonEmptyString(title)) {
@@ -123,26 +127,26 @@ export default class UI {
         }
       }
 
-      let content;
+      let content = null;
       let isHtmlContent = false;
       if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CONTENT)) {
         content = actorSetup[sdKeys.CONTENT];
         if (!AC.stringUtils.isNonEmptyString(content)) {
-          content = undefined;
+          content = null;
         }
       }
       else if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CONTENT_HTML)) {
         content = actorSetup[sdKeys.CONTENT_HTML];
-        if (!AC.stringUtils.isNonEmptyString(content)) {
-          content = undefined;
+        if (AC.stringUtils.isNonEmptyString(content)) {
+          isHtmlContent = true;
         }
         else {
-          isHtmlContent = true;
+          content = null;
         }
       }
 
-      let contentDiv;
-      if (content != null) {
+      let contentDiv = null;
+      if (content !== null) {
         contentDiv = AC.domFactory.createHtmlDiv(
             Config.cssClasses.CSMV_ACTOR_CONTENT);
         if (isHtmlContent) {
@@ -166,11 +170,11 @@ export default class UI {
         case "textblock":
           actorDiv.addClass(Config.cssClasses.CSMV_PRESET_TEXTBLOCK);
 
-          if (titleDiv != null) {
+          if (titleDiv !== null) {
             titleDiv.addClass(
                 Config.cssClasses.CSMV_PRESET_TEXTBLOCK_TITLE);
           }
-          if (contentDiv != null) {
+          if (contentDiv !== null) {
             contentDiv.addClass(
                 Config.cssClasses.CSMV_PRESET_TEXTBLOCK_CONTENT);
           }
@@ -192,7 +196,7 @@ export default class UI {
             }
           }
         }
-        else if (typeof classes === "string") {
+        else if (AC.stringUtils.isPrimitiveString(classes)) {
           actorDiv.addClass(classes);
         }
       }
@@ -286,7 +290,7 @@ export default class UI {
 
     counterText += this.model.currentStepNumber;
     if (this.model.isStepCounterTotalVisible) {
-      counterText += "/" + this.model.lastStepNumber;
+      counterText += `/${this.model.lastStepNumber}`;
     }
 
     return counterText;
@@ -357,7 +361,7 @@ export default class UI {
     this.updateButtonState(btns.toLastStep, false);
   }
 
-  updateActors() {
+  updateActors(AC = this.appCtx) {
     const setup = this.model.currentStepSetup;
 
     for (const instruction of setup) {
@@ -365,7 +369,7 @@ export default class UI {
       switch (op) {
         case "set-pos": {
           const [actorId, leftPos, topPos] = params;
-          const e = this.actorDivFor(actorId);
+          const e = AC.htmlElementFinder.actorDivFor(actorId);
           e.css("left", leftPos);
           e.css("top", topPos);
           }
@@ -374,7 +378,7 @@ export default class UI {
         case "show":
           if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
-              this.actorDivFor(actorId).show();
+              AC.htmlElementFinder.actorDivFor(actorId).show();
             }
           }
           break;
@@ -382,7 +386,7 @@ export default class UI {
         case "hide":
           if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
-              this.actorDivFor(actorId).hide();
+              AC.htmlElementFinder.actorDivFor(actorId).hide();
             }
           }
           break;
@@ -391,13 +395,6 @@ export default class UI {
           // TODO: ERROR: Unknown actor opcode!
       }
     }
-  }
-
-  actorDivFor(actorId) {
-    const clazz = Config.cssClasses.CSMV_ACTOR;
-    const nameAttr = Config.htmlAttributes.CSMV_NAME;
-
-    return $(`.${clazz}[${nameAttr}='${actorId}']`);
   }
 
   updateButtonStates() {
@@ -465,7 +462,6 @@ export default class UI {
 
     this.emitToLastStepButtonClickedEvent();
     this.log.addToLastClickedEvent();
-    console.log(this.log.get());
   }
 
   createAnimationFrame(AC = this.appCtx) {
@@ -533,39 +529,39 @@ export default class UI {
   }
 
   emitInitializationBeginsEvent() {
-    this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name,]);
+    this.emitEvent(Config.eventNames.INITIALIZATION_BEGINS, [this.name]);
   }
 
   emitUIInitializationBeginsEvent() {
-    this.emitEvent(Config.eventNames.UI_INITIALIZATION_BEGINS, [this.name,]);
+    this.emitEvent(Config.eventNames.UI_INITIALIZATION_BEGINS, [this.name]);
   }
 
   emitUIInitializationFinishedEvent() {
-    this.emitEvent(Config.eventNames.UI_INITIALIZATION_FINISHED, [this.name,]);
+    this.emitEvent(Config.eventNames.UI_INITIALIZATION_FINISHED, [this.name]);
   }
 
   emitInitializationFinishedEvent() {
-    this.emitEvent(Config.eventNames.INITIALIZATION_FINISHED, [this.name,]);
+    this.emitEvent(Config.eventNames.INITIALIZATION_FINISHED, [this.name]);
   }
 
   emitToFirstStepButtonClickedEvent() {
-    this.emitEvent(Config.eventNames.TO_FIRST_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_FIRST_STEP_CLICKED, [this.name]);
   }
 
   emitToPreviousStepButtonClickedEvent() {
-    this.emitEvent(Config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_PREVIOUS_STEP_CLICKED, [this.name]);
   }
 
   emitToNextStepButtonClickedEvent() {
-    this.emitEvent(Config.eventNames.TO_NEXT_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_NEXT_STEP_CLICKED, [this.name]);
   }
 
   emitToLastStepButtonClickedEvent() {
-    this.emitEvent(Config.eventNames.TO_LAST_STEP_CLICKED, [this.name,]);
+    this.emitEvent(Config.eventNames.TO_LAST_STEP_CLICKED, [this.name]);
   }
 
   emitEvent(id, params) {
-    const e = $.Event(id);
+    const e = new $.Event(id);
     $(this.container).trigger(e, params);
   }
 

@@ -5,6 +5,13 @@
  */
 
 
+
+
+const STRING_START_IDX = 0;
+
+
+
+
 /** Constants related to the application as a whole. */
 export const application = {
   NAME:                           "Client-Server Messaging Visualizer",
@@ -57,11 +64,11 @@ export const cssProperties = {
 
 /** Constants representing event names used by the application. */
 export const eventNames = {
-  /** Emitted before initialization of a visualization begins. */
-  INITIALIZATION_BEGINS:          "CSMesVis-initialization-begins",
+  /** Emitted before initialization of the data model of a visualization begins. */
+  MODEL_INITIALIZATION_BEGINS:    "CSMesVis-model-initialization-begins",
 
-  /** Emitted when initialization of the data model of a visualization is finished. */
-  MODEL_INITIALIZED:              "CSMesVis-model-initialization-finished",
+  /** Emitted after initialization of the data model of a visualization is finished. */
+  MODEL_INITIALIZATION_FINISHED:  "CSMesVis-model-initialization-finished",
 
   /** Emitted before initialization of the GUI of a visualization begins. */
   UI_INITIALIZATION_BEGINS:       "CSMesVis-ui-initialization-begins",
@@ -93,12 +100,13 @@ export const eventNames = {
 
 // Create a convenience constant that contains all event names.
 let allEvents = "";
-for (let n in eventNames) {
+for (const n in eventNames) {
   if (Object.prototype.hasOwnProperty.call(eventNames, n)) {
-    allEvents = allEvents + " " + eventNames[n];
+    allEvents += ` ${eventNames[n]}`;
   }
 }
-eventNames.ALL_EVENTS = allEvents.substring(0, allEvents.length);
+eventNames.ALL_EVENTS =
+    allEvents.substring(STRING_START_IDX, allEvents.length);
 
 
 
@@ -127,8 +135,10 @@ export const htmlTags = {
 /** Constants representing the strings that identify log events. */
 export const loggingKeys = {
   METADATA:                       "Metadata",
-  INITIALIZATION_BEGINS:          "Initialization begins",
-  INITIALIZATION_FINISHED:        "Initialization finished",
+  MODEL_INITIALIZATION_BEGINS:    "Model initialization begins",
+  MODEL_INITIALIZATION_FINISHED:  "Model initialization finished",
+  UI_INITIALIZATION_BEGINS:       "UI initialization begins",
+  UI_INITIALIZATION_FINISHED:     "UI initialization finished",
   TO_FIRST_STEP_CLICKED:          "'First' button clicked",
   TO_PREVIOUS_STEP_CLICKED:       "'Previous' button clicked",
   TO_NEXT_STEP_CLICKED:           "'Next' button clicked",

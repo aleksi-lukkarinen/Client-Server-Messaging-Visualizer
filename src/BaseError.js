@@ -4,9 +4,6 @@
  * @module BaseError
  */
 
-/* jshint -W097 */
-"use strict";
-
 import * as Config from "./Config.js";
 
 
@@ -20,8 +17,8 @@ export default function BaseError(message, appContext) {
 
 BaseError.prototype = new Error();
 
-BaseError.prototype.formatErrorMessage = 
-        function(message, AC = this._appCtx) {
+BaseError.prototype.formatErrorMessage =
+        function formatErrorMessage(message, AC = this._appCtx) {
 
   return AC.stringUtils.ensureThatEndsWithPeriod(
     `${Config.application.NAME}: ${message}`);

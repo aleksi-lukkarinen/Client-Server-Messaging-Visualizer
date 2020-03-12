@@ -10,6 +10,8 @@
 /** Provides utility functions for handling strings. */
 export default class StringUtils {
 
+  /* eslint class-methods-use-this: "off" */
+
   /**
    * Appends a given string to another string in case the latter
    * does not already end with the former.
@@ -19,7 +21,7 @@ export default class StringUtils {
    * @return {string} The given string with a period appended if necessary.
    */
   ensureThatEndsWith(s, ending) {
-    return !s.endsWith(ending) ? s + ending : s;
+    return s.endsWith(ending) ? s : s + ending;
   }
 
 
@@ -55,7 +57,11 @@ export default class StringUtils {
    * @return {boolean} True if the argument is a non-empty string; false otherwise.
    */
   isNonEmptyString(s) {
-    return $.type(s) === "string" && $.trim(s).length > 0;
+    return this.isPrimitiveString(s) && $.trim(s).length > 0;
+  }
+
+  isPrimitiveString(s) {
+    return $.type(s) === "string";
   }
 
 }

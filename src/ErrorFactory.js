@@ -17,15 +17,15 @@ export default class ErrorFactory {
   }
 
   forIncorrectSetupData(message) {
-    return ErrorFactory.createBaseErrorFor(`Incorrect setup data: ${message}`);
+    return this.createBaseErrorFor(`Incorrect setup data: ${message}`);
   }
 
   forIncorrectSetup(message) {
-    return ErrorFactory.createBaseErrorFor(`Incorrect setup: ${message}`);
+    return this.createBaseErrorFor(`Incorrect setup: ${message}`);
   }
 
   forModelViolation(message) {
-    return ErrorFactory.createBaseErrorFor(`Model violation: ${message}`);
+    return this.createBaseErrorFor(`Model violation: ${message}`);
   }
 
   createBaseErrorFor(message) {

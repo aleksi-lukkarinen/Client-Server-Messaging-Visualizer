@@ -10,6 +10,11 @@ import * as EnvInfo from "./EnvironmentInfo.js";
 
 
 
+const TWO_ARGUMENTS = 2;
+
+
+
+
 /** To be used for creating a log of user's actions. */
 export default class Logger {
 
@@ -20,7 +25,8 @@ export default class Logger {
       webPage: {
         location: {
           url:            EnvInfo.documentURL,
-          /*
+/* eslint multiline-comment-style: "off", capitalized-comments: "off" */
+/*
           protocol:       EnvInfo.locationProtocol,
           host:           EnvInfo.locationHost,
           hostname:       EnvInfo.locationHostname,
@@ -28,7 +34,7 @@ export default class Logger {
           pathname:       EnvInfo.locationPathname,
           hash:           EnvInfo.locationHash,
           query:          EnvInfo.locationQuery,
-          */
+*/
         },
         referrer:         EnvInfo.documentReferrer,
         title:            EnvInfo.documentTitle,
@@ -52,12 +58,20 @@ export default class Logger {
     });
   }
 
-  addInitializationBeginsEvent() {
-    this.add(Config.loggingKeys.INITIALIZATION_BEGINS);
+  addModelInitializationBeginsEvent() {
+    this.add(Config.loggingKeys.MODEL_INITIALIZATION_BEGINS);
   }
 
-  addInitializationFinishedEvent() {
-    this.add(Config.loggingKeys.INITIALIZATION_FINISHED);
+  addModelInitializationFinishedEvent() {
+    this.add(Config.loggingKeys.MODEL_INITIALIZATION_FINISHED);
+  }
+
+  addUIInitializationBeginsEvent() {
+    this.add(Config.loggingKeys.UI_INITIALIZATION_BEGINS);
+  }
+
+  addUIInitializationFinishedEvent() {
+    this.add(Config.loggingKeys.UI_INITIALIZATION_FINISHED);
   }
 
   addToFirstClickedEvent() {
@@ -79,11 +93,11 @@ export default class Logger {
   add(type, data) {
     const timestamp = Date.now();
     const timezoneOffset = new Date(timestamp).getTimezoneOffset();
-    const logEntry = [timestamp, timezoneOffset, type,];
+    const logEntry = [timestamp, timezoneOffset, type];
 
-    if (arguments.length === 2) {
+    if (arguments.length === TWO_ARGUMENTS) {
       if ($.isArray(data)) {
-        for (let item of data) {
+        for (const item of data) {
           logEntry.push(item);
         }
       }
