@@ -20,6 +20,7 @@
   "rules": {
     "array-element-newline": "off",
     "brace-style": ["error", "stroustrup"],
+    "class-methods-use-this": "warn",
     "comma-dangle": ["error", {
       "arrays": "always-multiline",
       "objects": "always-multiline",
@@ -27,7 +28,7 @@
       "exports": "never",
       "functions": "never"
     }],
-    "complexity": ["error", {"max": 10}],
+    "complexity": ["warn", {"max": 10}],
     "function-call-argument-newline": "off",
     "function-paren-newline": "off",
     "id-length": "off",
@@ -41,6 +42,8 @@
     "linebreak-style": ["error", "windows"],
     "lines-around-comment": "off",
     "max-len": ["warn", {"code": 120}],
+    "max-lines": ["warn", 500],
+    "max-lines-per-function": ["warn", 50],
     "max-params": ["warn", 6],
     "max-statements": ["warn", 40],
     "multiline-ternary": "off",
