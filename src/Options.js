@@ -31,7 +31,10 @@ export default class Options {
     this.parseBooleanOption(setupData, this._stepCounterTotalVisiblePath, true);
 
     this._stepCounterTitlePath = `${sdKeys.ENV}.${sdKeys.STEP_COUNTER}.${sdKeys.TITLE}`;
-    this.parseStringOption(setupData, this._stepCounterTitlePath, "Step");
+    this.parseStringOption(setupData, this._stepCounterTitlePath, Config.uiTexts.STEP_COUNTER_TITLE);
+    
+    this._stepCounterNoStepsTitlePath = `${sdKeys.ENV}.${sdKeys.STEP_COUNTER}.${sdKeys.NO_STEPS_TITLE}`;
+    this.parseStringOption(setupData, this._stepCounterNoStepsTitlePath, Config.uiTexts.STEP_COUNTER_TITLE_NO_STEPS);
   }
   
   parseBooleanOption(setupData, objectPath, defaultValue) {
@@ -86,6 +89,10 @@ export default class Options {
 
   get stepCounterTitle() {
     return this._optionData[this._stepCounterTitlePath];
+  }
+
+  get stepCounterNoStepsTitle() {
+    return this._optionData[this._stepCounterNoStepsTitlePath];
   }
 
   get ignoreVisibility() {

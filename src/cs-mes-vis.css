@@ -3,6 +3,7 @@ body {
 }
 
 .csmv-outer-frame {
+  font-family:              Arial, Helvetica, sans-serif;
   display:                  inline-block;
   margin:                   0.2em;
   padding:                  0.5em;
@@ -12,13 +13,11 @@ body {
 }
 
 .csmv-visualization-title {
-  font-family:              Arial, Helvetica, sans-serif;
   font-weight:              bold;
   padding-bottom:           0.75em;
 }
 
 .csmv-visualization-description {
-  font-family:              Arial, Helvetica, sans-serif;
   font-size:                0.7em;
   padding-bottom:           0.75em;
   color:                    #706020;
@@ -46,12 +45,23 @@ body {
   font-size:                0.75em;
 }
 
+.csmv-step-counter {
+  display:                  inline-block;
+  float:                    right;
+  font-size:                0.75em;
+  text-align:               right;
+  padding-top:              0.25em;
+}
+
+.csmv-step-counter-no-steps {
+  color:                    gray;
+}
+
 .csmv-actor {
   display:                  block;
   overflow:                 hidden;
   position:                 absolute;
   padding:                  0.5em 0em 0em 0em;
-  font-family:              Arial, Helvetica, sans-serif;
 }
 
 .csmv-custom-actor {
@@ -91,7 +101,6 @@ body {
 
 .csmv-preset-textblock {
   padding:                  0em;
-  font-family:              Arial, Helvetica, sans-serif;
 }
 
 .csmv-preset-textblock-title {

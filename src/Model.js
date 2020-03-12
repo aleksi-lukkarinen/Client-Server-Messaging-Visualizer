@@ -162,6 +162,10 @@ export default class Model {
     return this._options.stepCounterTitle;
   }
 
+  get stepCounterNoStepsTitle() {
+    return this._options.stepCounterNoStepsTitle;
+  }
+
   get ignoreVisibility() {
     return this._options.ignoreVisibility;
   }

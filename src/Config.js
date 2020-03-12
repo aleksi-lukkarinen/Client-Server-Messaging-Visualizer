@@ -36,6 +36,8 @@ export const cssClasses = {
   CSMV_PRESET_TEXTBLOCK:          "csmv-preset-textblock",
   CSMV_PRESET_TEXTBLOCK_CONTENT:  "csmv-preset-textblock-content",
   CSMV_PRESET_TEXTBLOCK_TITLE:    "csmv-preset-textblock-title",
+  CSMV_STEP_COUNTER:              "csmv-step-counter",
+  CSMV_STEP_COUNTER_NO_STEPS:     "csmv-step-counter-no-steps",
   CSMV_VISUALIZATION:             "csmv-visualization",
   CSMV_VIS_DESCRIPTION:           "csmv-visualization-description",
   CSMV_VIS_TITLE:                 "csmv-visualization-title",
@@ -161,6 +163,7 @@ export const setupDataKeys = {
   ID:                             "id",
   IGNORE_VISIBILITY:              "ignoreVisibility",
   NAME:                           "name",
+  NO_STEPS_TITLE:                 "noStepsTitle",
   PRESET:                         "preset",
   SETUP:                          "setup",
   SHOW:                           "show",
@@ -191,4 +194,6 @@ export const uiTexts = {
   TO_PREVIOUS_STEP_TITLE:         "Previous Step",
   TO_NEXT_STEP_TITLE:             "Next Step",
   TO_LAST_STEP_TITLE:             "Last Step",
+  STEP_COUNTER_TITLE:             "Step",
+  STEP_COUNTER_TITLE_NO_STEPS:    "No Steps",
 }

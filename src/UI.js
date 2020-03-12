@@ -235,6 +235,7 @@ export default class UI {
           cls.CSMV_BUTTON_TO_NEXT_STEP,
           this.handleToNextStepClick, frame);
 
+    // TODO: Refactor to use Options
     let shouldBeVisible = true;
     if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
       const env = this.setupData[sdKeys.ENV];
@@ -256,6 +257,37 @@ export default class UI {
             cls.CSMV_BUTTON_TO_LAST_STEP,
             this.handleToLastStepClick, frame);
     }
+
+    if (this.model.isStepCounterVisible) {
+      const c = DF.createHtmlDiv(
+                  Config.cssClasses.CSMV_STEP_COUNTER);
+
+      c.text(this.composeStepCounterText());
+      
+      if (this.model.lastStepNumber === 0) {
+        c.addClass(Config.cssClasses.CSMV_STEP_COUNTER_NO_STEPS);
+      }
+      
+      c.appendTo(frame);
+      this.stepCounter = c;
+    }
+  }
+  
+  composeStepCounterText() {
+    let counterText = 
+          StringUtils.ensureThatEndsWithSpace(
+                          this.model.stepCounterTitle);
+
+    if (this.model.lastStepNumber === 0) {
+      return this.model.stepCounterNoStepsTitle;
+    }
+
+    counterText += this.model.currentStepNumber;
+    if (this.model.isStepCounterTotalVisible) {
+      counterText += "/" + this.model.lastStepNumber;
+    }
+    
+    return counterText;
   }
 
   createButton(
@@ -264,6 +296,7 @@ export default class UI {
 
     const sdKeys = Config.setupDataKeys;
 
+    // TODO: Refactor to use options
     let title = defaultTitle;
     if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
       const env = this.setupData[sdKeys.ENV];
@@ -294,7 +327,23 @@ export default class UI {
     // TODO: Save button focus and restore, if possible
     this.disableButtons();
     this.updateActors();
+    this.updateStepCounter();
     this.updateButtonStates();
+  }
+
+  updateStepCounter() {
+    if (this.model.isStepCounterVisible) {
+      this.stepCounter.text(this.composeStepCounterText());
+
+      if (this.model.lastStepNumber === 0) {
+        this.stepCounter.addClass(
+                Config.cssClasses.CSMV_STEP_COUNTER_NO_STEPS);
+      }
+      else {
+        this.stepCounter.removeClass(
+                Config.cssClasses.CSMV_STEP_COUNTER_NO_STEPS);
+      }
+    }
   }
 
   disableButtons() {

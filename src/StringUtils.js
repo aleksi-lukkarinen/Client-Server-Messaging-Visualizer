@@ -15,7 +15,32 @@
  * @return {string} The given string with a period appended if necessary.
  */
  export function ensureThatEndsWithPeriod(s) {
-  return !s.endsWith(".") ? s + "." : s;
+  return this.ensureThatEndsWith(s, ".");
+}
+
+
+/**
+ * Appends a space (ASCII 32) to a string in case the string
+ * does not already end with one.
+ *
+ * @param {string} s - The string to check for the ending space.
+ * @return {string} The given string with a soace appended if necessary.
+ */
+ export function ensureThatEndsWithSpace(s) {
+  return this.ensureThatEndsWith(s, " ");
+}
+
+
+/**
+ * Appends a given string to another string in case the latter
+ * does not already end with the former.
+ *
+ * @param {string} s - The string to check for the desired ending.
+ * @param (string) ending - The desired ending of the string s.
+ * @return {string} The given string with a period appended if necessary.
+ */
+ export function ensureThatEndsWith(s, ending) {
+  return !s.endsWith(ending) ? s + ending : s;
 }
 
 
