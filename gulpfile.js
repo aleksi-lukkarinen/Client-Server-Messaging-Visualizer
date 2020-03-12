@@ -7,7 +7,6 @@ const del = require('del');
 const eslint = require('gulp-eslint');
 const jsdoc = require('gulp-jsdoc3');
 const log = require('gulplog');
-const mocha = require('gulp-mocha');
 const rename = require('gulp-rename');
 const source = require('vinyl-source-stream');
 const sourcemaps = require('gulp-sourcemaps');
@@ -108,10 +107,8 @@ function stage(cb) {
     .pipe(dest(esFiveStagingDir));
 }
 
-function unitTest() {
-  return src([testDir + "**/" + globAllJS], {read: false})
-    .pipe(mocha())
-    .on('error', console.error);
+function unitTest(cb) {
+  cb();
 }
 
 function publish(cb) {
