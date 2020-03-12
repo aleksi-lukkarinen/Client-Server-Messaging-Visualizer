@@ -4,6 +4,7 @@ const browserify = require('browserify');
 const buffer = require('vinyl-buffer');
 const csso = require('gulp-csso');
 const del = require('del');
+const eslint = require('gulp-eslint');
 const jsdoc = require('gulp-jsdoc3');
 const jshint = require('gulp-jshint');
 const log = require('gulplog');
@@ -54,6 +55,13 @@ function cssMinify(cb) {
     .pipe(csso())
     .pipe(sourcemaps.write('.'))
     .pipe(dest(esFiveDistributionDir));
+}
+
+function esLint() {
+  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS])
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 }
 
 function jsHint() {
@@ -114,28 +122,28 @@ function publish(cb) {
 }
 
 function watchSources(cb) {
-  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, jsDoc));
+  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, esLint, jsHint, jsDoc));
   watch(srcDir + globAllCSS,            series(cssMinify, stage));
   watch(examplesDir + globAllFiles,     series(stage));
 }
 
 exports.clean = clean;
+exports.eslint = esLint;
 exports.jshint = jsHint;
 exports.jsdoc = jsDoc;
-exports.js = series(jsHint, jsBabel, jsBundle)
+exports.js = series(jsHint, esLint, jsBabel, jsBundle)
 exports.css = series(cssMinify)
 exports.images = images
-exports.compile = parallel(exports.js, exports.css, images, jsDoc);
+exports.compile = parallel(exports.js, jsDoc, exports.css, images);
 exports.stage = stage;
 exports.unittest = unitTest;
 exports.test = series(unitTest);
-exports.publish = publish;
 exports.build = series(
   exports.compile,
   exports.test,
   exports.stage,
-  exports.publish
 );
 exports.cleanBuild = series(exports.clean, exports.build);
+exports.publish = series(exports.cleanBuild, publish);
 exports.watch = series(exports.build, watchSources);
 exports.default = exports.build;

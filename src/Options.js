@@ -66,10 +66,6 @@ export default class Options {
     this._optionData[objectPath] = val;
   }
 
-  getValue(setupData, objectPath) {
-    return retVal;
-  }
-
   isBoolean(val) {
     return $.type(val) === "boolean";
   }

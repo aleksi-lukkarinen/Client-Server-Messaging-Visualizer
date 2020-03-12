@@ -4,8 +4,6 @@
  * @module ObjectUtils
  */
 
-import * as Config from "./Config.js";
-
 
 
 

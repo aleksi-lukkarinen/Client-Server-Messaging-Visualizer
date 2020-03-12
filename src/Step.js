@@ -37,7 +37,7 @@ export default class Step {
           stepData, stepIndex, stepDataKey, 
           targetMember, visualizationName, AC = this._appCtx) {
 
-    if (stepData.hasOwnProperty(stepDataKey)) {
+    if (Object.prototype.hasOwnProperty.call(stepData, stepDataKey)) {
       if (!Array.isArray(stepData[stepDataKey])) {
         AC.errorFactory.forIncorrectSetupData(
           `${stepIndex}. step of '${visualizationName}' has ` +

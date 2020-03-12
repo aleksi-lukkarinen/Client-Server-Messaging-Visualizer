@@ -52,7 +52,7 @@ export default class UI {
   createActors(AC = this.appCtx) {
     const sdKeys = Config.setupDataKeys;
 
-    if (!this.setupData.hasOwnProperty(sdKeys.ACTORS)) {
+    if (!Object.prototype.hasOwnProperty.call(this.setupData, sdKeys.ACTORS)) {
       console.log(`Warning: Visualization '${this.name}' does not have any actors defined.`);
       return;
     }
@@ -62,7 +62,7 @@ export default class UI {
     if (!Array.isArray(actors)) {
       throw AC.errorFactory.forIncorrectSetupData(
               `Visualization '${this.name}': The 'actors' key ` +
-              `in the setup data has to be an array.`);
+              "in the setup data has to be an array.");
     }
 
     if (actors.length < 1) {
@@ -71,7 +71,7 @@ export default class UI {
     }
 
     for (const [idx, actorSetup] of actors.entries()) {
-      if (!actorSetup.hasOwnProperty(sdKeys.ID)) {
+      if (!Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.ID)) {
         throw AC.errorFactory.forIncorrectSetupData(
                 `The ${idx + 1}. actor of visualization '${this.name}' does not have an ID.`);
       }
@@ -88,23 +88,23 @@ export default class UI {
 
     // TODO: Defaults to Config
     let width = "100px";
-    if (actorSetup.hasOwnProperty(sdKeys.WIDTH)) {
+    if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.WIDTH)) {
       width = actorSetup[sdKeys.WIDTH];
     }
     actorDiv.css(Config.cssProperties.WIDTH, width);
 
     let height = "100px";
-    if (actorSetup.hasOwnProperty(sdKeys.HEIGHT)) {
+    if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.HEIGHT)) {
       height = actorSetup[sdKeys.HEIGHT];
     }
     actorDiv.css(Config.cssProperties.HEIGHT, height);
 
     // TODO: REFACTOR!!!!
-    if (actorSetup.hasOwnProperty(sdKeys.PRESET)) {
+    if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.PRESET)) {
       const preset = actorSetup[sdKeys.PRESET];
 
       let stereotypeDiv;
-      if (actorSetup.hasOwnProperty(sdKeys.STEREOTYPE)) {
+      if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.STEREOTYPE)) {
         const stereotype = actorSetup[sdKeys.STEREOTYPE];
         if (AC.stringUtils.isNonEmptyString(stereotype)) {
           stereotypeDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_STEREOTYPE);
@@ -114,7 +114,7 @@ export default class UI {
       }
 
       let titleDiv;
-      if (actorSetup.hasOwnProperty(sdKeys.TITLE)) {
+      if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.TITLE)) {
         const title = actorSetup[sdKeys.TITLE];
         if (AC.stringUtils.isNonEmptyString(title)) {
           titleDiv = AC.domFactory.createHtmlDiv(Config.cssClasses.CSMV_ACTOR_TITLE);
@@ -125,13 +125,13 @@ export default class UI {
 
       let content;
       let isHtmlContent = false;
-      if (actorSetup.hasOwnProperty(sdKeys.CONTENT)) {
+      if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CONTENT)) {
         content = actorSetup[sdKeys.CONTENT];
         if (!AC.stringUtils.isNonEmptyString(content)) {
           content = undefined;
         }
       }
-      else if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
+      else if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CONTENT_HTML)) {
         content = actorSetup[sdKeys.CONTENT_HTML];
         if (!AC.stringUtils.isNonEmptyString(content)) {
           content = undefined;
@@ -183,7 +183,7 @@ export default class UI {
     else {
       actorDiv.addClass(Config.cssClasses.CSMV_CUSTOM_ACTOR);
 
-      if (actorSetup.hasOwnProperty(sdKeys.CSS_CLASSES)) {
+      if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CSS_CLASSES)) {
         const classes = actorSetup[sdKeys.CSS_CLASSES];
         if (Array.isArray(classes)) {
           for (const c of classes) {
@@ -197,7 +197,7 @@ export default class UI {
         }
       }
 
-      if (actorSetup.hasOwnProperty(sdKeys.CONTENT_HTML)) {
+      if (Object.prototype.hasOwnProperty.call(actorSetup, sdKeys.CONTENT_HTML)) {
         actorDiv.html(actorSetup[sdKeys.CONTENT_HTML]);
       }
     }
@@ -239,13 +239,13 @@ export default class UI {
 
     // TODO: Refactor to use Options
     let shouldBeVisible = true;
-    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+    if (Object.prototype.hasOwnProperty.call(this.setupData, sdKeys.ENV)) {
       const env = this.setupData[sdKeys.ENV];
 
-      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
+      if (Object.prototype.hasOwnProperty.call(env, sdKeys.BUTTONS)) {
         const btns = env[sdKeys.BUTTONS];
 
-        if (btns.hasOwnProperty(sdKeys.SHOW_TO_LAST_STEP_BUTTON)) {
+        if (Object.prototype.hasOwnProperty.call(btns, sdKeys.SHOW_TO_LAST_STEP_BUTTON)) {
           const val = btns[sdKeys.SHOW_TO_LAST_STEP_BUTTON];
           if (typeof val === "boolean") {
             shouldBeVisible = val;
@@ -300,13 +300,13 @@ export default class UI {
 
     // TODO: Refactor to use options
     let title = defaultTitle;
-    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+    if (Object.prototype.hasOwnProperty.call(this.setupData, sdKeys.ENV)) {
       const env = this.setupData[sdKeys.ENV];
 
-      if (env.hasOwnProperty(sdKeys.BUTTONS)) {
+      if (Object.prototype.hasOwnProperty.call(env, sdKeys.BUTTONS)) {
         const btns = env[sdKeys.BUTTONS];
 
-        if (btns.hasOwnProperty(setupDataKeyForTitle)) {
+        if (Object.prototype.hasOwnProperty.call(btns, setupDataKeyForTitle)) {
           title = btns[setupDataKeyForTitle];
         }
       }
@@ -473,16 +473,16 @@ export default class UI {
               Config.cssClasses.CSMV_ANIMATION_FRAME);
 
     const sdKeys = Config.setupDataKeys;
-    if (this.setupData.hasOwnProperty(sdKeys.ENV)) {
+    if (Object.prototype.hasOwnProperty.call(this.setupData, sdKeys.ENV)) {
       const e = this.setupData[sdKeys.ENV];
 
-      if (e.hasOwnProperty(sdKeys.ANIMATION_FRAME)) {
+      if (Object.prototype.hasOwnProperty.call(e, sdKeys.ANIMATION_FRAME)) {
         const f = e[sdKeys.ANIMATION_FRAME];
 
-        if (f.hasOwnProperty(sdKeys.WIDTH)) {
+        if (Object.prototype.hasOwnProperty.call(f, sdKeys.WIDTH)) {
           frameDiv.css(Config.cssProperties.WIDTH, f[sdKeys.WIDTH]);
         }
-        if (f.hasOwnProperty(sdKeys.HEIGHT)) {
+        if (Object.prototype.hasOwnProperty.call(f, sdKeys.HEIGHT)) {
           frameDiv.css(Config.cssProperties.HEIGHT, f[sdKeys.HEIGHT]);
         }
       }
@@ -514,13 +514,13 @@ export default class UI {
           dataKeyForThis, divKeyForThis,
           verboseTypeForError, AC = this.appCtx) {
 
-    if (this.setupData.hasOwnProperty(setupDataKey)) {
+    if (Object.prototype.hasOwnProperty.call(this.setupData, setupDataKey)) {
       const d = this.setupData[setupDataKey];
 
       if (!AC.stringUtils.isNonEmptyString(d)) {
         throw AC.errorFactory.forIncorrectSetupData(
                   `Visualization '${this.name}' has an invalid ${verboseTypeForError}; ` +
-                  `it must be a string that contains not only whitespace.`);
+                  "it must be a string that contains not only whitespace.");
       }
 
       const content = $.trim(d);

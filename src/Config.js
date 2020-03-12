@@ -94,7 +94,7 @@ export const eventNames = {
 // Create a convenience constant that contains all event names.
 let allEvents = "";
 for (let n in eventNames) {
-  if (eventNames.hasOwnProperty(n)) {
+  if (Object.prototype.hasOwnProperty.call(eventNames, n)) {
     allEvents = allEvents + " " + eventNames[n];
   }
 }

@@ -69,7 +69,7 @@ export default class Bootstrapper {
 
   instantiateVisualizations(AC = this._appCtx) {
     for (const [idx, visualizationSetup] of document[Config.SETUP_DATA_ROOT_KEY].entries()) {
-      if (!visualizationSetup.hasOwnProperty(Config.setupDataKeys.NAME)) {
+      if (!Object.prototype.hasOwnProperty.call(visualizationSetup, Config.setupDataKeys.NAME)) {
         throw AC.errorFactory.forIncorrectSetupData(
                 `The ${idx + 1}. visualization does not have a name.`);
       }
@@ -86,16 +86,16 @@ export default class Bootstrapper {
     if (elems.length === 0) {
       throw AC.errorFactory.forIncorrectSetup(
               `Setup data is given for visualization '${setupDataEntry.name}', `+
-              `but the HTML file does not contain a container element for it.`);
+              "but the HTML file does not contain a container element for it.");
     }
     if (elems.length > 1) {
       throw AC.errorFactory.forIncorrectSetup(
-              `The HTML file contains multiple container elements ` +
+              "The HTML file contains multiple container elements " +
               `for visualization '${setupDataEntry.name}'.`);
     }
 
     const containerElement = elems[0];
-    const ui = new UI(containerElement, setupDataEntry, AC);
+    new UI(containerElement, setupDataEntry, AC);
   }
 
   allVisualizationElements() {

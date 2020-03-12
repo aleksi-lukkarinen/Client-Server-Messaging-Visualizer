@@ -8,7 +8,6 @@
 "use strict";
 
 import * as Config from "./Config.js";
-import * as StringUtils from "./StringUtils.js";
 
 
 
@@ -21,7 +20,9 @@ export default function BaseError(message, appContext) {
 
 BaseError.prototype = new Error();
 
-BaseError.prototype.formatErrorMessage = function(message, AC = this._appCtx) {
+BaseError.prototype.formatErrorMessage = 
+        function(message, AC = this._appCtx) {
+
   return AC.stringUtils.ensureThatEndsWithPeriod(
-            `${Config.application.NAME}: ${message}`);
+    `${Config.application.NAME}: ${message}`);
 };
