@@ -15,7 +15,6 @@
 !/.eslintrc.json
 !/.gitattributes
 !/.gitignore
-!/.jshintrc
 !/.mocharc.json
 !/CHANGELOG
 !/CODE_OF_CONDUCT.md
