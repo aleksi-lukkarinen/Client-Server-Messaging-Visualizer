@@ -7,7 +7,7 @@
 
 
 
-const STRING_START_IDX = 0;
+const FIRST_CHAR_IDX = 0;
 
 
 
@@ -106,7 +106,7 @@ for (const n in eventNames) {
   }
 }
 eventNames.ALL_EVENTS =
-    allEvents.substring(STRING_START_IDX, allEvents.length);
+    allEvents.substring(FIRST_CHAR_IDX, allEvents.length);
 
 
 
