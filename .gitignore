@@ -19,6 +19,7 @@
 !/CODE_OF_CONDUCT.md
 !/CONTRIBUTING.md
 !/gulpfile.js
+!/jest.config.js
 !/jsdoc.json
 !/LICENSE
 !/package.json

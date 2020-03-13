@@ -5,6 +5,7 @@ const buffer = require('vinyl-buffer');
 const csso = require('gulp-csso');
 const del = require('del');
 const eslint = require('gulp-eslint');
+const jest = require('gulp-jest').default;
 const jsdoc = require('gulp-jsdoc3');
 const log = require('gulplog');
 const rename = require('gulp-rename');
@@ -107,8 +108,11 @@ function stage(cb) {
     .pipe(dest(esFiveStagingDir));
 }
 
-function unitTest(cb) {
-  cb();
+function unitTest() {
+  process.env.NODE_ENV = "test";
+
+  return src(testDir + globAllJS)
+    .pipe(jest({}));
 }
 
 function publish(cb) {
@@ -126,7 +130,7 @@ exports.eslint = esLint;
 exports.jsdoc = jsDoc;
 exports.js = series(esLint, jsBabel, jsBundle)
 exports.css = series(cssMinify)
-exports.images = images
+exports.images = images;
 exports.compile = parallel(exports.js, jsDoc, exports.css, images);
 exports.stage = stage;
 exports.unittest = unitTest;
