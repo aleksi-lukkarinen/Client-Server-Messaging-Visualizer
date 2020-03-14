@@ -109,6 +109,12 @@ function stage(cb) {
 }
 
 function unitTest(cb) {
+/*
+ * 14.3.2020 AL: It should be possible to run Jest via Gulp using the gulp-jest plugin,
+ * but a new version of the plugin needs to be released before that, as there is
+ * a compatibility problem with a new Jest version (the fix is in GitHub already).
+ */
+
 //  process.env.NODE_ENV = "test";
 
 //  return src(testDir + globAllJS)
