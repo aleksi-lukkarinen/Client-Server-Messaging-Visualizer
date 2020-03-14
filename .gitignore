@@ -20,6 +20,7 @@
 !/CONTRIBUTING.md
 !/gulpfile.js
 !/jest.config.js
+!/jest.setup.js
 !/jsdoc.json
 !/LICENSE
 !/package.json
