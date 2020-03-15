@@ -369,7 +369,7 @@ export default class UI {
       switch (op) {
         case "set-pos": {
           const [actorId, leftPos, topPos] = params;
-          const e = AC.htmlElementFinder.actorDivFor(actorId);
+          const e = AC.htmlElementFinder.actorDivFor(actorId, this.frames.animation);
           e.css("left", leftPos);
           e.css("top", topPos);
           }
@@ -378,7 +378,7 @@ export default class UI {
         case "show":
           if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
-              AC.htmlElementFinder.actorDivFor(actorId).show();
+              AC.htmlElementFinder.actorDivFor(actorId, this.frames.animation).show();
             }
           }
           break;
@@ -386,7 +386,7 @@ export default class UI {
         case "hide":
           if (!this.model.ignoreVisibility) {
             for (const actorId of params) {
-              AC.htmlElementFinder.actorDivFor(actorId).hide();
+              AC.htmlElementFinder.actorDivFor(actorId, this.frames.animation).hide();
             }
           }
           break;

@@ -14,11 +14,11 @@ export default class HTMLElementFinder {
 
   /* eslint class-methods-use-this: "off" */
 
-  actorDivFor(actorId) {
+  actorDivFor(actorId, animationFrame) {
     const clazz = Config.cssClasses.CSMV_ACTOR;
     const nameAttr = Config.htmlAttributes.CSMV_NAME;
 
-    return $(`.${clazz}[${nameAttr}='${actorId}']`);
+    return animationFrame.find(`.${clazz}[${nameAttr}='${actorId}']`);
   }
 
   allVisualizationElements() {
