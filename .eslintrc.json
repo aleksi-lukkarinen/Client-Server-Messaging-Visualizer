@@ -2,8 +2,7 @@
   "env": {
     "browser": true,
     "es6": true,
-    "jquery": true,
-    "jest": true
+    "jquery": true
   },
   "extends": "eslint:all",
   "globals": {
@@ -34,7 +33,7 @@
     "id-length": "off",
     "indent": "off",
     "key-spacing": ["error", {
-      "beforeColon": false, 
+      "beforeColon": false,
       "afterColon": true,
       "mode": "minimum"
     }],
@@ -46,7 +45,8 @@
     "max-lines-per-function": ["warn", 50],
     "max-params": ["warn", 6],
     "max-statements": ["warn", 40],
-    "multiline-ternary": "off",
+		"multiline-ternary": "off",
+		"no-empty-function": "warn",
     "no-inline-comments": "off",
     "no-magic-numbers": ["error", {
       "detectObjects": true,
@@ -56,14 +56,15 @@
     "no-multi-spaces": ["error", {
       "ignoreEOLComments": true,
       "exceptions": {
-        "VariableDeclarator": true, 
+        "VariableDeclarator": true,
         "Property": true
       }
     }],
     "no-multiple-empty-lines": "off",
     "no-plusplus": "off",
     "no-ternary": "off",
-    "no-underscore-dangle": "off",
+		"no-underscore-dangle": "off",
+		"no-unused-vars": "warn",
     "no-warning-comments": "warn",
     "one-var": ["error", "never"],
     "padded-blocks": "off",

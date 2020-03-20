@@ -1,0 +1,8 @@
+{
+  "env": {
+    "jest": true
+  },
+  "rules": {
+		"max-lines-per-function": "off"
+  }
+}
