@@ -6,7 +6,7 @@ import ApplicationContext from "../src/ApplicationContext.js";
 describe("Class ApplicationContext", () => {
   describe("after instatiating", () => {
     const ac = new ApplicationContext();
-    
+
     test("property domFactory should be null", () => {
       expect(ac.domFactory).toBeNull();
     });
@@ -30,14 +30,14 @@ describe("Class ApplicationContext", () => {
 
   describe("after setting values for the properties, the same values should be returned by the same props", () => {
     const [A, B, C, D, E] = ["A", "B", "C", "D", "E"];
-    
+
     const ac = new ApplicationContext();
     ac.domFactory = A;
     ac.errorFactory = B;
     ac.htmlElementFinder = C;
     ac.objectUtils = D;
     ac.stringUtils = E;
-    
+
     test("domFactory", () => {
       expect(ac.domFactory).toBe(A);
     });
