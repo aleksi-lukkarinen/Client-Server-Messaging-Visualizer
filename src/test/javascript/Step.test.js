@@ -1,4 +1,4 @@
-import Step from "../src/Step.js";
+import Step from "../../main/javascript/Step.js";
 
 
 

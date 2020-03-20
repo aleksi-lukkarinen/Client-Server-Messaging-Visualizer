@@ -1,4 +1,4 @@
-import EnvironmentInfo from "../src/EnvironmentInfo.js";
+import EnvironmentInfo from "../../main/javascript/EnvironmentInfo.js";
 
 
 

@@ -1,21 +1,34 @@
-const { src, dest, series, parallel, watch } = require('gulp');
-const babel = require('gulp-babel');
-const browserify = require('browserify');
-const buffer = require('vinyl-buffer');
-const csso = require('gulp-csso');
-const del = require('del');
-const eslint = require('gulp-eslint');
-//const jest = require('gulp-jest').default;
-const jsdoc = require('gulp-jsdoc3');
-const log = require('gulplog');
-const rename = require('gulp-rename');
-const source = require('vinyl-source-stream');
-const sourcemaps = require('gulp-sourcemaps');
-const streamify = require('gulp-streamify');
-const uglify = require('gulp-uglify');
+/* eslint-disable capitalized-comments, dot-location, func-style, global-require */
+/* eslint-disable multiline-comment-style, no-multi-spaces, prefer-template */
+
+/* global require, exports */
+
+
+
+
+const {src, dest, series, parallel, watch} = require("gulp");
+const babel = require("gulp-babel");
+const browserify = require("browserify");
+const buffer = require("vinyl-buffer");
+const csso = require("gulp-csso");
+const del = require("del");
+const eslint = require("gulp-eslint");
+// const jest = require("gulp-jest").default;
+const jsdoc = require("gulp-jsdoc3");
+const log = require("gulplog");
+const rename = require("gulp-rename");
+const source = require("vinyl-source-stream");
+const sourcemaps = require("gulp-sourcemaps");
+const streamify = require("gulp-streamify");
+const uglify = require("gulp-uglify");
 
 const srcDir = "./src/";
-const examplesDir = "./examples/";
+const srcExamplesDir = srcDir + "examples/";
+const srcMainDir = srcDir + "main/";
+const srcMainJsDir = srcMainDir + "javascript/";
+const srcMainCSSDir = srcMainDir + "css/";
+const srcTestDir = srcDir + "test/";
+const srcTestJsDir = srcTestDir + "javascript/";
 const targetDir = "./target/";
 const buildDir = targetDir + "build/";
 const esFiveBuildDir = buildDir + "es5/";
@@ -23,11 +36,10 @@ const esFiveBabelDir = esFiveBuildDir + "babel/";
 const esFiveDistributionDir = esFiveBuildDir + "dist/";
 const stagingDir = targetDir + "staging/";
 const esFiveStagingDir = stagingDir + "es5/";
-const testDir = "./test/";
 
-const extCSS = ".css"
+const extCSS = ".css";
 const extMinCSS = ".min" + extCSS;
-const extJS = ".js"
+const extJS = ".js";
 const extMinJS = ".min" + extJS;
 const extJSON = ".json";
 const extMD = ".md";
@@ -46,34 +58,34 @@ const packageJson = "package" + extJSON;
 
 
 function clean() {
-  return del([targetDir, stagingDir]);
+  return del([targetDir]);
 }
 
-function cssMinify(cb) {
-  return src([srcDir + globAllCSS])
+function cssMinify() {
+  return src([srcMainCSSDir + globAllCSS])
     .pipe(sourcemaps.init())
-    .pipe(rename({ extname: extMinCSS }))
+    .pipe(rename({extname: extMinCSS}))
     .pipe(csso())
-    .pipe(sourcemaps.write('.'))
+    .pipe(sourcemaps.write("."))
     .pipe(dest(esFiveDistributionDir));
 }
 
 function esLint() {
-  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS])
+  return src([srcMainJsDir + globAllJS, srcMainJsDir + "**/" + globAllJS])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 }
 
 function jsDoc(cb) {
-  var config = require("./" + jsDocConf);
+  const config = require("./" + jsDocConf);
 
-  return src([packageJson, readmeMD, srcDir + globAllJS], {read: false})
+  return src([packageJson, readmeMD, srcMainJsDir + globAllJS], {read: false})
     .pipe(jsdoc(config, cb));
 }
 
 function jsBabel() {
-  return src([srcDir + globAllJS, srcDir + "**/" + globAllJS], {sourcemaps: true})
+  return src([srcMainJsDir + globAllJS, srcMainJsDir + "**/" + globAllJS], {sourcemaps: true})
     .pipe(babel())
     .pipe(dest(esFiveBabelDir, {sourcemaps: true}));
 }
@@ -81,7 +93,7 @@ function jsBabel() {
 function jsBundle() {
   const bundleStream = browserify({
     entries: [esFiveBabelDir + primaryJSFile],
-    debug: true
+    debug: true,
   }).bundle();
 
   return bundleStream
@@ -89,8 +101,8 @@ function jsBundle() {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
       .pipe(streamify(uglify()))
-      .on('error', log.error)
-    .pipe(sourcemaps.write('./'))
+      .on("error", log.error)
+    .pipe(sourcemaps.write("./"))
     .pipe(dest(esFiveDistributionDir));
 }
 
@@ -98,10 +110,10 @@ function images(cb) {
   cb();
 }
 
-function stage(cb) {
+function stage() {
   const sourceFiles = [
     esFiveDistributionDir + globAllFiles,
-    examplesDir + globAllFiles,
+    srcExamplesDir + globAllFiles,
   ];
 
   return src(sourceFiles)
@@ -115,10 +127,12 @@ function unitTest(cb) {
  * a compatibility problem with a new Jest version (the fix is in GitHub already).
  */
 
-//  process.env.NODE_ENV = "test";
+/*
+  process.env.NODE_ENV = "test";
 
-//  return src(testDir + globAllJS)
-//    .pipe(jest({}));
+  return src(srcTestJsDir + globAllJS)
+    .pipe(jest({}));
+*/
 
   cb();
 }
@@ -127,27 +141,23 @@ function publish(cb) {
   cb();
 }
 
-function watchSources(cb) {
-  watch(srcDir + globAllJS,             series(jsBabel, jsBundle, stage, esLint, jsDoc));
-  watch(srcDir + globAllCSS,            series(cssMinify, stage));
-  watch(examplesDir + globAllFiles,     series(stage));
+function watchSources() {
+  watch(srcMainJsDir + globAllJS,           series(jsBabel, jsBundle, stage, esLint, jsDoc));
+  watch(srcMainCSSDir + globAllCSS,         series(cssMinify, stage));
+  watch(srcExamplesDir + globAllFiles,      series(stage));
 }
 
 exports.clean = clean;
 exports.eslint = esLint;
 exports.jsdoc = jsDoc;
-exports.js = series(esLint, jsBabel, jsBundle)
-exports.css = series(cssMinify)
+exports.js = series(esLint, jsBabel, jsBundle);
+exports.css = series(cssMinify);
 exports.images = images;
 exports.compile = parallel(exports.js, jsDoc, exports.css, images);
 exports.stage = stage;
 exports.unittest = unitTest;
 exports.test = series(unitTest);
-exports.build = series(
-  exports.compile,
-  exports.test,
-  exports.stage,
-);
+exports.build = series(exports.compile, exports.test, exports.stage);
 exports.cleanBuild = series(exports.clean, exports.build);
 exports.publish = series(exports.cleanBuild, publish);
 exports.watch = series(exports.build, watchSources);

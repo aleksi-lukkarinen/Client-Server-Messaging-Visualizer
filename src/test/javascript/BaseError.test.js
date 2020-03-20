@@ -1,4 +1,4 @@
-import BaseError from "../src/BaseError.js";
+import BaseError from "../../main/javascript/BaseError.js";
 
 
 

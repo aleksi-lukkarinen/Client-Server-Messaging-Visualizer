@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-import StringUtils from "../src/StringUtils.js";
+import StringUtils from "../../main/javascript/StringUtils.js";
 
 
 

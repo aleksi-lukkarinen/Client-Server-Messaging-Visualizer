@@ -1,4 +1,4 @@
-import Bootstrapper from "../src/Bootstrapper.js";
+import Bootstrapper from "../../main/javascript/Bootstrapper.js";
 
 
 

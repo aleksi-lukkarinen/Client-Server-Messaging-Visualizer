@@ -1,4 +1,4 @@
-import Model from "../src/Model.js";
+import Model from "../../main/javascript/Model.js";
 
 
 

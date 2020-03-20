@@ -1,4 +1,4 @@
-import ErrorFactory from "../src/ErrorFactory.js";
+import ErrorFactory from "../../main/javascript/ErrorFactory.js";
 
 
 

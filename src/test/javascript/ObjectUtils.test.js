@@ -1,4 +1,4 @@
-import ObjectUtils from "../src/ObjectUtils.js";
+import ObjectUtils from "../../main/javascript/ObjectUtils.js";
 
 
 

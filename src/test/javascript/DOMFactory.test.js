@@ -1,4 +1,4 @@
-import DOMFactory from "../src/DOMFactory.js";
+import DOMFactory from "../../main/javascript/DOMFactory.js";
 
 
 

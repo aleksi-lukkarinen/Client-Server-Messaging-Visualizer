@@ -1,4 +1,4 @@
-import Logger from "../src/Logger.js";
+import Logger from "../../main/javascript/Logger.js";
 
 
 

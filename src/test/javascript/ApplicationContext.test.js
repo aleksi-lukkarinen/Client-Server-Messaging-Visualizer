@@ -1,4 +1,4 @@
-import ApplicationContext from "../src/ApplicationContext.js";
+import ApplicationContext from "../../main/javascript/ApplicationContext.js";
 
 
 

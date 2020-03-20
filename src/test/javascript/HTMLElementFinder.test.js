@@ -1,4 +1,4 @@
-import HTMLElementFinder from "../src/HTMLElementFinder.js";
+import HTMLElementFinder from "../../main/javascript/HTMLElementFinder.js";
 
 
 

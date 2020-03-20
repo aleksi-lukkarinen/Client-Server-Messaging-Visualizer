@@ -9,9 +9,7 @@
 
 !/.vscode
 !/conf
-!/examples
 !/src
-!/test
 !/.babelrc
 !/.eslintrc.json
 !/.gitattributes

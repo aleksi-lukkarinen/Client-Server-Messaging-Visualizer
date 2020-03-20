@@ -1,6 +1,5 @@
 {
-  "editor.insertSpaces": false,
-  "editor.detectIndentation": false,
+	"editor.detectIndentation": false,
   "editor.tabSize": 2,
 	"html.format.endWithNewline": true,
 	"files.encoding": "utf8",

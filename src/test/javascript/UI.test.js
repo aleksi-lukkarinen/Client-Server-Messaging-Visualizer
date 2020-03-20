@@ -1,4 +1,4 @@
-import UI from "../src/UI.js";
+import UI from "../../main/javascript/UI.js";
 
 
 

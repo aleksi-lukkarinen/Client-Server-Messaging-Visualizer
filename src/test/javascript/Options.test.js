@@ -1,4 +1,4 @@
-import Options from "../src/Options.js";
+import Options from "../../main/javascript/Options.js";
 
 
 

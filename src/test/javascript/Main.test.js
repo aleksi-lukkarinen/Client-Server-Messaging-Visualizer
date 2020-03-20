@@ -1,4 +1,4 @@
-import Main from "../src/Main.js";
+import Main from "../../main/javascript/Main.js";
 
 
 

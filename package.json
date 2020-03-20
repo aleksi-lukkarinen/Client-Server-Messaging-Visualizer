@@ -17,7 +17,7 @@
   ],
   "author": "Aleksi Lukkarinen",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {},
   "devDependencies": {
