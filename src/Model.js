@@ -102,19 +102,19 @@ export default class Model {
   emitModelInitializationBeginsEvent() {
     this.emitEvent(
           Config.eventNames.MODEL_INITIALIZATION_BEGINS,
-          [this.name]);
+          [this._name]);
   }
 
   emitModelInitializationFinishedEvent() {
     this.emitEvent(
           Config.eventNames.MODEL_INITIALIZATION_FINISHED,
-          [this.name]);
+          [this._name]);
   }
 
   emitModelChangedEvent() {
     this.emitEvent(
           Config.eventNames.MODEL_CHANGED,
-          [this.name]);
+          [this._name]);
   }
 
   emitEvent(id, params) {
