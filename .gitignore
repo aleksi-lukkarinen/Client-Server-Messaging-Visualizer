@@ -21,6 +21,7 @@
 !/gulpfile.js
 !/jest.config.js
 !/jest.setup.js
+!/jsconfig.json
 !/jsdoc.json
 !/LICENSE
 !/package.json
