@@ -21,11 +21,11 @@ describe("Class StringUtils", () => {
         ".ensureThatEndsWith(..., ...)",
         (end, start) => {
 
-    test(`should append "${end}" to "${start}" to get "${start + end}"`, () => {
+    it(`should append "${end}" to "${start}" to get "${start + end}"`, () => {
       expect(su.ensureThatEndsWith(start, end)).toEqual(start + end);
     });
 
-    test(`should not append "${end}" to "${start + end}" to get "${start + end + end}"`, () => {
+    it(`should not append "${end}" to "${start + end}" to get "${start + end + end}"`, () => {
       expect(su.ensureThatEndsWith(start + end, end)).toEqual(start + end);
     });
   });
@@ -66,7 +66,7 @@ describe("Class StringUtils", () => {
 
     const prettyArg = typeof arg === "string" ? `"${arg}"` : arg;
 
-    test(`should return ${expected} for ${prettyArg}`, () => {
+    it(`should return ${expected} for ${prettyArg}`, () => {
       expect(su.isPrimitiveString(arg)).toEqual(expected);
     });
   });
@@ -88,7 +88,7 @@ describe("Class StringUtils", () => {
   ])(".isNonEmptyString(...)", (arg, expected) => {
     const prettyArg = typeof arg === "string" ? `"${arg}"` : arg;
 
-    test(`should return ${expected} for ${prettyArg}`, () => {
+    it(`should return ${expected} for ${prettyArg}`, () => {
       // @ts-ignore
       expect(su.isNonEmptyString(arg)).toEqual(expected);
     });
