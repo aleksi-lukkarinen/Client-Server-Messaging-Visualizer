@@ -3,7 +3,7 @@
     "browser": true,
     "es6": true,
     "jquery": true,
-    "mocha": true
+    "jest": true
   },
   "extends": "eslint:all",
   "globals": {
