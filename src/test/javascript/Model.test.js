@@ -3,7 +3,6 @@ import Model from "../../main/javascript/Model.js";
 
 
 
-describe("Class Model", () => {
-  test.skip("", () => {
-  });
+describe("class Model", () => {
+  it.todo("to be implemented");
 });

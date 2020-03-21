@@ -71,7 +71,15 @@ function cssMinify() {
 }
 
 function esLint() {
-  return src([srcMainJsDir + globAllJS, srcMainJsDir + "**/" + globAllJS])
+  const sourceFiles = [
+    srcMainJsDir + globAllJS,
+    srcMainJsDir + "**/" + globAllJS,
+
+    srcTestJsDir + globAllJS,
+    srcTestJsDir + "**/" + globAllJS,
+  ];
+
+  return src(sourceFiles)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());

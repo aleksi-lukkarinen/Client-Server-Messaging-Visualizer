@@ -1,2 +1,4 @@
-global.window = window
-global.$ = require('jquery');
+/* globals global, require */
+
+global.window = window;
+global.$ = require("jquery");

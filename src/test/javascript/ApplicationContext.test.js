@@ -3,7 +3,11 @@ import ApplicationContext from "../../main/javascript/ApplicationContext.js";
 
 
 
-describe("Class ApplicationContext", () => {
+describe("class ApplicationContext", () => {
+  beforeEach(() => {
+    expect.hasAssertions();
+  });
+
   describe("after instatiating", () => {
     const ac = new ApplicationContext();
 

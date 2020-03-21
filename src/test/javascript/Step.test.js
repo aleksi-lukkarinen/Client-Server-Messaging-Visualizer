@@ -3,7 +3,6 @@ import Step from "../../main/javascript/Step.js";
 
 
 
-describe("Class Step", () => {
-  test.skip("", () => {
-  });
+describe("class Step", () => {
+  it.todo("to be implemented");
 });

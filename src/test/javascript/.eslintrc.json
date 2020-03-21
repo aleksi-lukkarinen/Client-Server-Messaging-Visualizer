@@ -1,8 +1,18 @@
 {
+  "extends": [
+    "plugin:jest/all"
+  ],
   "env": {
-    "jest": true
+    "jest": true,
+    "jest/globals": true
   },
+  "plugins": [
+    "jest"
+  ],
   "rules": {
-		"max-lines-per-function": "off"
+    "jest/consistent-test-it": "off",
+    "jest/no-hooks": "off",
+    "jest/prefer-expect-assertions": "off",
+    "max-lines-per-function": "off"
   }
 }

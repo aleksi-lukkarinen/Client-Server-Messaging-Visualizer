@@ -3,7 +3,6 @@ import EnvironmentInfo from "../../main/javascript/EnvironmentInfo.js";
 
 
 
-describe("Class EnvironmentInfo", () => {
-  test.skip("", () => {
-  });
+describe("class EnvironmentInfo", () => {
+  it.todo("to be implemented");
 });

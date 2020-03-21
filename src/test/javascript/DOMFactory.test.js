@@ -3,7 +3,6 @@ import DOMFactory from "../../main/javascript/DOMFactory.js";
 
 
 
-describe("Class DOMFactory", () => {
-  test.skip("", () => {
-  });
+describe("class DOMFactory", () => {
+  it.todo("to be implemented");
 });

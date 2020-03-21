@@ -3,7 +3,6 @@ import UI from "../../main/javascript/UI.js";
 
 
 
-describe("Class UI", () => {
-  test.skip("", () => {
-  });
+describe("class UI", () => {
+  it.todo("to be implemented");
 });

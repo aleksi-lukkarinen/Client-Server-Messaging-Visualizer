@@ -3,7 +3,6 @@ import Logger from "../../main/javascript/Logger.js";
 
 
 
-describe("Class Logger", () => {
-  test.skip("", () => {
-  });
+describe("class Logger", () => {
+  it.todo("to be implemented");
 });
