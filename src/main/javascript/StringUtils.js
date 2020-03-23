@@ -60,6 +60,13 @@ export default class StringUtils {
     return this.isPrimitiveString(s) && $.trim(s).length > 0;
   }
 
+
+  /**
+   * Checks if the type of an argument is that of the primitive string.
+   *
+   * @param {string} s - The value to check.
+   * @return {boolean} True if the argument is a primitive string; false otherwise.
+   */
   isPrimitiveString(s) {
     return $.type(s) === "string";
   }
