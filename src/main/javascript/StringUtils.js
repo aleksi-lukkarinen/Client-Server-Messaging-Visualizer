@@ -16,8 +16,8 @@ export default class StringUtils {
    * Appends a given string to another string in case the latter
    * does not already end with the former.
    *
-   * @param {string} s - The string to check for the desired ending.
-   * @param (string) ending - The desired ending of the string s.
+   * @param {string} [s] - The string to check for the desired ending.
+   * @param {string} [ending] - The desired ending of the string s.
    * @return {string} The given string with a period appended if necessary.
    */
   ensureThatEndsWith(s, ending) {
@@ -29,7 +29,7 @@ export default class StringUtils {
    * Appends a period to a string in case the string
    * does not already end with one.
    *
-   * @param {string} s - The string to check for the ending period.
+   * @param {string} [s] - The string to check for the ending period.
    * @return {string} The given string with a period appended if necessary.
    */
   ensureThatEndsWithPeriod(s) {
@@ -41,7 +41,7 @@ export default class StringUtils {
    * Appends a space (ASCII 32) to a string in case the string
    * does not already end with one.
    *
-   * @param {string} s - The string to check for the ending space.
+   * @param {string} [s] - The string to check for the ending space.
    * @return {string} The given string with a soace appended if necessary.
    */
   ensureThatEndsWithSpace(s) {
@@ -53,7 +53,7 @@ export default class StringUtils {
    * Checks if an argument is a non-empty string. That is,
    * the string must contain at least one non-whitespace character.
    *
-   * @param {string} s - The string to check.
+   * @param {string} [s] - The string to check.
    * @return {boolean} True if the argument is a non-empty string; false otherwise.
    */
   isNonEmptyString(s) {
@@ -64,7 +64,7 @@ export default class StringUtils {
   /**
    * Checks if the type of an argument is that of the primitive string.
    *
-   * @param {string} s - The value to check.
+   * @param {string} [s] - The value to check.
    * @return {boolean} True if the argument is a primitive string; false otherwise.
    */
   isPrimitiveString(s) {
