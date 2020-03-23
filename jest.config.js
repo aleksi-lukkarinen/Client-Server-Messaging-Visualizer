@@ -1,5 +1,5 @@
 /* globals module */
-/* eslint-disable array-bracket-newline, capitalized-comments, multiline-comment-style */
+/* eslint-disable array-bracket-newline, capitalized-comments, max-len, multiline-comment-style */
 
 
 

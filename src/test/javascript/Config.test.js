@@ -1,4 +1,4 @@
-import Config from "../../main/javascript/Config.js";
+import * as Config from "../../main/javascript/Config.js";
 
 
 

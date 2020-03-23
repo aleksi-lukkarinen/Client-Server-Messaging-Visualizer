@@ -1,5 +1,5 @@
 /* eslint-disable capitalized-comments, dot-location, func-style, global-require */
-/* eslint-disable multiline-comment-style, no-multi-spaces, prefer-template */
+/* eslint-disable multiline-comment-style, no-multi-spaces, no-unused-vars, prefer-template */
 
 /* global require, exports */
 
