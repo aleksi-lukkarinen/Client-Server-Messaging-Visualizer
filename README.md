@@ -1,6 +1,6 @@
 # Client–Server Messaging Visualizer
 
-This browser-based application can be used to visualize calls and responses as well as data streams in client–server scenarios.
+CSMV is a general-purpose client-side JavaScript library for creating visualizations of abstract concepts. These visualizations are based on steps, through which the user can browse through by pressing the buttons in the user interface. By writing a *script*, the author can compose a visualization by describing the desired steps in terms of *actors*, which are declared pieces of text, HTML, and images.
 
 
 <br/>
