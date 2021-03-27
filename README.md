@@ -3,6 +3,8 @@
 This browser-based application can be used to visualize calls and responses as well as data streams in client–server scenarios.
 
 
+<br/>
+
 ## Literature
 
 CSMV has appeared in the following publications:
@@ -11,6 +13,7 @@ CSMV has appeared in the following publications:
 
 
 
+<br/>
 
 ## Visualization Examples
 
@@ -18,17 +21,18 @@ CSMV has appeared in the following publications:
 
 The figure below is from a visualization of communication between a web browser and a web server.
 
-![](doc/github/csmv-vis-ex-ajax-get.png)
+<img src="doc/github/csmv-vis-ex-ajax-get.png" alt="" width="50%" height="50%" />
 
 
 ### Registering an Event Handler
 
 The figure below illustrates a step in a visualization that explains how to register an event handler for a Document Object Model element. The program is written in pseudocode, and both the explanations and the user interface are in Finnish.
 
-![](doc/github/csmv-vis-ex-edp.png)
+<img src="doc/github/csmv-vis-ex-edp.png" alt="" width="50%" height="50%" />
 
 
 
+<br/>
 
 ## Development Setup
 
