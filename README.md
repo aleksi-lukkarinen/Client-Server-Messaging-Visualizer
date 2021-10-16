@@ -9,7 +9,7 @@ CSMV is a general-purpose client-side JavaScript library for creating visualizat
 
 CSMV has appeared in the following publications:
 
-<sub>**Aleksi Lukkarinen, Lassi Haaranen, and Lauri Malmi. 2021.** Scripted Step-based Visualizations: A Pilot Study. In *Proceedings of the 13th International Conference on Computer Supported Education – Volume 2*, 2021, Virtual Event (CSEDU 2021), pages 240–247. SciTePress, Setúbal, Portugal. ISBN 978-989-758-502-9. ISSN 2184-5026. DOI: 10.5220/0010454502400247</sub>
+<sub>**Aleksi Lukkarinen, Lassi Haaranen, and Lauri Malmi. 2021.** Scripted Step-based Visualizations: A Pilot Study. In *Proceedings of the 13th International Conference on Computer Supported Education – Volume 2*, 2021, Virtual Event (CSEDU 2021), pages 240–247. SciTePress, Setúbal, Portugal. ISBN 978-989-758-502-9. ISSN 2184-5026. DOI: [10.5220/0010454502400247](https://www.doi.org/10.5220/0010454502400247)</sub>
 
 <sub>**Ari Korhonen, Giacomo Mariani, Peter Sormunen, Jan-Mikael Rybicki, Aleksi Lukkarinen, Lassi Haaranen, Artturi Tilanterä, and Juha Sorva. 2021.** New Acos Content Types. In *Proceedings of SPLICE 2021 workshop CS Education Infrastructure for All III: From Ideas to Practice* at 52nd ACM Technical Symposium on Computer Science Education, March 15–16, 2021, online (SPLICE’21). 5 pages. Accessed March 27, 2021. Available at: https://cssplice.github.io/SIGCSE21/proceedings.html</sub>
 
